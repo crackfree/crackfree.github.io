@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>crackfree</title>
+  <subtitle>认识世界，了解自己。</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="https://crackfree.github.io/"/>
+  <updated>2016-04-15T06:16:02.000Z</updated>
+  <id>https://crackfree.github.io/</id>
+  
+  <author>
+    <name>crackfree</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Linux下使用hexo在github上搭建博客</title>
+    <link href="https://crackfree.github.io/2016/04/04/using-hexo-to-write-blog-on-github/"/>
+    <id>https://crackfree.github.io/2016/04/04/using-hexo-to-write-blog-on-github/</id>
+    <published>2016-04-04T12:32:13.000Z</published>
+    <updated>2016-04-15T06:16:02.000Z</updated>
+    
+    <content type="html">&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;hr&gt;
+&lt;p&gt;最近想写一个博客，而github上拥有免费空间，在github上自己搭建博客可以自己高度定制，所以有了此文。(github pages 300M size,) &lt;/p&gt;
+&lt;h2 id=&quot;hexo安装和配置&quot;&gt;&lt;a href=&quot;#hexo安装和配置&quot; class=&quot;headerlink&quot; title=&quot;hexo安装和配置&quot;&gt;&lt;/a&gt;hexo安装和配置&lt;/h2&gt;&lt;hr&gt;
+&lt;h3 id=&quot;hexo简介&quot;&gt;&lt;a href=&quot;#hexo简介&quot; class=&quot;headerlink&quot; title=&quot;hexo简介&quot;&gt;&lt;/a&gt;hexo简介&lt;/h3&gt;&lt;p&gt;&lt;img src=&quot;https://avatars2.githubusercontent.com/u/6375567?v=3&amp;amp;s=400&quot; alt=&quot;hexo&quot;&gt;&lt;/p&gt;
+&lt;p&gt;hexo &lt;a href=&quot;https://github.com/hexojs/hexo&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;github项目地址&lt;/a&gt; 是一款基于Node.js的轻量级博客框架。它只通过静态页面生成来生成博客。这使得它非常简洁，某些依赖后端的功能如留言，需要调用其他网站的服务来完成。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Blazing fast generating&lt;/li&gt;
+&lt;li&gt;Support for GitHub Flavored Markdown and most Octopress plugins&lt;/li&gt;
+&lt;li&gt;One-command deploy to GitHub Pages, Heroku, etc.&lt;/li&gt;
+&lt;li&gt;Powerful plugin system&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&quot;预备软件安装&quot;&gt;&lt;a href=&quot;#预备软件安装&quot; class=&quot;headerlink&quot; title=&quot;预备软件安装&quot;&gt;&lt;/a&gt;预备软件安装&lt;/h3&gt;&lt;hr&gt;
+&lt;ul&gt;
+&lt;li&gt;Node.js&lt;/li&gt;
+&lt;li&gt;git&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;#据说安装nodejs 版hexo会有问题，推荐使用此版本&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;sudo apt-get install nodejs-legacy &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;sudo apt-get install git&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;#之后某插件安装会用到，不装生成页面会龟速&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;sudo apt-get install g++&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h3 id=&quot;hexo安装&quot;&gt;&lt;a href=&quot;#hexo安装&quot; class=&quot;headerlink&quot; title=&quot;hexo安装&quot;&gt;&lt;/a&gt;hexo安装&lt;/h3&gt;&lt;hr&gt;
+&lt;ul&gt;
+&lt;li&gt;hexo安装&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;sudo npm install hexo-cli -g&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;#建一个目录，此目录就是日后博客系统存放的地方&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;mkdir hexo &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;built_in&quot;&gt;cd&lt;/span&gt; hexo&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;npm install hexo --save&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;#如果命令无法运行，可以尝试更换taobao的npm源&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;npm install -g cnpm --registry=https://registry.npm.taobao.org&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;ul&gt;
+&lt;li&gt;博客系统初始化&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;#在之前建好的hexo目录下&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;hexo init&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;npm install&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;#安装deployer插件&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;npm install hexo-deployer-git --save&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;ul&gt;
+&lt;li&gt;测试本地博客与hexo相关操作&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ul&gt;
+&lt;li&gt;启动本地博客&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;#在目录下输入命令
+hexo s
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;浏览器访问&lt;a href=&quot;http://127.0.0.1:4000/即可查看&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;http://127.0.0.1:4000/即可查看&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;按ctrl+c先关闭本地的hexo&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;github配置与部署&quot;&gt;&lt;a href=&quot;#github配置与部署&quot; class=&quot;headerlink&quot; title=&quot;github配置与部署&quot;&gt;&lt;/a&gt;github配置与部署&lt;/h2&gt;&lt;hr&gt;
+&lt;h3 id=&quot;github简介与申请&quot;&gt;&lt;a href=&quot;#github简介与申请&quot; class=&quot;headerlink&quot; title=&quot;github简介与申请&quot;&gt;&lt;/a&gt;github简介与申请&lt;/h3&gt;&lt;hr&gt;
+&lt;ul&gt;
+&lt;li&gt;github简介戳&lt;a href=&quot;https://zh.wikipedia.org/zh/GitHub&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;维基百科&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;github&lt;a href=&quot;https://github.com/join?source=header-home&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;申请&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;建立仓库&quot;&gt;&lt;a href=&quot;#建立仓库&quot; class=&quot;headerlink&quot; title=&quot;建立仓库&quot;&gt;&lt;/a&gt;建立仓库&lt;/h3&gt;&lt;hr&gt;
+&lt;ul&gt;
+&lt;li&gt;点击「New Repository」&lt;/li&gt;
+&lt;li&gt;填写项目信息&lt;a href=&quot;http://www.pchou.info/web-build/2013/01/05/build-github-blog-page-02.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;详见&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;开启gh-pages功能&quot;&gt;&lt;a href=&quot;#开启gh-pages功能&quot; class=&quot;headerlink&quot; title=&quot;开启gh-pages功能&quot;&gt;&lt;/a&gt;开启gh-pages功能&lt;/h3&gt;&lt;hr&gt;
+&lt;p&gt;点击界面右侧的Settings，你将会打开这个库的setting页面，向下拖动，直到看见GitHub Pages,点击Automatic page generator，Github将会自动替你创建出一个gh-pages的页面。&lt;br&gt;如果你的配置没有问题，那么大约15分钟之后，yourname.github.io这个网址就可以正常访问了。&lt;/p&gt;
+&lt;h3 id=&quot;配置ssh&quot;&gt;&lt;a href=&quot;#配置ssh&quot; class=&quot;headerlink&quot; title=&quot;配置ssh&quot;&gt;&lt;/a&gt;配置ssh&lt;/h3&gt;&lt;hr&gt;
+&lt;ul&gt;
+&lt;li&gt;此处配置ssh key 是为了部署博客时使用&lt;/li&gt;
+&lt;li&gt;查看已有ssh key:  &lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code&gt;cat ~/.ssh/id_rsa.pub&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;如果上面结果为空，生成新的SSH Key:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;$ ssh-keygen -t rsa -C &lt;span class=&quot;string&quot;&gt;&quot;mail@mailaddress.com&quot;&lt;/span&gt;  &lt;span class=&quot;comment&quot;&gt;#此处填写邮箱地址&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Generating public/private rsa key pair.&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Enter file &lt;span class=&quot;keyword&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;built_in&quot;&gt;which&lt;/span&gt; to save the key (/home/user/.ssh/id_rsa):  &lt;span class=&quot;comment&quot;&gt;#按回车&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Enter passphrase (empty &lt;span class=&quot;keyword&quot;&gt;for&lt;/span&gt; no passphrase): &lt;span class=&quot;comment&quot;&gt;#输入要设置的密码，也可以留空，设置密码后每次更新都要输入密码&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Enter same passphrase again: &lt;span class=&quot;comment&quot;&gt;#再输入设置的密码&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h3 id=&quot;Github上添加SSH-Key&quot;&gt;&lt;a href=&quot;#Github上添加SSH-Key&quot; class=&quot;headerlink&quot; title=&quot;Github上添加SSH Key&quot;&gt;&lt;/a&gt;Github上添加SSH Key&lt;/h3&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;$ cat /etc/.ssh/id_rsa.pub&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;ul&gt;
+&lt;li&gt;复制上面输出的内容,如:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;ssh-rsa &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;省略&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;yourmail@yourmail.com&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;ul&gt;
+&lt;li&gt;在github上，右上角 头像 –&amp;gt; Setting –&amp;gt; SSH Keys –&amp;gt; New SSH Keys,&lt;br&gt;Title 随便写，如 我的博客&lt;br&gt;Key 粘贴上面复制的内容，点下面 Add SSH Keys&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;测试-SSH-Keys&quot;&gt;&lt;a href=&quot;#测试-SSH-Keys&quot; class=&quot;headerlink&quot; title=&quot;测试 SSH Keys&quot;&gt;&lt;/a&gt;测试 SSH Keys&lt;/h3&gt;&lt;hr&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;$  ssh -T git@github.com&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;The authenticity of host &lt;span class=&quot;string&quot;&gt;&#39;github.com (207.97.227.239)&#39;&lt;/span&gt; can&lt;span class=&quot;string&quot;&gt;&#39;t be established.&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;RSA key fingerprint is 16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48.&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Are you sure you want to continue connecting (yes/no)? #输入yes&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;以上表示添加key成功了&lt;/p&gt;
+&lt;h3 id=&quot;配置Deployment&quot;&gt;&lt;a href=&quot;#配置Deployment&quot; class=&quot;headerlink&quot; title=&quot;配置Deployment&quot;&gt;&lt;/a&gt;配置Deployment&lt;/h3&gt;&lt;hr&gt;
+&lt;ul&gt;
+&lt;li&gt;github相关，因为要部署到github上&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;git config --global user.name &lt;span class=&quot;string&quot;&gt;&quot;yourname&quot;&lt;/span&gt;  &lt;span class=&quot;comment&quot;&gt;#Github用户名&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;git config --global user.email &lt;span class=&quot;string&quot;&gt;&quot;youremail&quot;&lt;/span&gt;   &lt;span class=&quot;comment&quot;&gt;#刚才写的邮箱&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h2 id=&quot;hexo配置&quot;&gt;&lt;a href=&quot;#hexo配置&quot; class=&quot;headerlink&quot; title=&quot;hexo配置&quot;&gt;&lt;/a&gt;hexo配置&lt;/h2&gt;&lt;hr&gt;
+&lt;h3 id=&quot;修改全局配置文件&quot;&gt;&lt;a href=&quot;#修改全局配置文件&quot; class=&quot;headerlink&quot; title=&quot;修改全局配置文件&quot;&gt;&lt;/a&gt;修改全局配置文件&lt;/h3&gt;&lt;hr&gt;
+&lt;p&gt;此段落引用自Hexo官方文档&lt;/p&gt;
+&lt;p&gt;您可以在&lt;a href=&quot;https://hexo.io/zh-cn/docs/configuration.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;_config.yml&lt;/a&gt;中修改大部份的配置。&lt;/p&gt;
+&lt;h2 id=&quot;Hexo-使用与部署&quot;&gt;&lt;a href=&quot;#Hexo-使用与部署&quot; class=&quot;headerlink&quot; title=&quot;Hexo 使用与部署&quot;&gt;&lt;/a&gt;Hexo 使用与部署&lt;/h2&gt;&lt;hr&gt;
+&lt;h3 id=&quot;hexo部署至github&quot;&gt;&lt;a href=&quot;#hexo部署至github&quot; class=&quot;headerlink&quot; title=&quot;hexo部署至github&quot;&gt;&lt;/a&gt;hexo部署至github&lt;/h3&gt;&lt;hr&gt;
+&lt;ul&gt;
+&lt;li&gt;以下命令即可将已经搭建好的博客部署到github上去，但在这之前需要做其他工作&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;$ hexo d&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;发表文章&quot;&gt;&lt;a href=&quot;#发表文章&quot; class=&quot;headerlink&quot; title=&quot;发表文章&quot;&gt;&lt;/a&gt;发表文章&lt;/h3&gt;&lt;hr&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;hexo n &amp;quot;你要发布的文章的题目&amp;quot; #如 hexo n &amp;quot;test&amp;quot;,即在博客目录source/_posts/下生成test.md文件，用markdown编辑器编辑此文件即可写博客&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;写完博客后&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;hexo g #生成本地静态页面&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;hexo s #可在本地查看效果&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h3 id=&quot;Markdown简单介绍&quot;&gt;&lt;a href=&quot;#Markdown简单介绍&quot; class=&quot;headerlink&quot; title=&quot;Markdown简单介绍&quot;&gt;&lt;/a&gt;Markdown简单介绍&lt;/h3&gt;&lt;hr&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Markdown 是一种轻量级标记语言。它允许人们“使用易读易写的纯文本格式编写文档，详细请看(维基百科)[&lt;a href=&quot;https://zh.wikipedia.org/wiki/Markdown]。&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://zh.wikipedia.org/wiki/Markdown]。&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;http://www.jianshu.com/p/q81RER&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;markdown新手入门&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;http://wowubuntu.com/markdown/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;markdown详细语法&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&quot;hexo部署至github-1&quot;&gt;&lt;a href=&quot;#hexo部署至github-1&quot; class=&quot;headerlink&quot; title=&quot;hexo部署至github&quot;&gt;&lt;/a&gt;hexo部署至github&lt;/h3&gt;&lt;p&gt;&lt;code&gt;$ hexo d&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;此时打开&lt;a href=&quot;http://你的用户名.github.io&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;http://你的用户名.github.io&lt;/a&gt;,即可查看效果了&lt;/p&gt;
+&lt;h2 id=&quot;推荐阅读&quot;&gt;&lt;a href=&quot;#推荐阅读&quot; class=&quot;headerlink&quot; title=&quot;推荐阅读&quot;&gt;&lt;/a&gt;推荐阅读&lt;/h2&gt;&lt;hr&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://hexo.io/zh-cn/docs/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;hexo官方文档&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://hexo.io/plugins/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;hexo插件&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://hexo.io/themes/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;hexo主题&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.jianshu.com/p/q81RER&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;markdown新手入门&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://wowubuntu.com/markdown/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;markdown语法说明&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;hr&gt;
+&lt;p&gt;最近想写一个博客，而github上拥有免费空间，在github上自己搭建博客可以自己高度定制，所以有了此文。(github pag
+    
+    </summary>
+    
+    
+      <category term="hexo" scheme="https://crackfree.github.io/tags/hexo/"/>
+    
+      <category term="github" scheme="https://crackfree.github.io/tags/github/"/>
+    
+      <category term="blog" scheme="https://crackfree.github.io/tags/blog/"/>
+    
+  </entry>
+  
+</feed>

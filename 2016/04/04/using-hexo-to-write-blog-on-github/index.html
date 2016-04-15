@@ -1,0 +1,560 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-cn">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Linux下使用hexo在github上搭建博客 | crackfree</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="crackfree">
+    
+
+    
+    <meta name="description" content="前言
+最近想写一个博客，而github上拥有免费空间，在github上自己搭建博客可以自己高度定制，所以有了此文。(github pages 300M size,) 
+hexo安装和配置
+hexo简介
+hexo github项目地址 是一款基于Node.js的轻量级博客框架。它只通过静态页面生成来生成博客。这使得它非常简洁，某些依赖后端的功能如留言，需要调用其他网站的服务来完成。
+
+
+Blazin">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux下使用hexo在github上搭建博客">
+<meta property="og:url" content="https://crackfree.github.io/2016/04/04/using-hexo-to-write-blog-on-github/index.html">
+<meta property="og:site_name" content="crackfree">
+<meta property="og:description" content="前言
+最近想写一个博客，而github上拥有免费空间，在github上自己搭建博客可以自己高度定制，所以有了此文。(github pages 300M size,) 
+hexo安装和配置
+hexo简介
+hexo github项目地址 是一款基于Node.js的轻量级博客框架。它只通过静态页面生成来生成博客。这使得它非常简洁，某些依赖后端的功能如留言，需要调用其他网站的服务来完成。
+
+
+Blazin">
+<meta property="og:image" content="https://avatars2.githubusercontent.com/u/6375567?v=3&s=400">
+<meta property="og:updated_time" content="2016-04-15T06:16:02.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux下使用hexo在github上搭建博客">
+<meta name="twitter:description" content="前言
+最近想写一个博客，而github上拥有免费空间，在github上自己搭建博客可以自己高度定制，所以有了此文。(github pages 300M size,) 
+hexo安装和配置
+hexo简介
+hexo github项目地址 是一款基于Node.js的轻量级博客框架。它只通过静态页面生成来生成博客。这使得它非常简洁，某些依赖后端的功能如留言，需要调用其他网站的服务来完成。
+
+
+Blazin">
+<meta name="twitter:image" content="https://avatars2.githubusercontent.com/u/6375567?v=3&s=400">
+
+    
+    <link rel="alternative" href="/atom.xml" title="crackfree" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="crackfree" title="crackfree"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="crackfree">crackfree</a></h1>
+				<h2 class="blog-motto">认识世界，了解自己。</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:crackfree.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/04/04/using-hexo-to-write-blog-on-github/" title="Linux下使用hexo在github上搭建博客" itemprop="url">Linux下使用hexo在github上搭建博客</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="crackfree" target="_blank" itemprop="author">crackfree</a>
+		
+  <p class="article-time">
+    <time datetime="2016-04-04T12:32:13.000Z" itemprop="datePublished"> Published 2016-04-04</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hexo安装和配置"><span class="toc-number">2.</span> <span class="toc-text">hexo安装和配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#hexo简介"><span class="toc-number">2.1.</span> <span class="toc-text">hexo简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#预备软件安装"><span class="toc-number">2.2.</span> <span class="toc-text">预备软件安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hexo安装"><span class="toc-number">2.3.</span> <span class="toc-text">hexo安装</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#github配置与部署"><span class="toc-number">3.</span> <span class="toc-text">github配置与部署</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#github简介与申请"><span class="toc-number">3.1.</span> <span class="toc-text">github简介与申请</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#建立仓库"><span class="toc-number">3.2.</span> <span class="toc-text">建立仓库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#开启gh-pages功能"><span class="toc-number">3.3.</span> <span class="toc-text">开启gh-pages功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置ssh"><span class="toc-number">3.4.</span> <span class="toc-text">配置ssh</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Github上添加SSH-Key"><span class="toc-number">3.5.</span> <span class="toc-text">Github上添加SSH Key</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试-SSH-Keys"><span class="toc-number">3.6.</span> <span class="toc-text">测试 SSH Keys</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置Deployment"><span class="toc-number">3.7.</span> <span class="toc-text">配置Deployment</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hexo配置"><span class="toc-number">4.</span> <span class="toc-text">hexo配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#修改全局配置文件"><span class="toc-number">4.1.</span> <span class="toc-text">修改全局配置文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hexo-使用与部署"><span class="toc-number">5.</span> <span class="toc-text">Hexo 使用与部署</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#hexo部署至github"><span class="toc-number">5.1.</span> <span class="toc-text">hexo部署至github</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#发表文章"><span class="toc-number">5.2.</span> <span class="toc-text">发表文章</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Markdown简单介绍"><span class="toc-number">5.3.</span> <span class="toc-text">Markdown简单介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hexo部署至github-1"><span class="toc-number">5.4.</span> <span class="toc-text">hexo部署至github</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#推荐阅读"><span class="toc-number">6.</span> <span class="toc-text">推荐阅读</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><hr>
+<p>最近想写一个博客，而github上拥有免费空间，在github上自己搭建博客可以自己高度定制，所以有了此文。(github pages 300M size,) </p>
+<h2 id="hexo安装和配置"><a href="#hexo安装和配置" class="headerlink" title="hexo安装和配置"></a>hexo安装和配置</h2><hr>
+<h3 id="hexo简介"><a href="#hexo简介" class="headerlink" title="hexo简介"></a>hexo简介</h3><p><img src="https://avatars2.githubusercontent.com/u/6375567?v=3&amp;s=400" alt="hexo"></p>
+<p>hexo <a href="https://github.com/hexojs/hexo" target="_blank" rel="external">github项目地址</a> 是一款基于Node.js的轻量级博客框架。它只通过静态页面生成来生成博客。这使得它非常简洁，某些依赖后端的功能如留言，需要调用其他网站的服务来完成。</p>
+<blockquote>
+<ul>
+<li>Blazing fast generating</li>
+<li>Support for GitHub Flavored Markdown and most Octopress plugins</li>
+<li>One-command deploy to GitHub Pages, Heroku, etc.</li>
+<li>Powerful plugin system</li>
+</ul>
+</blockquote>
+<h3 id="预备软件安装"><a href="#预备软件安装" class="headerlink" title="预备软件安装"></a>预备软件安装</h3><hr>
+<ul>
+<li>Node.js</li>
+<li>git</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#据说安装nodejs 版hexo会有问题，推荐使用此版本</span></span><br><span class="line">sudo apt-get install nodejs-legacy </span><br><span class="line">sudo apt-get install git</span><br><span class="line"><span class="comment">#之后某插件安装会用到，不装生成页面会龟速</span></span><br><span class="line">sudo apt-get install g++</span><br></pre></td></tr></table></figure>
+<h3 id="hexo安装"><a href="#hexo安装" class="headerlink" title="hexo安装"></a>hexo安装</h3><hr>
+<ul>
+<li>hexo安装</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">sudo npm install hexo-cli -g</span><br><span class="line"><span class="comment">#建一个目录，此目录就是日后博客系统存放的地方</span></span><br><span class="line">mkdir hexo </span><br><span class="line"><span class="built_in">cd</span> hexo</span><br><span class="line">npm install hexo --save</span><br><span class="line">	</span><br><span class="line"><span class="comment">#如果命令无法运行，可以尝试更换taobao的npm源</span></span><br><span class="line">npm install -g cnpm --registry=https://registry.npm.taobao.org</span><br></pre></td></tr></table></figure>
+<ul>
+<li>博客系统初始化</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#在之前建好的hexo目录下</span></span><br><span class="line">hexo init</span><br><span class="line">npm install</span><br><span class="line"><span class="comment">#安装deployer插件</span></span><br><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+<ul>
+<li>测试本地博客与hexo相关操作</li>
+</ul>
+<ul>
+<li>启动本地博客</li>
+</ul>
+<pre><code>#在目录下输入命令
+hexo s
+</code></pre><ul>
+<li>浏览器访问<a href="http://127.0.0.1:4000/即可查看" target="_blank" rel="external">http://127.0.0.1:4000/即可查看</a></li>
+<li>按ctrl+c先关闭本地的hexo</li>
+</ul>
+<h2 id="github配置与部署"><a href="#github配置与部署" class="headerlink" title="github配置与部署"></a>github配置与部署</h2><hr>
+<h3 id="github简介与申请"><a href="#github简介与申请" class="headerlink" title="github简介与申请"></a>github简介与申请</h3><hr>
+<ul>
+<li>github简介戳<a href="https://zh.wikipedia.org/zh/GitHub" target="_blank" rel="external">维基百科</a></li>
+<li>github<a href="https://github.com/join?source=header-home" target="_blank" rel="external">申请</a></li>
+</ul>
+<h3 id="建立仓库"><a href="#建立仓库" class="headerlink" title="建立仓库"></a>建立仓库</h3><hr>
+<ul>
+<li>点击「New Repository」</li>
+<li>填写项目信息<a href="http://www.pchou.info/web-build/2013/01/05/build-github-blog-page-02.html" target="_blank" rel="external">详见</a></li>
+</ul>
+<h3 id="开启gh-pages功能"><a href="#开启gh-pages功能" class="headerlink" title="开启gh-pages功能"></a>开启gh-pages功能</h3><hr>
+<p>点击界面右侧的Settings，你将会打开这个库的setting页面，向下拖动，直到看见GitHub Pages,点击Automatic page generator，Github将会自动替你创建出一个gh-pages的页面。<br>如果你的配置没有问题，那么大约15分钟之后，yourname.github.io这个网址就可以正常访问了。</p>
+<h3 id="配置ssh"><a href="#配置ssh" class="headerlink" title="配置ssh"></a>配置ssh</h3><hr>
+<ul>
+<li>此处配置ssh key 是为了部署博客时使用</li>
+<li>查看已有ssh key:  </li>
+</ul>
+<p><code>cat ~/.ssh/id_rsa.pub</code></p>
+<ul>
+<li>如果上面结果为空，生成新的SSH Key:</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-keygen -t rsa -C <span class="string">"mail@mailaddress.com"</span>  <span class="comment">#此处填写邮箱地址</span></span><br><span class="line">Generating public/private rsa key pair.</span><br><span class="line">Enter file <span class="keyword">in</span> <span class="built_in">which</span> to save the key (/home/user/.ssh/id_rsa):  <span class="comment">#按回车</span></span><br><span class="line">Enter passphrase (empty <span class="keyword">for</span> no passphrase): <span class="comment">#输入要设置的密码，也可以留空，设置密码后每次更新都要输入密码</span></span><br><span class="line">Enter same passphrase again: <span class="comment">#再输入设置的密码</span></span><br></pre></td></tr></table></figure>
+<h3 id="Github上添加SSH-Key"><a href="#Github上添加SSH-Key" class="headerlink" title="Github上添加SSH Key"></a>Github上添加SSH Key</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ cat /etc/.ssh/id_rsa.pub</span><br></pre></td></tr></table></figure>
+<ul>
+<li>复制上面输出的内容,如:</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ssh-rsa </span><br><span class="line">省略</span><br><span class="line">yourmail@yourmail.com</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在github上，右上角 头像 –&gt; Setting –&gt; SSH Keys –&gt; New SSH Keys,<br>Title 随便写，如 我的博客<br>Key 粘贴上面复制的内容，点下面 Add SSH Keys</li>
+</ul>
+<h3 id="测试-SSH-Keys"><a href="#测试-SSH-Keys" class="headerlink" title="测试 SSH Keys"></a>测试 SSH Keys</h3><hr>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$  ssh -T git@github.com</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">The authenticity of host <span class="string">'github.com (207.97.227.239)'</span> can<span class="string">'t be established.</span><br><span class="line">RSA key fingerprint is 16:27:ac:a5:76:28:2d:36:63:1b:56:4d:eb:df:a6:48.</span><br><span class="line">Are you sure you want to continue connecting (yes/no)? #输入yes</span></span><br></pre></td></tr></table></figure>
+<p>以上表示添加key成功了</p>
+<h3 id="配置Deployment"><a href="#配置Deployment" class="headerlink" title="配置Deployment"></a>配置Deployment</h3><hr>
+<ul>
+<li>github相关，因为要部署到github上</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name <span class="string">"yourname"</span>  <span class="comment">#Github用户名</span></span><br><span class="line">git config --global user.email <span class="string">"youremail"</span>   <span class="comment">#刚才写的邮箱</span></span><br></pre></td></tr></table></figure>
+<h2 id="hexo配置"><a href="#hexo配置" class="headerlink" title="hexo配置"></a>hexo配置</h2><hr>
+<h3 id="修改全局配置文件"><a href="#修改全局配置文件" class="headerlink" title="修改全局配置文件"></a>修改全局配置文件</h3><hr>
+<p>此段落引用自Hexo官方文档</p>
+<p>您可以在<a href="https://hexo.io/zh-cn/docs/configuration.html" target="_blank" rel="external">_config.yml</a>中修改大部份的配置。</p>
+<h2 id="Hexo-使用与部署"><a href="#Hexo-使用与部署" class="headerlink" title="Hexo 使用与部署"></a>Hexo 使用与部署</h2><hr>
+<h3 id="hexo部署至github"><a href="#hexo部署至github" class="headerlink" title="hexo部署至github"></a>hexo部署至github</h3><hr>
+<ul>
+<li>以下命令即可将已经搭建好的博客部署到github上去，但在这之前需要做其他工作<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo d</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="发表文章"><a href="#发表文章" class="headerlink" title="发表文章"></a>发表文章</h3><hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo n &quot;你要发布的文章的题目&quot; #如 hexo n &quot;test&quot;,即在博客目录source/_posts/下生成test.md文件，用markdown编辑器编辑此文件即可写博客</span><br></pre></td></tr></table></figure>
+<p>写完博客后</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hexo g #生成本地静态页面</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">hexo s #可在本地查看效果</span><br></pre></td></tr></table></figure>
+<h3 id="Markdown简单介绍"><a href="#Markdown简单介绍" class="headerlink" title="Markdown简单介绍"></a>Markdown简单介绍</h3><hr>
+<blockquote>
+<p>Markdown 是一种轻量级标记语言。它允许人们“使用易读易写的纯文本格式编写文档，详细请看(维基百科)[<a href="https://zh.wikipedia.org/wiki/Markdown]。" target="_blank" rel="external">https://zh.wikipedia.org/wiki/Markdown]。</a><br><a href="http://www.jianshu.com/p/q81RER" target="_blank" rel="external">markdown新手入门</a><br><a href="http://wowubuntu.com/markdown/" target="_blank" rel="external">markdown详细语法</a></p>
+</blockquote>
+<h3 id="hexo部署至github-1"><a href="#hexo部署至github-1" class="headerlink" title="hexo部署至github"></a>hexo部署至github</h3><p><code>$ hexo d</code></p>
+<p>此时打开<a href="http://你的用户名.github.io" target="_blank" rel="external">http://你的用户名.github.io</a>,即可查看效果了</p>
+<h2 id="推荐阅读"><a href="#推荐阅读" class="headerlink" title="推荐阅读"></a>推荐阅读</h2><hr>
+<ul>
+<li><a href="https://hexo.io/zh-cn/docs/" target="_blank" rel="external">hexo官方文档</a></li>
+<li><a href="https://hexo.io/plugins/" target="_blank" rel="external">hexo插件</a></li>
+<li><a href="https://hexo.io/themes/" target="_blank" rel="external">hexo主题</a></li>
+<li><a href="http://www.jianshu.com/p/q81RER" target="_blank" rel="external">markdown新手入门</a></li>
+<li><a href="http://wowubuntu.com/markdown/" target="_blank" rel="external">markdown语法说明</a></li>
+</ul>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/hexo/">hexo</a><a href="/tags/github/">github</a><a href="/tags/blog/">blog</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://crackfree.github.io/2016/04/04/using-hexo-to-write-blog-on-github/" data-title="Linux下使用hexo在github上搭建博客 | crackfree" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hexo安装和配置"><span class="toc-number">2.</span> <span class="toc-text">hexo安装和配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#hexo简介"><span class="toc-number">2.1.</span> <span class="toc-text">hexo简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#预备软件安装"><span class="toc-number">2.2.</span> <span class="toc-text">预备软件安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hexo安装"><span class="toc-number">2.3.</span> <span class="toc-text">hexo安装</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#github配置与部署"><span class="toc-number">3.</span> <span class="toc-text">github配置与部署</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#github简介与申请"><span class="toc-number">3.1.</span> <span class="toc-text">github简介与申请</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#建立仓库"><span class="toc-number">3.2.</span> <span class="toc-text">建立仓库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#开启gh-pages功能"><span class="toc-number">3.3.</span> <span class="toc-text">开启gh-pages功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置ssh"><span class="toc-number">3.4.</span> <span class="toc-text">配置ssh</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Github上添加SSH-Key"><span class="toc-number">3.5.</span> <span class="toc-text">Github上添加SSH Key</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试-SSH-Keys"><span class="toc-number">3.6.</span> <span class="toc-text">测试 SSH Keys</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置Deployment"><span class="toc-number">3.7.</span> <span class="toc-text">配置Deployment</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hexo配置"><span class="toc-number">4.</span> <span class="toc-text">hexo配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#修改全局配置文件"><span class="toc-number">4.1.</span> <span class="toc-text">修改全局配置文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hexo-使用与部署"><span class="toc-number">5.</span> <span class="toc-text">Hexo 使用与部署</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#hexo部署至github"><span class="toc-number">5.1.</span> <span class="toc-text">hexo部署至github</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#发表文章"><span class="toc-number">5.2.</span> <span class="toc-text">发表文章</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Markdown简单介绍"><span class="toc-number">5.3.</span> <span class="toc-text">Markdown简单介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hexo部署至github-1"><span class="toc-number">5.4.</span> <span class="toc-text">hexo部署至github</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#推荐阅读"><span class="toc-number">6.</span> <span class="toc-text">推荐阅读</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/hexo/" title="hexo">hexo<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/github/" title="github">github<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/blog/" title="blog">blog<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=null&verifier=&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 认识世界,了解自己。 <br/>
+			Stay hungry, stay foolish..</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="crackfree">crackfree</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
