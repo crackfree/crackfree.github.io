@@ -36,11 +36,11 @@
     </summary>
     
     
-      <category term="linux" scheme="https://crackfree.github.io/tags/linux/"/>
-    
       <category term="shell" scheme="https://crackfree.github.io/tags/shell/"/>
     
       <category term="fedora" scheme="https://crackfree.github.io/tags/fedora/"/>
+    
+      <category term="linux" scheme="https://crackfree.github.io/tags/linux/"/>
     
   </entry>
   
@@ -49,7 +49,7 @@
     <link href="https://crackfree.github.io/2016/04/01/using-key-login-ssh-and-forbiden-password-login/"/>
     <id>https://crackfree.github.io/2016/04/01/using-key-login-ssh-and-forbiden-password-login/</id>
     <published>2016-04-01T05:04:46.000Z</published>
-    <updated>2016-04-16T05:06:44.000Z</updated>
+    <updated>2016-04-16T05:12:37.000Z</updated>
     
     <content type="html">&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;hr&gt;
 &lt;p&gt;因为ssh用密码登录不太安全，容易被爆破，使用某些工具登录每次都要输入密码，不方便，所以现在一般都禁止用密码登录，而使用key登录。&lt;/p&gt;
@@ -83,11 +83,11 @@ AuthorizedKeysFile .ssh/authorized_keys
     </summary>
     
     
-      <category term="ssh" scheme="https://crackfree.github.io/tags/ssh/"/>
-    
       <category term="linux" scheme="https://crackfree.github.io/tags/linux/"/>
     
-      <category term="rsa" scheme="https://crackfree.github.io/tags/rsa/"/>
+      <category term="ssh" scheme="https://crackfree.github.io/tags/ssh/"/>
+    
+      <category term="RSA" scheme="https://crackfree.github.io/tags/RSA/"/>
     
   </entry>
   
