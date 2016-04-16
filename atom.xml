@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://crackfree.github.io/"/>
-  <updated>2016-04-15T06:16:02.000Z</updated>
+  <updated>2016-04-16T05:11:02.000Z</updated>
   <id>https://crackfree.github.io/</id>
   
   <author>
@@ -16,11 +16,87 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>解决fedora下ifconfig命令不见了</title>
+    <link href="https://crackfree.github.io/2016/04/02/fedora-ifconfig-command/"/>
+    <id>https://crackfree.github.io/2016/04/02/fedora-ifconfig-command/</id>
+    <published>2016-04-02T05:08:16.000Z</published>
+    <updated>2016-04-16T05:11:02.000Z</updated>
+    
+    <content type="html">&lt;p&gt;在fedora上发现没有ifconfig、netstat等命令不见了。原因是系统是最小模式安装的，于是有了下面的解决方法：&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;使用以下命令，查找ifconfig属于那个包：&lt;br&gt;&lt;code&gt;sudo dnf provides ifconfig&lt;/code&gt;&lt;br&gt;然后，安装：&lt;br&gt;&lt;code&gt;sudo dnf install net-tools&lt;/code&gt;&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;在fedora上发现没有ifconfig、netstat等命令不见了。原因是系统是最小模式安装的，于是有了下面的解决方法：&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;使用以下命令，查找ifconfig属于那个包：&lt;br&gt;&lt;code&gt;sudo dnf provides ifconfig&lt;/co
+    
+    </summary>
+    
+    
+      <category term="linux" scheme="https://crackfree.github.io/tags/linux/"/>
+    
+      <category term="shell" scheme="https://crackfree.github.io/tags/shell/"/>
+    
+      <category term="fedora" scheme="https://crackfree.github.io/tags/fedora/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>ssh使用key登录与禁止使用密码登录</title>
+    <link href="https://crackfree.github.io/2016/04/01/using-key-login-ssh-and-forbiden-password-login/"/>
+    <id>https://crackfree.github.io/2016/04/01/using-key-login-ssh-and-forbiden-password-login/</id>
+    <published>2016-04-01T05:04:46.000Z</published>
+    <updated>2016-04-16T05:06:44.000Z</updated>
+    
+    <content type="html">&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;hr&gt;
+&lt;p&gt;因为ssh用密码登录不太安全，容易被爆破，使用某些工具登录每次都要输入密码，不方便，所以现在一般都禁止用密码登录，而使用key登录。&lt;/p&gt;
+&lt;h2 id=&quot;key创建和设置&quot;&gt;&lt;a href=&quot;#key创建和设置&quot; class=&quot;headerlink&quot; title=&quot;key创建和设置&quot;&gt;&lt;/a&gt;key创建和设置&lt;/h2&gt;&lt;hr&gt;
+&lt;p&gt;首先，要创建一个key来代替密码，其实就是创建一对公钥、私钥。&lt;br&gt;&lt;code&gt;ssh-keygen -t rsa&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;然后，拷贝公钥到远程要设置的主机上。&lt;br&gt;用法：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Usage: ssh-copy-id [-h|-?|-n] [-i [identity_file]] [-p port] [[-o &lt;ssh -o=&quot;&quot; options=&quot;&quot;&gt;] …] [user@]hostname&lt;/ssh&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;code&gt;ssh-copy-id -i ~/.ssh/id_rsa -p ssh端口 root@主机ip&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;测试：&lt;br&gt;&lt;code&gt;ssh root@ip #-i 参数加key私钥的路径，如果key的私钥存在其他地方&lt;/code&gt;&lt;br&gt;如果设置正确，现在不用密码直接登录了。&lt;/p&gt;
+&lt;h2 id=&quot;禁止密码登录&quot;&gt;&lt;a href=&quot;#禁止密码登录&quot; class=&quot;headerlink&quot; title=&quot;禁止密码登录&quot;&gt;&lt;/a&gt;禁止密码登录&lt;/h2&gt;&lt;hr&gt;
+&lt;pre&gt;&lt;code&gt;vim   /etc/ssh/sshd_config
+#将PasswordAuthentication yes
+#改为PasswordAuthentication no
+#将ChallengeResponseAuthentication yes
+#改为ChallengeResponseAuthentication no
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;然后需要重启sshd服务生效&lt;br&gt;&lt;code&gt;service sshd restart&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&quot;题外话&quot;&gt;&lt;a href=&quot;#题外话&quot; class=&quot;headerlink&quot; title=&quot;题外话&quot;&gt;&lt;/a&gt;题外话&lt;/h2&gt;&lt;hr&gt;
+&lt;p&gt;默认设置ssh为支持key登录，以防万一还是要检查一下&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;RSAAuthentication yes 
+PubkeyAuthentication yes
+AuthorizedKeysFile .ssh/authorized_keys
+&lt;/code&gt;&lt;/pre&gt;</content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;hr&gt;
+&lt;p&gt;因为ssh用密码登录不太安全，容易被爆破，使用某些工具登录每次都要输入密码，不方便，所以现在一般都禁止用密码登录，而使用key登录
+    
+    </summary>
+    
+    
+      <category term="ssh" scheme="https://crackfree.github.io/tags/ssh/"/>
+    
+      <category term="linux" scheme="https://crackfree.github.io/tags/linux/"/>
+    
+      <category term="rsa" scheme="https://crackfree.github.io/tags/rsa/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Linux下使用hexo在github上搭建博客</title>
-    <link href="https://crackfree.github.io/2016/04/04/using-hexo-to-write-blog-on-github/"/>
-    <id>https://crackfree.github.io/2016/04/04/using-hexo-to-write-blog-on-github/</id>
-    <published>2016-04-04T12:32:13.000Z</published>
-    <updated>2016-04-15T06:16:02.000Z</updated>
+    <link href="https://crackfree.github.io/2016/03/04/using-hexo-to-write-blog-on-github/"/>
+    <id>https://crackfree.github.io/2016/03/04/using-hexo-to-write-blog-on-github/</id>
+    <published>2016-03-04T12:32:13.000Z</published>
+    <updated>2016-04-16T05:10:52.000Z</updated>
     
     <content type="html">&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;hr&gt;
 &lt;p&gt;最近想写一个博客，而github上拥有免费空间，在github上自己搭建博客可以自己高度定制，所以有了此文。(github pages 300M size,) &lt;/p&gt;

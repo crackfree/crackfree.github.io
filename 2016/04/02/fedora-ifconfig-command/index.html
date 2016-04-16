@@ -4,22 +4,29 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>crackfree</title>
+    <title>解决fedora下ifconfig命令不见了 | crackfree</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="crackfree">
     
 
     
-    <meta name="description" content="认识世界，了解自己。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="crackfree">
-<meta property="og:url" content="https://crackfree.github.io/index.html">
+    <meta name="description" content="在fedora上发现没有ifconfig、netstat等命令不见了。原因是系统是最小模式安装的，于是有了下面的解决方法：
+
+使用以下命令，查找ifconfig属于那个包：sudo dnf provides ifconfig然后，安装：sudo dnf install net-tools">
+<meta property="og:type" content="article">
+<meta property="og:title" content="解决fedora下ifconfig命令不见了">
+<meta property="og:url" content="https://crackfree.github.io/2016/04/02/fedora-ifconfig-command/index.html">
 <meta property="og:site_name" content="crackfree">
-<meta property="og:description" content="认识世界，了解自己。">
+<meta property="og:description" content="在fedora上发现没有ifconfig、netstat等命令不见了。原因是系统是最小模式安装的，于是有了下面的解决方法：
+
+使用以下命令，查找ifconfig属于那个包：sudo dnf provides ifconfig然后，安装：sudo dnf install net-tools">
+<meta property="og:updated_time" content="2016-04-16T05:11:02.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="crackfree">
-<meta name="twitter:description" content="认识世界，了解自己。">
+<meta name="twitter:title" content="解决fedora下ifconfig命令不见了">
+<meta name="twitter:description" content="在fedora上发现没有ifconfig、netstat等命令不见了。原因是系统是最小模式安装的，于是有了下面的解决方法：
+
+使用以下命令，查找ifconfig属于那个包：sudo dnf provides ifconfig然后，安装：sudo dnf install net-tools">
 
     
     <link rel="alternative" href="/atom.xml" title="crackfree" type="application/atom+xml">
@@ -73,81 +80,87 @@
 </div>
     </header>
     <div id="container">
-      <div id="main">
-
+      <div id="main" class="post" itemscope itemprop="blogPost">
   
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2016/04/02/fedora-ifconfig-command/" title="解决fedora下ifconfig命令不见了" itemprop="url">
-  
-    <h1 itemprop="name">解决fedora下ifconfig命令不见了</h1>
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
     
-     
-           <p itemprop="description" >在fedora上发现没有ifconfig、netstat等命令不见了。原因是系统是最小模式安装的，于是有了下面的解决方法：
-
-使用以下命令，查找ifconfig属于那个包：sudo dnf provides ifconfig然后，安装：sudo dnf install net-t</p>
-        
+      <a href="/2016/04/02/fedora-ifconfig-command/" title="解决fedora下ifconfig命令不见了" itemprop="url">解决fedora下ifconfig命令不见了</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="crackfree" target="_blank" itemprop="author">crackfree</a>
+		
+  <p class="article-time">
+    <time datetime="2016-04-02T05:08:16.000Z" itemprop="datePublished"> Published 2016-04-02</time>
     
-    <time datetime="2016-04-02T05:08:16.000Z" itemprop="datePublished">2016-04-02</time>
-  </a>
-</section>
-
-
-
-
-
-
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			
+		
+		</div>
+		
+		<p>在fedora上发现没有ifconfig、netstat等命令不见了。原因是系统是最小模式安装的，于是有了下面的解决方法：</p>
+<hr>
+<p>使用以下命令，查找ifconfig属于那个包：<br><code>sudo dnf provides ifconfig</code><br>然后，安装：<br><code>sudo dnf install net-tools</code></p>
   
-<section class="post" itemscope itemprop="blogitem">
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
   
-    <a href="/2016/04/01/using-key-login-ssh-and-forbiden-password-login/" title="ssh使用key登录与禁止使用密码登录" itemprop="url">
-  
-    <h1 itemprop="name">ssh使用key登录与禁止使用密码登录</h1>
-    
-     
-           <p itemprop="description" >前言
-因为ssh用密码登录不太安全，容易被爆破，使用某些工具登录每次都要输入密码，不方便，所以现在一般都禁止用密码登录，而使用key登录。
-key创建和设置
-首先，要创建一个key来代替密码，其实就是创建一对公钥、私钥。ssh-keygen -t rsa
-然后，拷贝公钥到远程要设</p>
-        
-    
-    <time datetime="2016-04-01T05:04:46.000Z" itemprop="datePublished">2016-04-01</time>
-  </a>
-</section>
-
-
-
-
-
-
-  
-<section class="post" itemscope itemprop="blogitem">
-  
-    <a href="/2016/03/04/using-hexo-to-write-blog-on-github/" title="Linux下使用hexo在github上搭建博客" itemprop="url">
-  
-    <h1 itemprop="name">Linux下使用hexo在github上搭建博客</h1>
-    
-     
-           <p itemprop="description" >前言
-最近想写一个博客，而github上拥有免费空间，在github上自己搭建博客可以自己高度定制，所以有了此文。(github pages 300M size,) 
-hexo安装和配置
-hexo简介
-hexo github项目地址 是一款基于Node.js的轻量级博客框架。它只</p>
-        
-    
-    <time datetime="2016-03-04T12:32:13.000Z" itemprop="datePublished">2016-03-04</time>
-  </a>
-</section>
-
-
-
-
-
-
+  <span></span> <a href="/tags/linux/">linux</a><a href="/tags/shell/">shell</a><a href="/tags/fedora/">fedora</a>
+  </div>
 
 </div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://crackfree.github.io/2016/04/02/fedora-ifconfig-command/" data-title="解决fedora下ifconfig命令不见了 | crackfree" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2016/04/01/using-key-login-ssh-and-forbiden-password-login/"  title="ssh使用key登录与禁止使用密码登录">
+ <strong>下一篇：</strong><br/> 
+ <span>ssh使用key登录与禁止使用密码登录
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
       <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ 
+ 
+  </div>
 
 <div id="asidepart">
 <div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
@@ -303,12 +316,89 @@ $(document).ready(function(){
       m.removeClass('moveMain');
       a.css('display', 'block').removeClass('fadeOut');
       o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
         
     }
   });
 });
 </script>
 
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
 
 
 
@@ -379,4 +469,4 @@ var _hmt = _hmt || [];
 <!-- Tiny_search End -->
 
   </body>
- </html>
+</html>
