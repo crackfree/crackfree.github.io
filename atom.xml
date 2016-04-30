@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://crackfree.github.io/"/>
-  <updated>2016-04-16T05:11:02.000Z</updated>
+  <updated>2016-04-30T07:58:20.000Z</updated>
   <id>https://crackfree.github.io/</id>
   
   <author>
@@ -14,6 +14,43 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Linux 更新出现 Hash Sum mismatch 错误解决</title>
+    <link href="https://crackfree.github.io/2016/04/30/Linux-update-error-Hash-Sum-mismatch-resolved/"/>
+    <id>https://crackfree.github.io/2016/04/30/Linux-update-error-Hash-Sum-mismatch-resolved/</id>
+    <published>2016-04-30T06:49:44.000Z</published>
+    <updated>2016-04-30T07:58:20.000Z</updated>
+    
+    <content type="html">&lt;p&gt;linux 更新时，出现如下错误:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;W: Failed to fetch ****** Hash Sum mismatch,&lt;br&gt;E: Some index files failed to download. They have been ignored, or old ones used instead.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;经过google得知出现错误的原因：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;有些ISP缓存了仓库，没有及时更新。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;使用mirror更新，而mirror没有及时更新&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;使用如下命令解决：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sudo rm -rf /var/lib/apt/lists/*
+sudo apt-get clean
+sudo apt-get update
+&lt;/code&gt;&lt;/pre&gt;</content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;linux 更新时，出现如下错误:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;W: Failed to fetch ****** Hash Sum mismatch,&lt;br&gt;E: Some index files failed to download. They have b
+    
+    </summary>
+    
+    
+      <category term="linux" scheme="https://crackfree.github.io/tags/linux/"/>
+    
+  </entry>
   
   <entry>
     <title>解决fedora下ifconfig命令不见了</title>
