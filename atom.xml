@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://crackfree.github.io/"/>
-  <updated>2016-04-30T07:58:20.000Z</updated>
+  <updated>2016-05-15T06:57:25.000Z</updated>
   <id>https://crackfree.github.io/</id>
   
   <author>
@@ -14,6 +14,100 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>VPS上使用haproxy和iptables进行代理中转与端口转发</title>
+    <link href="https://crackfree.github.io/2016/05/15/VPS%E4%B8%8A%E4%BD%BF%E7%94%A8haproxy%E5%92%8Ciptables%E8%BF%9B%E8%A1%8C%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/"/>
+    <id>https://crackfree.github.io/2016/05/15/VPS上使用haproxy和iptables进行端口转发/</id>
+    <published>2016-05-15T04:58:06.000Z</published>
+    <updated>2016-05-15T06:57:25.000Z</updated>
+    
+    <content type="html">&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;hr&gt;
+&lt;p&gt;因为A VPS上装了锐速，另B VPS上配置了代理。A的链路好，而A上配置代理有坑。因此想办法把两者的有点结合起来，做一个端口转发将A的端口转发至B，来提升代理的速度。&lt;br&gt;此时网络连接链路变为:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Me &amp;lt;--&amp;gt; A&amp;lt;--&amp;gt;B&amp;lt;--&amp;gt; Internet
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;现在有两种方案：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;haproxy  &lt;/li&gt;
+&lt;li&gt;iptables  &lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;haproxy:&lt;br&gt;优点：效率高&lt;br&gt;缺点：配置比第二种复杂&lt;/p&gt;
+&lt;p&gt;iptables:&lt;br&gt;优点：配置简单，不用装软件&lt;br&gt;缺点：效率不如第一种高&lt;/p&gt;
+&lt;h2 id=&quot;haproxy配置方法&quot;&gt;&lt;a href=&quot;#haproxy配置方法&quot; class=&quot;headerlink&quot; title=&quot;haproxy配置方法&quot;&gt;&lt;/a&gt;haproxy配置方法&lt;/h2&gt;&lt;h3 id=&quot;haproxy-介绍&quot;&gt;&lt;a href=&quot;#haproxy-介绍&quot; class=&quot;headerlink&quot; title=&quot;haproxy 介绍&quot;&gt;&lt;/a&gt;haproxy 介绍&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;HAProxy is a free, very fast and reliable solution offering high availability, load balancing, and proxying for TCP and HTTP-based applications. It is particularly suited for very high traffic web sites and powers quite a number of the world’s most visited ones. Over the years it has become the de-facto standard opensource load balancer, is now shipped with most mainstream Linux distributions, and is often deployed by default in cloud platforms. Since it does not advertise itself, we only know it’s used when the admins report it :-)&lt;br&gt;&lt;img src=&quot;http://www.haproxy.org/img/haproxy-pmode.png&quot; alt=&quot;&quot;&gt;  &lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;a href=&quot;http://www.haproxy.org/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;项目官网&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;PS:这么强悍的软件用来当中转有点浪费。&lt;/p&gt;
+&lt;p&gt;安装&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;yum install haproxy
+vim /etc/haproxy/haproxy.cfg
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;将配置文件替换如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;global
+        ulimit-n  51200
+
+defaults
+        log global
+        mode    tcp
+        option  dontlognull
+        contimeout 1000
+        clitimeout 150000
+        srvtimeout 150000
+        #上面這一塊內容即將失效，需要更換為
+        #timeout connect 1000
+        #timeout client  150000
+        #timeout server 150000
+
+frontend ss-in
+        bind *:8388
+        default_backend ss-out
+
+backend ss-out
+        server server1 US_VPS_IP:8388 maxconn 20480 
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;将backend ss-out下面US_VPS_IP 改为要转发到的远程IP和端口，将frontend ss-in下面 bind *:8388改为本地要监听的端口  &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;启动与开机启动haproxy        &lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;service haproxy start
+systemctl enable haproxy
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;此时是以root身份启动，想以nobody身份运行。将下面保存为/root/haproxy.sh，后将文件加入/etc/rc.local作为开机启动。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;#! /bin/bash
+ulimit-n  51200
+sudo -u nobody haproxy /etc/haproxy/haproxy.cfg
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;如果你想进一步折腾haproxy可以参考&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://linux.die.net/man/1/haproxy&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;http://linux.die.net/man/1/haproxy&lt;/a&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.linuxidc.com/wap.aspx?nid=118968&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;http://www.linuxidc.com/wap.aspx?nid=118968&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;iptables配置&quot;&gt;&lt;a href=&quot;#iptables配置&quot; class=&quot;headerlink&quot; title=&quot;iptables配置&quot;&gt;&lt;/a&gt;iptables配置&lt;/h2&gt;&lt;hr&gt;
+&lt;pre&gt;&lt;code&gt;vim /etc/sysctl.conf
+添加：
+net.ipv4.ip_forward=1
+sysctl -p /etc/sysctl.conf
+
+A 88端口  -&amp;gt; B:8888端口:
+iptables -t nat -A PREROUTING -d A -p tcp --dport 88 -j DNAT --to-destination B:8888
+
+B 8888端口将数据返回时，将源ip改为A:
+iptables -t nat -A POSTROUTING -d B -p tcp --dport 8888 -j SNAT A
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&quot;总结&quot;&gt;&lt;a href=&quot;#总结&quot; class=&quot;headerlink&quot; title=&quot;总结&quot;&gt;&lt;/a&gt;总结&lt;/h2&gt;&lt;hr&gt;
+&lt;p&gt;haproxy和iptables不仅可以用于前言中的转发用途，还可以用做国内VPS到国外VPS的中转来提升速度&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;hr&gt;
+&lt;p&gt;因为A VPS上装了锐速，另B VPS上配置了代理。A的链路好，而A上配置代理有坑。因此想办法把两者的有点结合起来，做一个端口转发
+    
+    </summary>
+    
+    
+      <category term="haproxy" scheme="https://crackfree.github.io/tags/haproxy/"/>
+    
+      <category term="iptables" scheme="https://crackfree.github.io/tags/iptables/"/>
+    
+      <category term="VPS" scheme="https://crackfree.github.io/tags/VPS/"/>
+    
+  </entry>
   
   <entry>
     <title>Linux 更新出现 Hash Sum mismatch 错误解决</title>
