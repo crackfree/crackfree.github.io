@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://crackfree.github.io/"/>
-  <updated>2016-05-15T06:57:25.000Z</updated>
+  <updated>2016-05-15T08:55:55.000Z</updated>
   <id>https://crackfree.github.io/</id>
   
   <author>
@@ -16,11 +16,62 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>vim切换权限用root保存文件</title>
+    <link href="https://crackfree.github.io/2016/05/15/vim-save-root-file-with-non-root-user/"/>
+    <id>https://crackfree.github.io/2016/05/15/vim-save-root-file-with-non-root-user/</id>
+    <published>2016-05-15T07:37:06.000Z</published>
+    <updated>2016-05-15T08:55:55.000Z</updated>
+    
+    <content type="html">&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;hr&gt;
+&lt;p&gt;用vim时，经常会出现编辑完文件没权限保存。难到要重新敲一遍？&lt;/p&gt;
+&lt;h2 id=&quot;解决方法&quot;&gt;&lt;a href=&quot;#解决方法&quot; class=&quot;headerlink&quot; title=&quot;解决方法&quot;&gt;&lt;/a&gt;解决方法&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;在vim状态，直接用&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt;:w !sudo tee %
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;或&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;:w !sudo sh -c &amp;quot;cat &amp;gt; %&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;命令详解：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;w: 将所有行输出&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;!:vim里执行命令&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;sudo：切换成root执行&lt;/li&gt;
+&lt;li&gt;tee：重定向输出多个文件&lt;/li&gt;
+&lt;li&gt;%：vim里表示当前文件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol&gt;
+&lt;li&gt;可以添加下面其中一条到/etc/vim/vimrc ，之后vim里直接用w!!即可切换成root保存了&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt;cmap w!! w !sudo tee &amp;gt; /dev/null %
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;或&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;cmap w!! w !sudo sh -c &amp;quot;cat &amp;gt; %&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;或&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;command -nargs=? w!! :w !sudo tee %
+&lt;/code&gt;&lt;/pre&gt;&lt;ol&gt;
+&lt;li&gt;用sudo vim 编辑把之前的全都复制进去，或保存到一个临时文件再sudo mv 回去。（太麻烦不推荐）&lt;/li&gt;
+&lt;/ol&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;hr&gt;
+&lt;p&gt;用vim时，经常会出现编辑完文件没权限保存。难到要重新敲一遍？&lt;/p&gt;
+&lt;h2 id=&quot;解决方法&quot;&gt;&lt;a href=&quot;#解决方法&quot;
+    
+    </summary>
+    
+    
+      <category term="vim" scheme="https://crackfree.github.io/tags/vim/"/>
+    
+  </entry>
+  
+  <entry>
     <title>VPS上使用haproxy和iptables进行代理中转与端口转发</title>
-    <link href="https://crackfree.github.io/2016/05/15/VPS%E4%B8%8A%E4%BD%BF%E7%94%A8haproxy%E5%92%8Ciptables%E8%BF%9B%E8%A1%8C%E7%AB%AF%E5%8F%A3%E8%BD%AC%E5%8F%91/"/>
-    <id>https://crackfree.github.io/2016/05/15/VPS上使用haproxy和iptables进行端口转发/</id>
+    <link href="https://crackfree.github.io/2016/05/15/haproxy-or-iptables-forward-ports-on-VPS/"/>
+    <id>https://crackfree.github.io/2016/05/15/haproxy-or-iptables-forward-ports-on-VPS/</id>
     <published>2016-05-15T04:58:06.000Z</published>
-    <updated>2016-05-15T06:57:25.000Z</updated>
+    <updated>2016-05-15T08:13:15.000Z</updated>
     
     <content type="html">&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;hr&gt;
 &lt;p&gt;因为A VPS上装了锐速，另B VPS上配置了代理。A的链路好，而A上配置代理有坑。因此想办法把两者的有点结合起来，做一个端口转发将A的端口转发至B，来提升代理的速度。&lt;br&gt;此时网络连接链路变为:&lt;/p&gt;
@@ -87,7 +138,7 @@ sysctl -p /etc/sysctl.conf
 A 88端口  -&amp;gt; B:8888端口:
 iptables -t nat -A PREROUTING -d A -p tcp --dport 88 -j DNAT --to-destination B:8888
 
-B 8888端口将数据返回时，将源ip改为A:
+将发到8888端口的包，IP伪装成A
 iptables -t nat -A POSTROUTING -d B -p tcp --dport 8888 -j SNAT A
 &lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&quot;总结&quot;&gt;&lt;a href=&quot;#总结&quot; class=&quot;headerlink&quot; title=&quot;总结&quot;&gt;&lt;/a&gt;总结&lt;/h2&gt;&lt;hr&gt;
 &lt;p&gt;haproxy和iptables不仅可以用于前言中的转发用途，还可以用做国内VPS到国外VPS的中转来提升速度&lt;/p&gt;

@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>VPS上使用haproxy和iptables进行代理中转与端口转发 | crackfree</title>
+    <title>vim切换权限用root保存文件 | crackfree</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="crackfree">
@@ -12,41 +12,72 @@
 
     
     <meta name="description" content="前言
-因为A VPS上装了锐速，另B VPS上配置了代理。A的链路好，而A上配置代理有坑。因此想办法把两者的有点结合起来，做一个端口转发将A的端口转发至B，来提升代理的速度。此时网络连接链路变为:
-Me &amp;lt;--&amp;gt; A&amp;lt;--&amp;gt;B&amp;lt;--&amp;gt; Internet
-现在有两种方案：
+用vim时，经常会出现编辑完文件没权限保存。难到要重新敲一遍？
+解决方法
+在vim状态，直接用
 
-haproxy  
-iptables  
+:w !sudo tee %
+或
+:w !sudo sh -c &amp;quot;cat &amp;gt; %&amp;quot;
+命令详解：
 
-haproxy:优点：效率高缺点：配置比第二种">
+w: 将所有行输出
+
+!:vim里执行命令
+
+sudo：切换成root执行
+tee：重定向输出多个文件
+%：vim里表示当前文件
+
+
+可以添加下面其中一条到/etc/vim">
 <meta property="og:type" content="article">
-<meta property="og:title" content="VPS上使用haproxy和iptables进行代理中转与端口转发">
-<meta property="og:url" content="https://crackfree.github.io/2016/05/15/VPS上使用haproxy和iptables进行端口转发/index.html">
+<meta property="og:title" content="vim切换权限用root保存文件">
+<meta property="og:url" content="https://crackfree.github.io/2016/05/15/vim-save-root-file-with-non-root-user/index.html">
 <meta property="og:site_name" content="crackfree">
 <meta property="og:description" content="前言
-因为A VPS上装了锐速，另B VPS上配置了代理。A的链路好，而A上配置代理有坑。因此想办法把两者的有点结合起来，做一个端口转发将A的端口转发至B，来提升代理的速度。此时网络连接链路变为:
-Me &amp;lt;--&amp;gt; A&amp;lt;--&amp;gt;B&amp;lt;--&amp;gt; Internet
-现在有两种方案：
+用vim时，经常会出现编辑完文件没权限保存。难到要重新敲一遍？
+解决方法
+在vim状态，直接用
 
-haproxy  
-iptables  
+:w !sudo tee %
+或
+:w !sudo sh -c &amp;quot;cat &amp;gt; %&amp;quot;
+命令详解：
 
-haproxy:优点：效率高缺点：配置比第二种">
-<meta property="og:image" content="http://www.haproxy.org/img/haproxy-pmode.png">
-<meta property="og:updated_time" content="2016-05-15T06:57:25.000Z">
+w: 将所有行输出
+
+!:vim里执行命令
+
+sudo：切换成root执行
+tee：重定向输出多个文件
+%：vim里表示当前文件
+
+
+可以添加下面其中一条到/etc/vim">
+<meta property="og:updated_time" content="2016-05-15T08:55:55.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="VPS上使用haproxy和iptables进行代理中转与端口转发">
+<meta name="twitter:title" content="vim切换权限用root保存文件">
 <meta name="twitter:description" content="前言
-因为A VPS上装了锐速，另B VPS上配置了代理。A的链路好，而A上配置代理有坑。因此想办法把两者的有点结合起来，做一个端口转发将A的端口转发至B，来提升代理的速度。此时网络连接链路变为:
-Me &amp;lt;--&amp;gt; A&amp;lt;--&amp;gt;B&amp;lt;--&amp;gt; Internet
-现在有两种方案：
+用vim时，经常会出现编辑完文件没权限保存。难到要重新敲一遍？
+解决方法
+在vim状态，直接用
 
-haproxy  
-iptables  
+:w !sudo tee %
+或
+:w !sudo sh -c &amp;quot;cat &amp;gt; %&amp;quot;
+命令详解：
 
-haproxy:优点：效率高缺点：配置比第二种">
-<meta name="twitter:image" content="http://www.haproxy.org/img/haproxy-pmode.png">
+w: 将所有行输出
+
+!:vim里执行命令
+
+sudo：切换成root执行
+tee：重定向输出多个文件
+%：vim里表示当前文件
+
+
+可以添加下面其中一条到/etc/vim">
 
     
     <link rel="alternative" href="/atom.xml" title="crackfree" type="application/atom+xml">
@@ -106,14 +137,14 @@ haproxy:优点：效率高缺点：配置比第二种">
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/05/15/VPS上使用haproxy和iptables进行端口转发/" title="VPS上使用haproxy和iptables进行代理中转与端口转发" itemprop="url">VPS上使用haproxy和iptables进行代理中转与端口转发</a>
+      <a href="/2016/05/15/vim-save-root-file-with-non-root-user/" title="vim切换权限用root保存文件" itemprop="url">vim切换权限用root保存文件</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="crackfree" target="_blank" itemprop="author">crackfree</a>
 		
   <p class="article-time">
-    <time datetime="2016-05-15T04:58:06.000Z" itemprop="datePublished"> Published 2016-05-15</time>
+    <time datetime="2016-05-15T07:37:06.000Z" itemprop="datePublished"> Published 2016-05-15</time>
     
   </p>
 </header>
@@ -122,79 +153,39 @@ haproxy:优点：效率高缺点：配置比第二种">
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#haproxy配置方法"><span class="toc-number">2.</span> <span class="toc-text">haproxy配置方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#haproxy-介绍"><span class="toc-number">2.1.</span> <span class="toc-text">haproxy 介绍</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#iptables配置"><span class="toc-number">3.</span> <span class="toc-text">iptables配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解决方法"><span class="toc-number">2.</span> <span class="toc-text">解决方法</span></a></li></ol>
 		
 		</div>
 		
 		<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><hr>
-<p>因为A VPS上装了锐速，另B VPS上配置了代理。A的链路好，而A上配置代理有坑。因此想办法把两者的有点结合起来，做一个端口转发将A的端口转发至B，来提升代理的速度。<br>此时网络连接链路变为:</p>
-<pre><code>Me &lt;--&gt; A&lt;--&gt;B&lt;--&gt; Internet
-</code></pre><p>现在有两种方案：</p>
+<p>用vim时，经常会出现编辑完文件没权限保存。难到要重新敲一遍？</p>
+<h2 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h2><ol>
+<li>在vim状态，直接用</li>
+</ol>
+<pre><code>:w !sudo tee %
+</code></pre><p>或</p>
+<pre><code>:w !sudo sh -c &quot;cat &gt; %&quot;
+</code></pre><p>命令详解：</p>
 <ul>
-<li>haproxy  </li>
-<li>iptables  </li>
+<li><p>w: 将所有行输出</p>
+</li>
+<li><p>!:vim里执行命令</p>
+</li>
+<li>sudo：切换成root执行</li>
+<li>tee：重定向输出多个文件</li>
+<li>%：vim里表示当前文件</li>
 </ul>
-<p>haproxy:<br>优点：效率高<br>缺点：配置比第二种复杂</p>
-<p>iptables:<br>优点：配置简单，不用装软件<br>缺点：效率不如第一种高</p>
-<h2 id="haproxy配置方法"><a href="#haproxy配置方法" class="headerlink" title="haproxy配置方法"></a>haproxy配置方法</h2><h3 id="haproxy-介绍"><a href="#haproxy-介绍" class="headerlink" title="haproxy 介绍"></a>haproxy 介绍</h3><blockquote>
-<p>HAProxy is a free, very fast and reliable solution offering high availability, load balancing, and proxying for TCP and HTTP-based applications. It is particularly suited for very high traffic web sites and powers quite a number of the world’s most visited ones. Over the years it has become the de-facto standard opensource load balancer, is now shipped with most mainstream Linux distributions, and is often deployed by default in cloud platforms. Since it does not advertise itself, we only know it’s used when the admins report it :-)<br><img src="http://www.haproxy.org/img/haproxy-pmode.png" alt="">  </p>
-</blockquote>
-<p><a href="http://www.haproxy.org/" target="_blank" rel="external">项目官网</a></p>
-<p>PS:这么强悍的软件用来当中转有点浪费。</p>
-<p>安装</p>
-<pre><code>yum install haproxy
-vim /etc/haproxy/haproxy.cfg
-</code></pre><p>将配置文件替换如下：</p>
-<pre><code>global
-        ulimit-n  51200
-
-defaults
-        log global
-        mode    tcp
-        option  dontlognull
-        contimeout 1000
-        clitimeout 150000
-        srvtimeout 150000
-        #上面這一塊內容即將失效，需要更換為
-        #timeout connect 1000
-        #timeout client  150000
-        #timeout server 150000
-
-frontend ss-in
-        bind *:8388
-        default_backend ss-out
-
-backend ss-out
-        server server1 US_VPS_IP:8388 maxconn 20480 
-</code></pre><p>将backend ss-out下面US_VPS_IP 改为要转发到的远程IP和端口，将frontend ss-in下面 bind *:8388改为本地要监听的端口  </p>
-<ul>
-<li><p>启动与开机启动haproxy        </p>
-<pre><code>service haproxy start
-systemctl enable haproxy
-</code></pre></li>
-</ul>
-<p>此时是以root身份启动，想以nobody身份运行。将下面保存为/root/haproxy.sh，后将文件加入/etc/rc.local作为开机启动。</p>
-<pre><code>#! /bin/bash
-ulimit-n  51200
-sudo -u nobody haproxy /etc/haproxy/haproxy.cfg
-</code></pre><p>如果你想进一步折腾haproxy可以参考</p>
-<ul>
-<li><a href="http://linux.die.net/man/1/haproxy" target="_blank" rel="external">http://linux.die.net/man/1/haproxy</a>。</li>
-<li><a href="http://www.linuxidc.com/wap.aspx?nid=118968" target="_blank" rel="external">http://www.linuxidc.com/wap.aspx?nid=118968</a></li>
-</ul>
-<h2 id="iptables配置"><a href="#iptables配置" class="headerlink" title="iptables配置"></a>iptables配置</h2><hr>
-<pre><code>vim /etc/sysctl.conf
-添加：
-net.ipv4.ip_forward=1
-sysctl -p /etc/sysctl.conf
-
-A 88端口  -&gt; B:8888端口:
-iptables -t nat -A PREROUTING -d A -p tcp --dport 88 -j DNAT --to-destination B:8888
-
-B 8888端口将数据返回时，将源ip改为A:
-iptables -t nat -A POSTROUTING -d B -p tcp --dport 8888 -j SNAT A
-</code></pre><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><hr>
-<p>haproxy和iptables不仅可以用于前言中的转发用途，还可以用做国内VPS到国外VPS的中转来提升速度</p>
+<ol>
+<li>可以添加下面其中一条到/etc/vim/vimrc ，之后vim里直接用w!!即可切换成root保存了</li>
+</ol>
+<pre><code>cmap w!! w !sudo tee &gt; /dev/null %
+</code></pre><p>或</p>
+<pre><code>cmap w!! w !sudo sh -c &quot;cat &gt; %&quot;
+</code></pre><p>或</p>
+<pre><code>command -nargs=? w!! :w !sudo tee %
+</code></pre><ol>
+<li>用sudo vim 编辑把之前的全都复制进去，或保存到一个临时文件再sudo mv 回去。（太麻烦不推荐）</li>
+</ol>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -203,7 +194,7 @@ iptables -t nat -A POSTROUTING -d B -p tcp --dport 8888 -j SNAT A
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/haproxy/">haproxy</a><a href="/tags/iptables/">iptables</a><a href="/tags/VPS/">VPS</a>
+  <span></span> <a href="/tags/vim/">vim</a>
   </div>
 
 </div>
@@ -212,7 +203,7 @@ iptables -t nat -A POSTROUTING -d B -p tcp --dport 8888 -j SNAT A
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://crackfree.github.io/2016/05/15/VPS上使用haproxy和iptables进行端口转发/" data-title="VPS上使用haproxy和iptables进行代理中转与端口转发 | crackfree" data-tsina="null" class="share clearfix">
+	  <div data-url="https://crackfree.github.io/2016/05/15/vim-save-root-file-with-non-root-user/" data-title="vim切换权限用root保存文件 | crackfree" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -227,9 +218,9 @@ iptables -t nat -A POSTROUTING -d B -p tcp --dport 8888 -j SNAT A
  
 
 <div class="next">
-<a href="/2016/04/30/Linux-update-error-Hash-Sum-mismatch-resolved/"  title="Linux 更新出现 Hash Sum mismatch 错误解决">
+<a href="/2016/05/15/haproxy-or-iptables-forward-ports-on-VPS/"  title="VPS上使用haproxy和iptables进行代理中转与端口转发">
  <strong>下一篇：</strong><br/> 
- <span>Linux 更新出现 Hash Sum mismatch 错误解决
+ <span>VPS上使用haproxy和iptables进行代理中转与端口转发
 </span>
 </a>
 </div>
@@ -244,7 +235,7 @@ iptables -t nat -A POSTROUTING -d B -p tcp --dport 8888 -j SNAT A
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#haproxy配置方法"><span class="toc-number">2.</span> <span class="toc-text">haproxy配置方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#haproxy-介绍"><span class="toc-number">2.1.</span> <span class="toc-text">haproxy 介绍</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#iptables配置"><span class="toc-number">3.</span> <span class="toc-text">iptables配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解决方法"><span class="toc-number">2.</span> <span class="toc-text">解决方法</span></a></li></ol>
  
   </div>
 
@@ -267,11 +258,11 @@ iptables -t nat -A POSTROUTING -d B -p tcp --dport 8888 -j SNAT A
 			
 		
 			
-				<li><a href="/tags/fedora/" title="fedora">fedora<sup>1</sup></a></li>
+				<li><a href="/tags/vim/" title="vim">vim<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/VPS/" title="VPS">VPS<sup>1</sup></a></li>
+				<li><a href="/tags/fedora/" title="fedora">fedora<sup>1</sup></a></li>
 			
 		
 			
@@ -279,15 +270,15 @@ iptables -t nat -A POSTROUTING -d B -p tcp --dport 8888 -j SNAT A
 			
 		
 			
-				<li><a href="/tags/shell/" title="shell">shell<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/iptables/" title="iptables">iptables<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/hexo/" title="hexo">hexo<sup>1</sup></a></li>
+				<li><a href="/tags/VPS/" title="VPS">VPS<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/shell/" title="shell">shell<sup>1</sup></a></li>
 			
 		
 			
@@ -304,6 +295,10 @@ iptables -t nat -A POSTROUTING -d B -p tcp --dport 8888 -j SNAT A
 		
 			
 				<li><a href="/tags/RSA/" title="RSA">RSA<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hexo/" title="hexo">hexo<sup>1</sup></a></li>
 			
 		
 		</ul>
