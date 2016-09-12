@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://crackfree.github.io/"/>
-  <updated>2016-05-15T08:55:55.000Z</updated>
+  <updated>2016-09-12T15:58:49.000Z</updated>
   <id>https://crackfree.github.io/</id>
   
   <author>
@@ -14,6 +14,38 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>cat xx.iso &gt; /dev/sdX 启动原理</title>
+    <link href="https://crackfree.github.io/2016/09/04/cat-x-iso-to-dev-sdX-mechanism/"/>
+    <id>https://crackfree.github.io/2016/09/04/cat-x-iso-to-dev-sdX-mechanism/</id>
+    <published>2016-09-03T18:03:30.000Z</published>
+    <updated>2016-09-12T15:58:49.000Z</updated>
+    
+    <content type="html">&lt;h1 id=&quot;cat-x-iso-gt-dev-sdX-启动原理&quot;&gt;&lt;a href=&quot;#cat-x-iso-gt-dev-sdX-启动原理&quot; class=&quot;headerlink&quot; title=&quot;cat x.iso &amp;gt;  /dev/sdX 启动原理&quot;&gt;&lt;/a&gt;cat x.iso &amp;gt;  /dev/sdX 启动原理&lt;/h1&gt;&lt;hr&gt;
+&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;hr&gt;
+&lt;p&gt;之前在U盘装系统的时，“刻录”U盘常用命令cat xx.iso &amp;gt; /dev/sdX（其实用dd也可以），xx.iso为要“刻录”的系统，sdX为U盘在系统中的设备文件名。执行命令后，U盘变为一个自带引导，包含iso内内容的操作系统安装盘。个人觉得能自带引导比较神奇，于是有了本文。&lt;/p&gt;
+&lt;h2 id=&quot;原理分析&quot;&gt;&lt;a href=&quot;#原理分析&quot; class=&quot;headerlink&quot; title=&quot;原理分析&quot;&gt;&lt;/a&gt;原理分析&lt;/h2&gt;&lt;hr&gt;
+&lt;p&gt;ISO是一种文件系统格式，其他的如ext4、ntfs、fat。ISO格式可以作为一种镜像文件，文件系统自身可带引导功能。cat/dd命令只是将文件系统镜像拷贝到Ｕ盘设备上。&lt;br&gt;&lt;br&gt;ISO文件自身的引导，可由特殊工具创建的，比如说isohybrid，可将引导程序写入镜像文件前几个扇区，iso9660标准一般不会使用开始的几个用来引导的扇区，使iso镜像可以有引导功能。这也解释通了光盘为什么可以引导(光盘自身是ISO格式)。任何设备在Linux中都被抽象为文件，cat xx.iso &amp;gt; /dev/sdX将ISO中的内容输出重定向到设备上，从而完成了拷贝。在这个过程中，cat对iso文件没有任何处理，仅仅是数据拷贝。&lt;br&gt;&lt;br&gt;同理，也可以创建一个ext4格式的文件镜像然后cat　ext4file &amp;gt; sdX 完成对sdX硬盘的格式化和数据写入。&lt;/p&gt;
+&lt;h2 id=&quot;参考文献&quot;&gt;&lt;a href=&quot;#参考文献&quot; class=&quot;headerlink&quot; title=&quot;参考文献&quot;&gt;&lt;/a&gt;参考文献&lt;/h2&gt;&lt;hr&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://unix.stackexchange.com/questions/31537/how-why-does-cat-write-a-bootable-iso-to-a-device&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://unix.stackexchange.com/questions/31537/how-why-does-cat-write-a-bootable-iso-to-a-device&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://unix.stackexchange.com/questions/48267/what-happens-when-i-do-cat-debian-iso-dev-sdx&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://unix.stackexchange.com/questions/48267/what-happens-when-i-do-cat-debian-iso-dev-sdx&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;cat-x-iso-gt-dev-sdX-启动原理&quot;&gt;&lt;a href=&quot;#cat-x-iso-gt-dev-sdX-启动原理&quot; class=&quot;headerlink&quot; title=&quot;cat x.iso &amp;gt;  /dev/sdX 启动原理&quot;&gt;&lt;/a&gt;cat x.i
+    
+    </summary>
+    
+    
+      <category term="linux" scheme="https://crackfree.github.io/tags/linux/"/>
+    
+      <category term="ISO" scheme="https://crackfree.github.io/tags/ISO/"/>
+    
+  </entry>
   
   <entry>
     <title>vim切换权限用root保存文件</title>
