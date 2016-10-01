@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://crackfree.github.io/"/>
-  <updated>2016-09-12T15:58:49.000Z</updated>
+  <updated>2016-10-01T11:45:00.000Z</updated>
   <id>https://crackfree.github.io/</id>
   
   <author>
@@ -14,6 +14,66 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Centos 升级glibc</title>
+    <link href="https://crackfree.github.io/2016/10/01/glibc-upgrade/"/>
+    <id>https://crackfree.github.io/2016/10/01/glibc-upgrade/</id>
+    <published>2016-10-01T08:37:43.000Z</published>
+    <updated>2016-10-01T11:45:00.000Z</updated>
+    
+    <content type="html">&lt;h1 id=&quot;Centos-升级glibc&quot;&gt;&lt;a href=&quot;#Centos-升级glibc&quot; class=&quot;headerlink&quot; title=&quot;Centos 升级glibc&quot;&gt;&lt;/a&gt;Centos 升级glibc&lt;/h1&gt;&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;hr&gt;
+&lt;p&gt;刚升级了glibc,整理网上文章如下&lt;/p&gt;
+&lt;h3 id=&quot;glibc简介&quot;&gt;&lt;a href=&quot;#glibc简介&quot; class=&quot;headerlink&quot; title=&quot;glibc简介&quot;&gt;&lt;/a&gt;glibc简介&lt;/h3&gt;&lt;hr&gt;
+&lt;p&gt;glibc是GNU发布的libc库，即c运行库。glibc是linux系统中最底层的api，几乎其它任何运行库都会依赖于glibc。glibc除了封装linux操作系统所提供的系统服务外，它本身也提供了许多其它一些必要功能服务的实现。由于 glibc 囊括了几乎所有的 UNIX 通行的标准，可以想见其内容包罗万象。而就像其他的 UNIX 系统一样，其内含的档案群分散于系统的树状目录结构中，像一个支架一般撑起整个操作系统。&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;a href=&quot;http://baike.baidu.com/view/1323132.htm&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;百科&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&quot;为什么要升级&quot;&gt;&lt;a href=&quot;#为什么要升级&quot; class=&quot;headerlink&quot; title=&quot;为什么要升级&quot;&gt;&lt;/a&gt;为什么要升级&lt;/h2&gt;&lt;hr&gt;
+&lt;p&gt;查看系统glibc库版本可使用如下命令:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;$ strings /lib64/libc.so.6 |grep GLIBC_&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Centos 为了稳定使用的glibc版本通常比较低。而安装有些程序需要依赖新版本。升级glibc需要慎重，因很多人升级失败后导致系统不能用了。&lt;/p&gt;
+&lt;p&gt;如果升级基本C运行库到一个太新的版本，可能会影响CentOS的运行。所以大家如果遇到CentOS基本库的问题，影响了自己程序的运行，应该可以考虑：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;在低版本的系统编译自己的产品，如果自己的产品确实不需要新版才支持的新特性&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;用版本高的系统来编译，比如ubuntu，和centos的新版，但可能需要部署到较低版本，那么可以考虑用mock等技术制作更好的安装包，把依赖打入包内&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;利用容器技术，如Docker，在低版本的操作系统内，轻量级的隔离出一个虚拟运行环境，适应你的程序。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;升级过程&quot;&gt;&lt;a href=&quot;#升级过程&quot; class=&quot;headerlink&quot; title=&quot;升级过程&quot;&gt;&lt;/a&gt;升级过程&lt;/h2&gt;&lt;hr&gt;
+&lt;h3 id=&quot;选择版本下载安装包&quot;&gt;&lt;a href=&quot;#选择版本下载安装包&quot; class=&quot;headerlink&quot; title=&quot;选择版本下载安装包&quot;&gt;&lt;/a&gt;选择版本下载安装包&lt;/h3&gt;&lt;hr&gt;
+&lt;p&gt;&lt;a href=&quot;https://ftp.gnu.org/gnu/glibc/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://ftp.gnu.org/gnu/glibc/&lt;/a&gt;&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;wget http://ftp.gnu.org/gnu/glibc/glibc-2.15.tar.gz&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;#解压&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;tar xvf glibc-2.15.tar.gz&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h3 id=&quot;安装gcc&quot;&gt;&lt;a href=&quot;#安装gcc&quot; class=&quot;headerlink&quot; title=&quot;安装gcc&quot;&gt;&lt;/a&gt;安装gcc&lt;/h3&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;yum -y install gcc&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h3 id=&quot;编译&quot;&gt;&lt;a href=&quot;#编译&quot; class=&quot;headerlink&quot; title=&quot;编译&quot;&gt;&lt;/a&gt;编译&lt;/h3&gt;&lt;hr&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;mkdir build&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;cd build&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;../configure --prefix=/opt/glibc-2.15&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h3 id=&quot;glibc软链&quot;&gt;&lt;a href=&quot;#glibc软链&quot; class=&quot;headerlink&quot; title=&quot;glibc软链&quot;&gt;&lt;/a&gt;glibc软链&lt;/h3&gt;&lt;hr&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;rm -rf /lib64/libc.so.6 &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;LD_PRELOAD=/opt/glibc-2.15/lib/libc-2.15.so ln -s /opt/glibc-2.15/lib/libc-2.15.so /lib64/libc.so.6&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h3 id=&quot;glibc升级失败回滚方法&quot;&gt;&lt;a href=&quot;#glibc升级失败回滚方法&quot; class=&quot;headerlink&quot; title=&quot;glibc升级失败回滚方法&quot;&gt;&lt;/a&gt;glibc升级失败回滚方法&lt;/h3&gt;&lt;hr&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;LD_PRELOAD=/lib64/libc-2.12.so ln -s /lib64/libc-2.12.so /lib64/libc.so.6&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h2 id=&quot;相关原理&quot;&gt;&lt;a href=&quot;#相关原理&quot; class=&quot;headerlink&quot; title=&quot;相关原理&quot;&gt;&lt;/a&gt;相关原理&lt;/h2&gt;&lt;hr&gt;
+&lt;p&gt;glibc在linux下是个软链接。&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;$ ll /lib64/libc.so.6  &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;lrwxrwxrwx 1 root root 19 Sep 23 08:29 /lib64/libc.so.6 -&amp;gt; /lib64/libc-2.12.so&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;上面做的事情是：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;把新的glibc编译好了。&lt;/li&gt;
+&lt;li&gt;然后，把旧的删除，新的换上去。&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;strong&gt;因为ln命令本身依赖glibc库，前面删除glibc软链之后需要使用：&lt;/strong&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;LD_PRELOAD=/opt/glibc-2.15/lib/libc-2.15.so ln -s /opt/glibc-2.15/lib/libc-2.15.so /lib64/libc.so.6&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;手工指定glibc库的位置来完成ln命令执行。&lt;/p&gt;
+&lt;h2 id=&quot;相关链接&quot;&gt;&lt;a href=&quot;#相关链接&quot; class=&quot;headerlink&quot; title=&quot;相关链接&quot;&gt;&lt;/a&gt;相关链接&lt;/h2&gt;&lt;p&gt;&lt;a href=&quot;http://m.blog.csdn.net/article/details?id=52033950&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;http://m.blog.csdn.net/article/details?id=52033950&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;http://blog.csdn.net/officercat/article/details/39520227&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;http://blog.csdn.net/officercat/article/details/39520227&lt;/a&gt;&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;Centos-升级glibc&quot;&gt;&lt;a href=&quot;#Centos-升级glibc&quot; class=&quot;headerlink&quot; title=&quot;Centos 升级glibc&quot;&gt;&lt;/a&gt;Centos 升级glibc&lt;/h1&gt;&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot;
+    
+    </summary>
+    
+    
+      <category term="linux" scheme="https://crackfree.github.io/tags/linux/"/>
+    
+      <category term="glibc" scheme="https://crackfree.github.io/tags/glibc/"/>
+    
+  </entry>
   
   <entry>
     <title>cat xx.iso &gt; /dev/sdX 启动原理</title>

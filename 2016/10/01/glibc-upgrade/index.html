@@ -1,0 +1,560 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-cn">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Centos 升级glibc | crackfree</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="crackfree">
+    
+
+    
+    <meta name="description" content="Centos 升级glibc前言
+刚升级了glibc,整理网上文章如下
+glibc简介
+glibc是GNU发布的libc库，即c运行库。glibc是linux系统中最底层的api，几乎其它任何运行库都会依赖于glibc。glibc除了封装linux操作系统所提供的系统服务外，它本身也提供了许多其它一些必要功能服务的实现。由于 glibc 囊括了几乎所有的 UNIX 通行的标准，可以想见其内容包罗万">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Centos 升级glibc">
+<meta property="og:url" content="https://crackfree.github.io/2016/10/01/glibc-upgrade/index.html">
+<meta property="og:site_name" content="crackfree">
+<meta property="og:description" content="Centos 升级glibc前言
+刚升级了glibc,整理网上文章如下
+glibc简介
+glibc是GNU发布的libc库，即c运行库。glibc是linux系统中最底层的api，几乎其它任何运行库都会依赖于glibc。glibc除了封装linux操作系统所提供的系统服务外，它本身也提供了许多其它一些必要功能服务的实现。由于 glibc 囊括了几乎所有的 UNIX 通行的标准，可以想见其内容包罗万">
+<meta property="og:updated_time" content="2016-10-01T11:45:00.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Centos 升级glibc">
+<meta name="twitter:description" content="Centos 升级glibc前言
+刚升级了glibc,整理网上文章如下
+glibc简介
+glibc是GNU发布的libc库，即c运行库。glibc是linux系统中最底层的api，几乎其它任何运行库都会依赖于glibc。glibc除了封装linux操作系统所提供的系统服务外，它本身也提供了许多其它一些必要功能服务的实现。由于 glibc 囊括了几乎所有的 UNIX 通行的标准，可以想见其内容包罗万">
+
+    
+    <link rel="alternative" href="/atom.xml" title="crackfree" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="crackfree" title="crackfree"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="crackfree">crackfree</a></h1>
+				<h2 class="blog-motto">认识世界，了解自己。</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:crackfree.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/10/01/glibc-upgrade/" title="Centos 升级glibc" itemprop="url">Centos 升级glibc</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="crackfree" target="_blank" itemprop="author">crackfree</a>
+		
+  <p class="article-time">
+    <time datetime="2016-10-01T08:37:43.000Z" itemprop="datePublished"> Published 2016-10-01</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Centos-升级glibc"><span class="toc-number">1.</span> <span class="toc-text">Centos 升级glibc</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#glibc简介"><span class="toc-number">1.1.1.</span> <span class="toc-text">glibc简介</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#为什么要升级"><span class="toc-number">1.2.</span> <span class="toc-text">为什么要升级</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#升级过程"><span class="toc-number">1.3.</span> <span class="toc-text">升级过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#选择版本下载安装包"><span class="toc-number">1.3.1.</span> <span class="toc-text">选择版本下载安装包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装gcc"><span class="toc-number">1.3.2.</span> <span class="toc-text">安装gcc</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#编译"><span class="toc-number">1.3.3.</span> <span class="toc-text">编译</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#glibc软链"><span class="toc-number">1.3.4.</span> <span class="toc-text">glibc软链</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#glibc升级失败回滚方法"><span class="toc-number">1.3.5.</span> <span class="toc-text">glibc升级失败回滚方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关原理"><span class="toc-number">1.4.</span> <span class="toc-text">相关原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关链接"><span class="toc-number">1.5.</span> <span class="toc-text">相关链接</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<h1 id="Centos-升级glibc"><a href="#Centos-升级glibc" class="headerlink" title="Centos 升级glibc"></a>Centos 升级glibc</h1><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><hr>
+<p>刚升级了glibc,整理网上文章如下</p>
+<h3 id="glibc简介"><a href="#glibc简介" class="headerlink" title="glibc简介"></a>glibc简介</h3><hr>
+<p>glibc是GNU发布的libc库，即c运行库。glibc是linux系统中最底层的api，几乎其它任何运行库都会依赖于glibc。glibc除了封装linux操作系统所提供的系统服务外，它本身也提供了许多其它一些必要功能服务的实现。由于 glibc 囊括了几乎所有的 UNIX 通行的标准，可以想见其内容包罗万象。而就像其他的 UNIX 系统一样，其内含的档案群分散于系统的树状目录结构中，像一个支架一般撑起整个操作系统。<br><br><br><a href="http://baike.baidu.com/view/1323132.htm" target="_blank" rel="external">百科</a></p>
+<h2 id="为什么要升级"><a href="#为什么要升级" class="headerlink" title="为什么要升级"></a>为什么要升级</h2><hr>
+<p>查看系统glibc库版本可使用如下命令:</p>
+<p><code>$ strings /lib64/libc.so.6 |grep GLIBC_</code></p>
+<p>Centos 为了稳定使用的glibc版本通常比较低。而安装有些程序需要依赖新版本。升级glibc需要慎重，因很多人升级失败后导致系统不能用了。</p>
+<p>如果升级基本C运行库到一个太新的版本，可能会影响CentOS的运行。所以大家如果遇到CentOS基本库的问题，影响了自己程序的运行，应该可以考虑：</p>
+<ol>
+<li><p>在低版本的系统编译自己的产品，如果自己的产品确实不需要新版才支持的新特性</p>
+</li>
+<li><p>用版本高的系统来编译，比如ubuntu，和centos的新版，但可能需要部署到较低版本，那么可以考虑用mock等技术制作更好的安装包，把依赖打入包内</p>
+</li>
+<li><p>利用容器技术，如Docker，在低版本的操作系统内，轻量级的隔离出一个虚拟运行环境，适应你的程序。</p>
+</li>
+</ol>
+<h2 id="升级过程"><a href="#升级过程" class="headerlink" title="升级过程"></a>升级过程</h2><hr>
+<h3 id="选择版本下载安装包"><a href="#选择版本下载安装包" class="headerlink" title="选择版本下载安装包"></a>选择版本下载安装包</h3><hr>
+<p><a href="https://ftp.gnu.org/gnu/glibc/" target="_blank" rel="external">https://ftp.gnu.org/gnu/glibc/</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget http://ftp.gnu.org/gnu/glibc/glibc-2.15.tar.gz</span><br><span class="line">#解压</span><br><span class="line">tar xvf glibc-2.15.tar.gz</span><br></pre></td></tr></table></figure>
+<h3 id="安装gcc"><a href="#安装gcc" class="headerlink" title="安装gcc"></a>安装gcc</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install gcc</span><br></pre></td></tr></table></figure>
+<h3 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h3><hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir build</span><br><span class="line">cd build</span><br><span class="line">../configure --prefix=/opt/glibc-2.15</span><br></pre></td></tr></table></figure>
+<h3 id="glibc软链"><a href="#glibc软链" class="headerlink" title="glibc软链"></a>glibc软链</h3><hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rm -rf /lib64/libc.so.6 </span><br><span class="line">LD_PRELOAD=/opt/glibc-2.15/lib/libc-2.15.so ln -s /opt/glibc-2.15/lib/libc-2.15.so /lib64/libc.so.6</span><br></pre></td></tr></table></figure>
+<h3 id="glibc升级失败回滚方法"><a href="#glibc升级失败回滚方法" class="headerlink" title="glibc升级失败回滚方法"></a>glibc升级失败回滚方法</h3><hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LD_PRELOAD=/lib64/libc-2.12.so ln -s /lib64/libc-2.12.so /lib64/libc.so.6</span><br></pre></td></tr></table></figure>
+<h2 id="相关原理"><a href="#相关原理" class="headerlink" title="相关原理"></a>相关原理</h2><hr>
+<p>glibc在linux下是个软链接。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ll /lib64/libc.so.6  </span><br><span class="line">lrwxrwxrwx 1 root root 19 Sep 23 08:29 /lib64/libc.so.6 -&gt; /lib64/libc-2.12.so</span><br></pre></td></tr></table></figure></p>
+<p>上面做的事情是：</p>
+<ol>
+<li>把新的glibc编译好了。</li>
+<li>然后，把旧的删除，新的换上去。<br><br><br><strong>因为ln命令本身依赖glibc库，前面删除glibc软链之后需要使用：</strong><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LD_PRELOAD=/opt/glibc-2.15/lib/libc-2.15.so ln -s /opt/glibc-2.15/lib/libc-2.15.so /lib64/libc.so.6</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>手工指定glibc库的位置来完成ln命令执行。</p>
+<h2 id="相关链接"><a href="#相关链接" class="headerlink" title="相关链接"></a>相关链接</h2><p><a href="http://m.blog.csdn.net/article/details?id=52033950" target="_blank" rel="external">http://m.blog.csdn.net/article/details?id=52033950</a><br><a href="http://blog.csdn.net/officercat/article/details/39520227" target="_blank" rel="external">http://blog.csdn.net/officercat/article/details/39520227</a></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/linux/">linux</a><a href="/tags/glibc/">glibc</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://crackfree.github.io/2016/10/01/glibc-upgrade/" data-title="Centos 升级glibc | crackfree" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2016/09/04/cat-x-iso-to-dev-sdX-mechanism/"  title="cat xx.iso &gt; /dev/sdX 启动原理">
+ <strong>下一篇：</strong><br/> 
+ <span>cat xx.iso &gt; /dev/sdX 启动原理
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Centos-升级glibc"><span class="toc-number">1.</span> <span class="toc-text">Centos 升级glibc</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.1.</span> <span class="toc-text">前言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#glibc简介"><span class="toc-number">1.1.1.</span> <span class="toc-text">glibc简介</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#为什么要升级"><span class="toc-number">1.2.</span> <span class="toc-text">为什么要升级</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#升级过程"><span class="toc-number">1.3.</span> <span class="toc-text">升级过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#选择版本下载安装包"><span class="toc-number">1.3.1.</span> <span class="toc-text">选择版本下载安装包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装gcc"><span class="toc-number">1.3.2.</span> <span class="toc-text">安装gcc</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#编译"><span class="toc-number">1.3.3.</span> <span class="toc-text">编译</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#glibc软链"><span class="toc-number">1.3.4.</span> <span class="toc-text">glibc软链</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#glibc升级失败回滚方法"><span class="toc-number">1.3.5.</span> <span class="toc-text">glibc升级失败回滚方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关原理"><span class="toc-number">1.4.</span> <span class="toc-text">相关原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关链接"><span class="toc-number">1.5.</span> <span class="toc-text">相关链接</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/linux/" title="linux">linux<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/glibc/" title="glibc">glibc<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/shell/" title="shell">shell<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/fedora/" title="fedora">fedora<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/haproxy/" title="haproxy">haproxy<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iptables/" title="iptables">iptables<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/VPS/" title="VPS">VPS<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ISO/" title="ISO">ISO<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/github/" title="github">github<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/blog/" title="blog">blog<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/vim/" title="vim">vim<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ssh/" title="ssh">ssh<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/RSA/" title="RSA">RSA<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hexo/" title="hexo">hexo<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=null&verifier=&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 认识世界,了解自己。 <br/>
+			Stay hungry, stay foolish..</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="crackfree">crackfree</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'crackfree';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
