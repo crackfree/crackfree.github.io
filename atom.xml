@@ -163,7 +163,7 @@
     <link href="https://crackfree.github.io/2016/05/15/haproxy-or-iptables-forward-ports-on-VPS/"/>
     <id>https://crackfree.github.io/2016/05/15/haproxy-or-iptables-forward-ports-on-VPS/</id>
     <published>2016-05-15T04:58:06.000Z</published>
-    <updated>2016-05-15T08:13:15.000Z</updated>
+    <updated>2016-10-01T14:32:42.000Z</updated>
     
     <content type="html">&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;hr&gt;
 &lt;p&gt;因为A VPS上装了锐速，另B VPS上配置了代理。A的链路好，而A上配置代理有坑。因此想办法把两者的有点结合起来，做一个端口转发将A的端口转发至B，来提升代理的速度。&lt;br&gt;此时网络连接链路变为:&lt;/p&gt;
@@ -231,7 +231,7 @@ A 88端口  -&amp;gt; B:8888端口:
 iptables -t nat -A PREROUTING -d A -p tcp --dport 88 -j DNAT --to-destination B:8888
 
 将发到8888端口的包，IP伪装成A
-iptables -t nat -A POSTROUTING -d B -p tcp --dport 8888 -j SNAT A
+iptables -t nat -A POSTROUTING -d B -p tcp --dport 8888 -j SNAT --to A
 &lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&quot;总结&quot;&gt;&lt;a href=&quot;#总结&quot; class=&quot;headerlink&quot; title=&quot;总结&quot;&gt;&lt;/a&gt;总结&lt;/h2&gt;&lt;hr&gt;
 &lt;p&gt;haproxy和iptables不仅可以用于前言中的转发用途，还可以用做国内VPS到国外VPS的中转来提升速度&lt;/p&gt;
 </content>
