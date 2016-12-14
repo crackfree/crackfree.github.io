@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://crackfree.github.io/"/>
-  <updated>2016-10-01T11:45:00.000Z</updated>
+  <updated>2016-12-14T15:15:35.000Z</updated>
   <id>https://crackfree.github.io/</id>
   
   <author>
@@ -14,6 +14,143 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Linux下大硬盘分区与加密－使用GPT、LVM over LUKS</title>
+    <link href="https://crackfree.github.io/2016/11/16/using-gpt-lvm-and-luks-to-part-big-disk-and-encrypt-it-in-Linux/"/>
+    <id>https://crackfree.github.io/2016/11/16/using-gpt-lvm-and-luks-to-part-big-disk-and-encrypt-it-in-Linux/</id>
+    <published>2016-11-16T13:50:55.000Z</published>
+    <updated>2016-12-14T15:15:35.000Z</updated>
+    
+    <content type="html">&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;hr&gt;
+&lt;p&gt;双十一买了块3T硬盘，今天有空折腾下，也记录下。&lt;br&gt;&lt;br&gt;本文用到的技术有GPT、LUKS、LVM、ext4。&lt;br&gt;&lt;br&gt;预定的结果为在使用GPT分区表的硬盘上，建立多个主分区。每个主分区使用LUKS整个分区加密。在加密的主分区内使用LVM建立多个所需的逻辑卷，简单的说为LVM over LUKS。 逻辑卷使用ext4格式格式化。&lt;br&gt;用一句话概括本文为ext4 over LVM over LUKS over GPT。&lt;/p&gt;
+&lt;h2 id=&quot;分区&quot;&gt;&lt;a href=&quot;#分区&quot; class=&quot;headerlink&quot; title=&quot;分区&quot;&gt;&lt;/a&gt;分区&lt;/h2&gt;&lt;hr&gt;
+&lt;p&gt;分区前先要确立分区表格式。&lt;br&gt;&lt;del&gt;因通常MBR分区表最大支持到2T&lt;/del&gt;，所以需要使用GPT分区表。GPT&lt;a href=&quot;https://zh.wikipedia.org/wiki/GUID%E7%A3%81%E7%A2%9F%E5%88%86%E5%89%B2%E8%A1%A8&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;维基百科&lt;/a&gt; &lt;br&gt;&lt;/p&gt;
+&lt;p&gt;刚才看来wiki,西数与洗劫盘，使用MBR分区技术可以支持到16T。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;对于那些扇区为512字节的磁盘，MBR分区表不支持容量大于2.2TB（2.2×1012字节）[1]的分区，然而，一些硬盘制造商（诸如希捷和西部数据）注意到这个局限性，并且将他们的容量较大的磁盘升级到4KB的扇区，这意味着MBR的有效容量上限提升到16 TiB。 这个看似“正确的”解决方案，在临时地降低人们对改进磁盘分配表的需求的同时，也给市场带来关于在有较大的块（block）的设备上从BIOS启动时，如何最佳的划分磁盘分区的困惑。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;使用GPT分区比MBR分区有如下优点：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;主分区数目多，GPT最多128个,MBR 4个&lt;/li&gt;
+&lt;li&gt;安全性高，便于数据恢复，GPT将分区信息在每个分区首尾都存放一遍，MBR分区表只存一处，万一分区信息损坏,GPT恢复概率更高&lt;/li&gt;
+&lt;li&gt;大容量支持，MBR使用512B扇区大小最多2.2T，4K扇区大小16T，GPT 9.4ZB&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;缺点：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;兼容性，见&lt;a href=&quot;https://zh.wikipedia.org/wiki/GUID%E7%A3%81%E7%A2%9F%E5%88%86%E5%89%B2%E8%A1%A8#.E6.93.8D.E4.BD.9C.E7.B3.BB.E7.BB.9F.E6.94.AF.E6.8C.81&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;维基百科操作系统支持&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+&lt;p&gt;本文因需求使用GPT分区表，分区之前做了如下规划：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;分区&lt;/th&gt;
+&lt;th style=&quot;text-align:right&quot;&gt;大小&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td style=&quot;text-align:right&quot;&gt;2T&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td style=&quot;text-align:right&quot;&gt;0.7T&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;找到要分区的硬盘，如下sdc&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;# lsblk&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;NAME                         MAJ:MIN RM   SIZE RO TYPE  MOUNTPOINT&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;sdc                            8:32   0   2.7T  0 disk&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;使用parted指定分区格式&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;# parted  /dev/sdc&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;GNU Parted &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Using /dev/sdc&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Welcome to GNU Parted! Type &amp;apos;help&amp;apos; to view a list of commands.&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;(parted) mklabel gpt&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;(parted) print free&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Model: TO Exter nal USB 3.0 (scsi)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Disk /dev/sdc: 3001GB&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Sector size (logical/physical): 512B/4096B&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Partition Table: gpt&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Number  Start   End     Size    File system  Name  Flags&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;                17.4kB  3001GB  3001GB  Free Space&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;创建一个主分区&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;(parted) mkpart primary  0%  74%&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;创建另外一个主分区&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;(parted) mkpart primary 74% 100%&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;查看之前创建的分区&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;(parted) print free&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Model: TO Exter nal USB 3.0 (scsi)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Disk /dev/sdc: 3001GB&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Sector size (logical/physical): 512B/4096B&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Partition Table: gpt&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Number  Start   End     Size    File system  Name     Flags&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        17.4kB  33.6MB  33.5MB  Free Space&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt; 1      33.6MB  2220GB  2220GB               primary&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt; 2      2220GB  3001GB  780GB                primary&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        3001GB  3001GB  115kB   Free Space&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;运气不错没有出现&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Warning: The resulting partition is not properly aligned for best performance.&lt;br&gt;Ignore/Cancel?&lt;br&gt;&lt;br&gt;&lt;br&gt;如果出现参照：&lt;a href=&quot;http://rainbow.chard.org/2013/01/30/how-to-align-partitions-for-best-performance-using-parted/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;链接&lt;/a&gt;解决&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;加密&quot;&gt;&lt;a href=&quot;#加密&quot; class=&quot;headerlink&quot; title=&quot;加密&quot;&gt;&lt;/a&gt;加密&lt;/h2&gt;&lt;hr&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;创建加密容器　用 LUKS 方式格式化分区 &lt;/p&gt;
+ &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;# sudo cryptsetup luksFormat /dev/sdc2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;WARNING!&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;========&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;This will overwrite data on /dev/sdc2 irrevocably.&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Are you sure? (Type uppercase yes): YES (输入大写的YES)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Enter passphrase: (输入密码)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Verify passphrase:&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;打开加密盘&lt;/p&gt;
+ &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;cryptsetup luksOpen /dev/sdc2 westdata-hd2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Enter passphrase for /dev/sdc2:&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt; 打开之后，该虚拟盘会被映射到 /dev/mapper/westdata-hd2&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;开机自动挂载加密容器&lt;br&gt; 创建添加keyfile&lt;/p&gt;
+ &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;dd if=/dev/urandom of=keyfile bs=1k count=4 &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4+0 records in &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4+0 records out &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4096 bytes (4.1 kB) copied, 0.00206882 s, 2.0 MB/s &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;cryptsetup luksAddKey /dev/sdc2 keyfile &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Enter any passphrase:&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt; 添加自动挂载&lt;/p&gt;
+ &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;vim /etc/crypttab  &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;westdata-hd2    /dev/sdc2       keyfilepath   luks &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;vim /etc/fstab&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;/dev/mapper/name        keyfile                   ext4    _netdev         0 0&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;添加/移除/修改LUKS密码 &lt;/p&gt;
+ &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;#cryptsetup luksAddKey /dev/sdc2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Enter any passphrase:  &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Enter new passphrase for key slot:  &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Verify passphrase:  &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;#cryptsetup luksRemoveKey /dev/sdc2 &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Enter LUKS passphrase to be deleted:  &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;#cryptsetup luksAddKey /dev/sdc2 keyfile &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Enter any passphrase:&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;LVM分区&quot;&gt;&lt;a href=&quot;#LVM分区&quot; class=&quot;headerlink&quot; title=&quot;LVM分区&quot;&gt;&lt;/a&gt;LVM分区&lt;/h2&gt;&lt;hr&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;创建pv&lt;/p&gt;
+ &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;pvcreate  /dev/mapper/westdata-hd2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Physical volume &amp;quot;/dev/mapper/westdata-hd2&amp;quot; successfully created&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt; 查看已有pv&lt;/p&gt;
+ &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;pvs&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;PV                       VG      Fmt  Attr PSize   PFree  &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;..........&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;/dev/mapper/westdata-hd2         lvm2 a--  726.55g 726.55g&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;创建vg(卷组)&lt;/p&gt;
+ &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;vgcreate  vg-westdata2  /dev/mapper/westdata-hd2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  Volume group &amp;quot;vg-westdata&amp;quot; successfully created&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;创建lv(逻辑卷)&lt;/p&gt;
+ &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;lvcreate   -l  100%VG   -n lv-westdata2 vg-westdata2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt; Logical volume &amp;quot;lv-westdata2&amp;quot; created&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt; 显示已有lv&lt;/p&gt;
+ &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;16&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;17&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;lvdisplay &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  --- Logical volume ---&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  LV Path                /dev/vg-westdata2/lv-westdata2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  LV Name                lv-westdata2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  VG Name                vg-westdata2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  LV UUID                P1grmT-SWx5-QyeP-fnbw-18wW-w9uN-V2eVze&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  LV Write Access        read/write&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  LV Creation host, time  2016-12-12 00:41:53 +0800&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  LV Status              available&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  # open                 0&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  LV Size                726.55 GiB&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  Current LE             185996&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  Segments               1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  Allocation             inherit&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  Read ahead sectors     auto&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  - currently set to     256&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  Block device           252:8&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;格式化逻辑卷&lt;/p&gt;
+ &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;16&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;17&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;18&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;19&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;20&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;21&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;22&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;23&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;mkfs.ext4 /dev/vg-westdata2/lv-westdata2 &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;mke2fs 1.42.9 (4-Feb-2014)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Filesystem label=&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;OS type: Linux&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Block size=4096 (log=2)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Fragment size=4096 (log=2)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Stride=0 blocks, Stripe width=0 blocks&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;47620096 inodes, 190459904 blocks&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9522995 blocks (5.00%) reserved for the super user&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;First data block=0&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Maximum filesystem blocks=4294967296&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5813 block groups&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;32768 blocks per group, 32768 fragments per group&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8192 inodes per group&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Superblock backups stored on blocks: &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	32768, 98304, 163840, 229376, 294912, 819200, 884736, 1605632, 2654208, &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	4096000, 7962624, 11239424, 20480000, 23887872, 71663616, 78675968, &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;	102400000&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Allocating group tables: done                            &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Writing inode tables: done                            &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Creating journal (32768 blocks): done&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Writing superblocks and filesystem accounting information: done&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;挂载逻辑卷&lt;/p&gt;
+ &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;mkdir /media/test&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;mount /dev/vg-westdata2/lv-westdata2  /media/test&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;逻辑卷自动挂载&lt;/p&gt;
+ &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;vim /etc/fstab&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;/dev/vg-westdata2/lv-westdata2      /media/test                  ext4    _netdev         0 0&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;关闭加密盘&quot;&gt;&lt;a href=&quot;#关闭加密盘&quot; class=&quot;headerlink&quot; title=&quot;关闭加密盘&quot;&gt;&lt;/a&gt;关闭加密盘&lt;/h2&gt;&lt;hr&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;卸载逻辑卷&lt;/p&gt;
+ &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;umount /dev/vg-westdata2/test&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;关闭加密盘&lt;/p&gt;
+ &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;cryptsetup luksClose westdata-hd2 (之前打开容器后面跟的名称)&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;引用&quot;&gt;&lt;a href=&quot;#引用&quot; class=&quot;headerlink&quot; title=&quot;引用&quot;&gt;&lt;/a&gt;引用&lt;/h2&gt;&lt;hr&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://zh.wikipedia.org/wiki/GUID%E7%A3%81%E7%A2%9F%E5%88%86%E5%89%B2%E8%A1%A8&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;    维基百科&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;hr&gt;
+&lt;p&gt;双十一买了块3T硬盘，今天有空折腾下，也记录下。&lt;br&gt;&lt;br&gt;本文用到的技术有GPT、LUKS、LVM、ext4。&lt;br&gt;&lt;br
+    
+    </summary>
+    
+    
+      <category term="GPT" scheme="https://crackfree.github.io/tags/GPT/"/>
+    
+      <category term="LVM" scheme="https://crackfree.github.io/tags/LVM/"/>
+    
+      <category term="LUKS" scheme="https://crackfree.github.io/tags/LUKS/"/>
+    
+      <category term="part" scheme="https://crackfree.github.io/tags/part/"/>
+    
+      <category term="dmcrypt" scheme="https://crackfree.github.io/tags/dmcrypt/"/>
+    
+  </entry>
   
   <entry>
     <title>Centos 升级glibc</title>

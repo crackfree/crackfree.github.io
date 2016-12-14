@@ -1,0 +1,636 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-cn">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Linux下大硬盘分区与加密－使用GPT、LVM over LUKS | crackfree</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="crackfree">
+    
+
+    
+    <meta name="description" content="前言
+双十一买了块3T硬盘，今天有空折腾下，也记录下。本文用到的技术有GPT、LUKS、LVM、ext4。预定的结果为在使用GPT分区表的硬盘上，建立多个主分区。每个主分区使用LUKS整个分区加密。在加密的主分区内使用LVM建立多个所需的逻辑卷，简单的说为LVM over LUKS。 逻辑卷使用ext4格式格式化。用一句话概括本文为ext4 over LVM over LUKS over GPT。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux下大硬盘分区与加密－使用GPT、LVM over LUKS">
+<meta property="og:url" content="https://crackfree.github.io/2016/11/16/using-gpt-lvm-and-luks-to-part-big-disk-and-encrypt-it-in-Linux/index.html">
+<meta property="og:site_name" content="crackfree">
+<meta property="og:description" content="前言
+双十一买了块3T硬盘，今天有空折腾下，也记录下。本文用到的技术有GPT、LUKS、LVM、ext4。预定的结果为在使用GPT分区表的硬盘上，建立多个主分区。每个主分区使用LUKS整个分区加密。在加密的主分区内使用LVM建立多个所需的逻辑卷，简单的说为LVM over LUKS。 逻辑卷使用ext4格式格式化。用一句话概括本文为ext4 over LVM over LUKS over GPT。">
+<meta property="og:updated_time" content="2016-12-14T15:15:35.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux下大硬盘分区与加密－使用GPT、LVM over LUKS">
+<meta name="twitter:description" content="前言
+双十一买了块3T硬盘，今天有空折腾下，也记录下。本文用到的技术有GPT、LUKS、LVM、ext4。预定的结果为在使用GPT分区表的硬盘上，建立多个主分区。每个主分区使用LUKS整个分区加密。在加密的主分区内使用LVM建立多个所需的逻辑卷，简单的说为LVM over LUKS。 逻辑卷使用ext4格式格式化。用一句话概括本文为ext4 over LVM over LUKS over GPT。">
+
+    
+    <link rel="alternative" href="/atom.xml" title="crackfree" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="crackfree" title="crackfree"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="crackfree">crackfree</a></h1>
+				<h2 class="blog-motto">认识世界，了解自己。</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:crackfree.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/11/16/using-gpt-lvm-and-luks-to-part-big-disk-and-encrypt-it-in-Linux/" title="Linux下大硬盘分区与加密－使用GPT、LVM over LUKS" itemprop="url">Linux下大硬盘分区与加密－使用GPT、LVM over LUKS</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="crackfree" target="_blank" itemprop="author">crackfree</a>
+		
+  <p class="article-time">
+    <time datetime="2016-11-16T13:50:55.000Z" itemprop="datePublished"> Published 2016-11-16</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分区"><span class="toc-number">2.</span> <span class="toc-text">分区</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#加密"><span class="toc-number">3.</span> <span class="toc-text">加密</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LVM分区"><span class="toc-number">4.</span> <span class="toc-text">LVM分区</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关闭加密盘"><span class="toc-number">5.</span> <span class="toc-text">关闭加密盘</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#引用"><span class="toc-number">6.</span> <span class="toc-text">引用</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><hr>
+<p>双十一买了块3T硬盘，今天有空折腾下，也记录下。<br><br>本文用到的技术有GPT、LUKS、LVM、ext4。<br><br>预定的结果为在使用GPT分区表的硬盘上，建立多个主分区。每个主分区使用LUKS整个分区加密。在加密的主分区内使用LVM建立多个所需的逻辑卷，简单的说为LVM over LUKS。 逻辑卷使用ext4格式格式化。<br>用一句话概括本文为ext4 over LVM over LUKS over GPT。</p>
+<h2 id="分区"><a href="#分区" class="headerlink" title="分区"></a>分区</h2><hr>
+<p>分区前先要确立分区表格式。<br><del>因通常MBR分区表最大支持到2T</del>，所以需要使用GPT分区表。GPT<a href="https://zh.wikipedia.org/wiki/GUID%E7%A3%81%E7%A2%9F%E5%88%86%E5%89%B2%E8%A1%A8" target="_blank" rel="external">维基百科</a> <br></p>
+<p>刚才看来wiki,西数与洗劫盘，使用MBR分区技术可以支持到16T。</p>
+<blockquote>
+<p>对于那些扇区为512字节的磁盘，MBR分区表不支持容量大于2.2TB（2.2×1012字节）[1]的分区，然而，一些硬盘制造商（诸如希捷和西部数据）注意到这个局限性，并且将他们的容量较大的磁盘升级到4KB的扇区，这意味着MBR的有效容量上限提升到16 TiB。 这个看似“正确的”解决方案，在临时地降低人们对改进磁盘分配表的需求的同时，也给市场带来关于在有较大的块（block）的设备上从BIOS启动时，如何最佳的划分磁盘分区的困惑。</p>
+</blockquote>
+<p>使用GPT分区比MBR分区有如下优点：</p>
+<ul>
+<li>主分区数目多，GPT最多128个,MBR 4个</li>
+<li>安全性高，便于数据恢复，GPT将分区信息在每个分区首尾都存放一遍，MBR分区表只存一处，万一分区信息损坏,GPT恢复概率更高</li>
+<li>大容量支持，MBR使用512B扇区大小最多2.2T，4K扇区大小16T，GPT 9.4ZB</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>兼容性，见<a href="https://zh.wikipedia.org/wiki/GUID%E7%A3%81%E7%A2%9F%E5%88%86%E5%89%B2%E8%A1%A8#.E6.93.8D.E4.BD.9C.E7.B3.BB.E7.BB.9F.E6.94.AF.E6.8C.81" target="_blank" rel="external">维基百科操作系统支持</a></li>
+</ul>
+<p><br></p>
+<p>本文因需求使用GPT分区表，分区之前做了如下规划：</p>
+<table>
+<thead>
+<tr>
+<th>分区</th>
+<th style="text-align:right">大小</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td style="text-align:right">2T</td>
+</tr>
+<tr>
+<td>2</td>
+<td style="text-align:right">0.7T</td>
+</tr>
+</tbody>
+</table>
+<p>找到要分区的硬盘，如下sdc</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># lsblk</span><br><span class="line">NAME                         MAJ:MIN RM   SIZE RO TYPE  MOUNTPOINT</span><br><span class="line"></span><br><span class="line">sdc                            8:32   0   2.7T  0 disk</span><br></pre></td></tr></table></figure>
+<p>使用parted指定分区格式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># parted  /dev/sdc</span><br><span class="line">GNU Parted </span><br><span class="line">Using /dev/sdc</span><br><span class="line">Welcome to GNU Parted! Type &apos;help&apos; to view a list of commands.</span><br><span class="line">(parted) mklabel gpt</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(parted) print free</span><br><span class="line">Model: TO Exter nal USB 3.0 (scsi)</span><br><span class="line">Disk /dev/sdc: 3001GB</span><br><span class="line">Sector size (logical/physical): 512B/4096B</span><br><span class="line">Partition Table: gpt</span><br><span class="line"></span><br><span class="line">Number  Start   End     Size    File system  Name  Flags</span><br><span class="line">                17.4kB  3001GB  3001GB  Free Space</span><br></pre></td></tr></table></figure>
+<p>创建一个主分区</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(parted) mkpart primary  0%  74%</span><br></pre></td></tr></table></figure>
+<p>创建另外一个主分区<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(parted) mkpart primary 74% 100%</span><br></pre></td></tr></table></figure></p>
+<p>查看之前创建的分区<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">(parted) print free</span><br><span class="line">Model: TO Exter nal USB 3.0 (scsi)</span><br><span class="line">Disk /dev/sdc: 3001GB</span><br><span class="line">Sector size (logical/physical): 512B/4096B</span><br><span class="line">Partition Table: gpt</span><br><span class="line"></span><br><span class="line">Number  Start   End     Size    File system  Name     Flags</span><br><span class="line">        17.4kB  33.6MB  33.5MB  Free Space</span><br><span class="line"> 1      33.6MB  2220GB  2220GB               primary</span><br><span class="line"> 2      2220GB  3001GB  780GB                primary</span><br><span class="line">        3001GB  3001GB  115kB   Free Space</span><br></pre></td></tr></table></figure></p>
+<p>运气不错没有出现</p>
+<blockquote>
+<p>Warning: The resulting partition is not properly aligned for best performance.<br>Ignore/Cancel?<br><br><br>如果出现参照：<a href="http://rainbow.chard.org/2013/01/30/how-to-align-partitions-for-best-performance-using-parted/" target="_blank" rel="external">链接</a>解决</p>
+</blockquote>
+<h2 id="加密"><a href="#加密" class="headerlink" title="加密"></a>加密</h2><hr>
+<ol>
+<li><p>创建加密容器　用 LUKS 方式格式化分区 </p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># sudo cryptsetup luksFormat /dev/sdc2</span><br><span class="line">	</span><br><span class="line">WARNING!</span><br><span class="line">========</span><br><span class="line">This will overwrite data on /dev/sdc2 irrevocably.</span><br><span class="line">	</span><br><span class="line">Are you sure? (Type uppercase yes): YES (输入大写的YES)</span><br><span class="line">Enter passphrase: (输入密码)</span><br><span class="line">Verify passphrase:</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>打开加密盘</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cryptsetup luksOpen /dev/sdc2 westdata-hd2</span><br><span class="line">Enter passphrase for /dev/sdc2:</span><br></pre></td></tr></table></figure>
+<p> 打开之后，该虚拟盘会被映射到 /dev/mapper/westdata-hd2</p>
+</li>
+</ol>
+<ol>
+<li><p>开机自动挂载加密容器<br> 创建添加keyfile</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">dd if=/dev/urandom of=keyfile bs=1k count=4 </span><br><span class="line">4+0 records in </span><br><span class="line">4+0 records out </span><br><span class="line">4096 bytes (4.1 kB) copied, 0.00206882 s, 2.0 MB/s </span><br><span class="line">cryptsetup luksAddKey /dev/sdc2 keyfile </span><br><span class="line">Enter any passphrase:</span><br></pre></td></tr></table></figure>
+<p> 添加自动挂载</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/crypttab  </span><br><span class="line">westdata-hd2    /dev/sdc2       keyfilepath   luks </span><br><span class="line">vim /etc/fstab</span><br><span class="line">/dev/mapper/name        keyfile                   ext4    _netdev         0 0</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>添加/移除/修改LUKS密码 </p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#cryptsetup luksAddKey /dev/sdc2</span><br><span class="line">Enter any passphrase:  </span><br><span class="line">Enter new passphrase for key slot:  </span><br><span class="line">Verify passphrase:  </span><br><span class="line">#cryptsetup luksRemoveKey /dev/sdc2 </span><br><span class="line">Enter LUKS passphrase to be deleted:  </span><br><span class="line">#cryptsetup luksAddKey /dev/sdc2 keyfile </span><br><span class="line">Enter any passphrase:</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="LVM分区"><a href="#LVM分区" class="headerlink" title="LVM分区"></a>LVM分区</h2><hr>
+<ol>
+<li><p>创建pv</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pvcreate  /dev/mapper/westdata-hd2</span><br><span class="line">Physical volume &quot;/dev/mapper/westdata-hd2&quot; successfully created</span><br></pre></td></tr></table></figure>
+<p> 查看已有pv</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pvs</span><br><span class="line">PV                       VG      Fmt  Attr PSize   PFree  </span><br><span class="line">..........</span><br><span class="line">/dev/mapper/westdata-hd2         lvm2 a--  726.55g 726.55g</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建vg(卷组)</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vgcreate  vg-westdata2  /dev/mapper/westdata-hd2</span><br><span class="line">  Volume group &quot;vg-westdata&quot; successfully created</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>创建lv(逻辑卷)</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lvcreate   -l  100%VG   -n lv-westdata2 vg-westdata2</span><br><span class="line"> Logical volume &quot;lv-westdata2&quot; created</span><br></pre></td></tr></table></figure>
+<p> 显示已有lv</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">lvdisplay </span><br><span class="line">  --- Logical volume ---</span><br><span class="line">  LV Path                /dev/vg-westdata2/lv-westdata2</span><br><span class="line">  LV Name                lv-westdata2</span><br><span class="line">  VG Name                vg-westdata2</span><br><span class="line">  LV UUID                P1grmT-SWx5-QyeP-fnbw-18wW-w9uN-V2eVze</span><br><span class="line">  LV Write Access        read/write</span><br><span class="line">  LV Creation host, time  2016-12-12 00:41:53 +0800</span><br><span class="line">  LV Status              available</span><br><span class="line">  # open                 0</span><br><span class="line">  LV Size                726.55 GiB</span><br><span class="line">  Current LE             185996</span><br><span class="line">  Segments               1</span><br><span class="line">  Allocation             inherit</span><br><span class="line">  Read ahead sectors     auto</span><br><span class="line">  - currently set to     256</span><br><span class="line">  Block device           252:8</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>格式化逻辑卷</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">mkfs.ext4 /dev/vg-westdata2/lv-westdata2 </span><br><span class="line">mke2fs 1.42.9 (4-Feb-2014)</span><br><span class="line">Filesystem label=</span><br><span class="line">OS type: Linux</span><br><span class="line">Block size=4096 (log=2)</span><br><span class="line">Fragment size=4096 (log=2)</span><br><span class="line">Stride=0 blocks, Stripe width=0 blocks</span><br><span class="line">47620096 inodes, 190459904 blocks</span><br><span class="line">9522995 blocks (5.00%) reserved for the super user</span><br><span class="line">First data block=0</span><br><span class="line">Maximum filesystem blocks=4294967296</span><br><span class="line">5813 block groups</span><br><span class="line">32768 blocks per group, 32768 fragments per group</span><br><span class="line">8192 inodes per group</span><br><span class="line">Superblock backups stored on blocks: </span><br><span class="line">	32768, 98304, 163840, 229376, 294912, 819200, 884736, 1605632, 2654208, </span><br><span class="line">	4096000, 7962624, 11239424, 20480000, 23887872, 71663616, 78675968, </span><br><span class="line">	102400000</span><br><span class="line"></span><br><span class="line">Allocating group tables: done                            </span><br><span class="line">Writing inode tables: done                            </span><br><span class="line">Creating journal (32768 blocks): done</span><br><span class="line">Writing superblocks and filesystem accounting information: done</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>挂载逻辑卷</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir /media/test</span><br><span class="line">mount /dev/vg-westdata2/lv-westdata2  /media/test</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>逻辑卷自动挂载</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/fstab</span><br><span class="line">/dev/vg-westdata2/lv-westdata2      /media/test                  ext4    _netdev         0 0</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="关闭加密盘"><a href="#关闭加密盘" class="headerlink" title="关闭加密盘"></a>关闭加密盘</h2><hr>
+<ol>
+<li><p>卸载逻辑卷</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">umount /dev/vg-westdata2/test</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>关闭加密盘</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cryptsetup luksClose westdata-hd2 (之前打开容器后面跟的名称)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h2><hr>
+<ul>
+<li><a href="https://zh.wikipedia.org/wiki/GUID%E7%A3%81%E7%A2%9F%E5%88%86%E5%89%B2%E8%A1%A8" target="_blank" rel="external">    维基百科</a></li>
+</ul>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/GPT/">GPT</a><a href="/tags/LVM/">LVM</a><a href="/tags/LUKS/">LUKS</a><a href="/tags/part/">part</a><a href="/tags/dmcrypt/">dmcrypt</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://crackfree.github.io/2016/11/16/using-gpt-lvm-and-luks-to-part-big-disk-and-encrypt-it-in-Linux/" data-title="Linux下大硬盘分区与加密－使用GPT、LVM over LUKS | crackfree" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2016/10/01/glibc-upgrade/"  title="Centos 升级glibc">
+ <strong>下一篇：</strong><br/> 
+ <span>Centos 升级glibc
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#分区"><span class="toc-number">2.</span> <span class="toc-text">分区</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#加密"><span class="toc-number">3.</span> <span class="toc-text">加密</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LVM分区"><span class="toc-number">4.</span> <span class="toc-text">LVM分区</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#关闭加密盘"><span class="toc-number">5.</span> <span class="toc-text">关闭加密盘</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#引用"><span class="toc-number">6.</span> <span class="toc-text">引用</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/linux/" title="linux">linux<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/vim/" title="vim">vim<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/shell/" title="shell">shell<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/fedora/" title="fedora">fedora<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/glibc/" title="glibc">glibc<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/haproxy/" title="haproxy">haproxy<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iptables/" title="iptables">iptables<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/VPS/" title="VPS">VPS<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/GPT/" title="GPT">GPT<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ISO/" title="ISO">ISO<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LUKS/" title="LUKS">LUKS<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/part/" title="part">part<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/dmcrypt/" title="dmcrypt">dmcrypt<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hexo/" title="hexo">hexo<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/github/" title="github">github<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/blog/" title="blog">blog<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ssh/" title="ssh">ssh<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/RSA/" title="RSA">RSA<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LVM/" title="LVM">LVM<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+    </ul>
+</div>
+
+  
+<div class="github-card">
+<p class="asidetitle">Github Card</p>
+<div class="github-card" data-github="crackfree" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 认识世界,了解自己。 <br/>
+			Stay hungry, stay foolish..</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		<a href="https://github.com/crackfree" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		<a href="https://www.douban.com/people/147714177" target="_blank" class="icon-douban" title="豆瓣"></a>
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="crackfree">crackfree</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'crackfree';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
