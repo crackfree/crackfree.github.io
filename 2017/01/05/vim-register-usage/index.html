@@ -4,47 +4,44 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Linux 更新出现 Hash Sum mismatch 错误解决 | crackfree</title>
+    <title>vim 寄存器使用 | crackfree</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="crackfree">
     
 
     
-    <meta name="description" content="linux 更新时，出现如下错误:
+    <meta name="description" content="前言
+使用vim需要粘贴复制的多了，系统剪贴板不能存多个值，vim中的寄存器能解决这个问题。
+寄存器分类
+VIM中有9中类型的寄存器，寄存器的主要功能就是缓存操作过程中删除、复制、搜索等的文本内容，通过 :help registers命令查看寄存器的详细帮助说明，这里对类型翻译如下：
 
-W: Failed to fetch ****** Hash Sum mismatch,E: Some index files failed to download. They have been ignored, or old ones used instead.
+未命名寄存器 “”  —— vim使用的默认寄存器，文本来源命令：d/c/s/x/y
 
-经过google得知出现错误的原因：
-
-有些ISP缓存了仓库，没有及时更新。
-
-使用mirr">
+10个数字命名寄存器 “">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux 更新出现 Hash Sum mismatch 错误解决">
-<meta property="og:url" content="https://crackfree.github.io/2016/04/30/Linux-update-error-Hash-Sum-mismatch-resolved/index.html">
+<meta property="og:title" content="vim 寄存器使用">
+<meta property="og:url" content="https://crackfree.github.io/2017/01/05/vim-register-usage/index.html">
 <meta property="og:site_name" content="crackfree">
-<meta property="og:description" content="linux 更新时，出现如下错误:
+<meta property="og:description" content="前言
+使用vim需要粘贴复制的多了，系统剪贴板不能存多个值，vim中的寄存器能解决这个问题。
+寄存器分类
+VIM中有9中类型的寄存器，寄存器的主要功能就是缓存操作过程中删除、复制、搜索等的文本内容，通过 :help registers命令查看寄存器的详细帮助说明，这里对类型翻译如下：
 
-W: Failed to fetch ****** Hash Sum mismatch,E: Some index files failed to download. They have been ignored, or old ones used instead.
+未命名寄存器 “”  —— vim使用的默认寄存器，文本来源命令：d/c/s/x/y
 
-经过google得知出现错误的原因：
-
-有些ISP缓存了仓库，没有及时更新。
-
-使用mirr">
-<meta property="og:updated_time" content="2016-04-30T07:58:20.000Z">
+10个数字命名寄存器 “">
+<meta property="og:updated_time" content="2017-01-09T15:38:28.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Linux 更新出现 Hash Sum mismatch 错误解决">
-<meta name="twitter:description" content="linux 更新时，出现如下错误:
+<meta name="twitter:title" content="vim 寄存器使用">
+<meta name="twitter:description" content="前言
+使用vim需要粘贴复制的多了，系统剪贴板不能存多个值，vim中的寄存器能解决这个问题。
+寄存器分类
+VIM中有9中类型的寄存器，寄存器的主要功能就是缓存操作过程中删除、复制、搜索等的文本内容，通过 :help registers命令查看寄存器的详细帮助说明，这里对类型翻译如下：
 
-W: Failed to fetch ****** Hash Sum mismatch,E: Some index files failed to download. They have been ignored, or old ones used instead.
+未命名寄存器 “”  —— vim使用的默认寄存器，文本来源命令：d/c/s/x/y
 
-经过google得知出现错误的原因：
-
-有些ISP缓存了仓库，没有及时更新。
-
-使用mirr">
+10个数字命名寄存器 “">
 
     
     <link rel="alternative" href="/atom.xml" title="crackfree" type="application/atom+xml">
@@ -104,14 +101,14 @@ W: Failed to fetch ****** Hash Sum mismatch,E: Some index files failed to downlo
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/04/30/Linux-update-error-Hash-Sum-mismatch-resolved/" title="Linux 更新出现 Hash Sum mismatch 错误解决" itemprop="url">Linux 更新出现 Hash Sum mismatch 错误解决</a>
+      <a href="/2017/01/05/vim-register-usage/" title="vim 寄存器使用" itemprop="url">vim 寄存器使用</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="crackfree" target="_blank" itemprop="author">crackfree</a>
 		
   <p class="article-time">
-    <time datetime="2016-04-30T06:49:44.000Z" itemprop="datePublished"> Published 2016-04-30</time>
+    <time datetime="2017-01-05T03:35:53.000Z" itemprop="datePublished"> Published 2017-01-05</time>
     
   </p>
 </header>
@@ -120,26 +117,98 @@ W: Failed to fetch ****** Hash Sum mismatch,E: Some index files failed to downlo
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#寄存器分类"><span class="toc-number">2.</span> <span class="toc-text">寄存器分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用方法"><span class="toc-number">3.</span> <span class="toc-text">使用方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考链接"><span class="toc-number">4.</span> <span class="toc-text">参考链接</span></a></li></ol>
 		
 		</div>
 		
-		<p>linux 更新时，出现如下错误:</p>
-<blockquote>
-<p>W: Failed to fetch ****** Hash Sum mismatch,<br>E: Some index files failed to download. They have been ignored, or old ones used instead.</p>
-</blockquote>
-<p>经过google得知出现错误的原因：</p>
+		<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><hr>
+<p>使用vim需要粘贴复制的多了，系统剪贴板不能存多个值，vim中的寄存器能解决这个问题。</p>
+<h2 id="寄存器分类"><a href="#寄存器分类" class="headerlink" title="寄存器分类"></a>寄存器分类</h2><hr>
+<p>VIM中有9中类型的寄存器，寄存器的主要功能就是缓存操作过程中删除、复制、搜索等的文本内容，通过 :help registers命令查看寄存器的详细帮助说明，这里对类型翻译如下：</p>
 <ul>
-<li><p>有些ISP缓存了仓库，没有及时更新。</p>
+<li><p>未命名寄存器 “”  —— vim使用的默认寄存器，文本来源命令：d/c/s/x/y</p>
 </li>
-<li><p>使用mirror更新，而mirror没有及时更新</p>
+<li><p>10个数字命名寄存器 “0 - “9 —— vim缓存yank和delete行操作命令产生的文本</p>
+</li>
+<li><p>1个非行删除内容缓存寄存器 “- —— vim缓存delete操作在非行上时产生的文本</p>
+</li>
+<li><p>26个字母命名寄存器 “a - “z / “A - “Z —— 完全由用户指定内容的寄存器</p>
+</li>
+<li><p>4个只读寄存器 “. “% “# “:</p>
+</li>
+<li><p>表达式寄存器 “= —— 使用VIM强大的表达式功能（从来没用过，一点不懂）</p>
+</li>
+<li><p>GUI选择寄存器 “* “+ “~ —— vim缓存在GUI中选择的文本</p>
+</li>
+<li><p>黑洞寄存器 “_ —— 类似Linux中的/dev/null文件，只进不出，可用来滤掉影响默认寄存器的内容</p>
+</li>
+<li><p>最后搜索模式寄存器 “/ —— 缓存在vim中使用过的最后的搜索内容</p>
 </li>
 </ul>
-<p>使用如下命令解决：</p>
-<pre><code>sudo rm -rf /var/lib/apt/lists/*
-sudo apt-get clean
-sudo apt-get update
-</code></pre>  
+<p>未命名寄存器（The Unnamed Register） 当使用y命令复制文本，或使用d、c、s、x命令删除文本时，文本将自动被放入””未命名寄存器。即使你在复制或删除文本时，已经指定了寄存器（例如使用”xdd命令），这些文本也将会被同时放入”x和””寄存器。</p>
+<p>数字寄存器（The Numbered Registers） “0始终存放最近删除的文本。”1也包含上次删除的文本。区别在于：”0不断被删除的文本所覆盖；而如果删除文本时，指定了寄存器或者文本小于一行，那么”1将不会被更新。 数字寄存器1-9可以看作是删除历史， 你可以从中找到早先删除的文本。比如你使用了三次dd命令，那么这三行文本被分别存放在寄存器1,2,3中，可以通过命令”1P,”2P,”3P将这些文本再粘贴回来。</p>
+<p>短删除寄存器（The Small Delete Register） 当删除少于一行的文本时，除非指定了某个寄存器，否则这些内容将会被放入”-短删除寄存器中。</p>
+<p>命名寄存器（The Named Registers） 当文本被放入以小写字母命名的寄存器（例如”a）时，该寄存器原有的内容将被覆盖；而使用以大写字母命名的寄存器（例如”A）时，将会把文本追加到原有内容之后。</p>
+<p>只读寄存器（The Read-Only Registers） 你只能从4个只读寄存器中粘贴内容，而不能放入文本。”%包含当前文件名；”#包含交替文件名；”.包含最近插入的文本；”:包含上次执行的命令行。</p>
+<p>表达式寄存器（The Expression Register） 当我们输入”=，就会在Vim底部显示一个以“＝”开始的提示行，可以在这里输入表达式并按回车键确认。随后使用命令p将表达式的结果粘贴到文本中。例如要在文本中插入38<em>56的值，首先进入命令模式，输入”=，在屏幕底部的提示行中输入“38</em>56”并按回车，然后输入命令p，这样就可以将计算结果插入文本中了。在表达式寄存器中，不仅可以使用通常的算术运算符，还可以使用Vim特定的函数和运算符。例如通过表达式寄存器来得到环境变量的值（例如”=$HOME）。如果没有输入任何表达式而直接按回车键，那么Vim将执行最近使用过的表达式。</p>
+<p>选择和拖拽寄存器（The Selection and Drop Registers） 有3个寄存器用于保存选中的文本：”<em>用于访问系统剪切板。在Windows下，”</em>和”+相同；在Linux下，”+包含选中的文本，”*包含复制的文本。使用”+y命令，可以将当前选中的文文本复制到系统剪切板中。而”+p命令，则可以粘贴系统剪切板中的内容。通过剪切板寄存器，能够在不同的Vim编辑器或者是其他应用程序之间，进行文本交换。”~包含上次从其它应用程序拖拽到Gvim中的文本。</p>
+<p>黑洞寄存器（The Black Hole Register） 任何放入”_中的文本都将不复存在。如果想要永久删除某些文本而不是将他放入1-9中的某个寄存中，就可以使用黑洞寄存器。例如：命令dd将删除一行文本并将其放入寄存器1中；而命令”_dd则将该行文本放入黑洞寄存器中，这些文本也就会永久消失了，而寄存器1中的文本会保持不变。</p>
+<p>搜索模式寄存器（Search Pattern Register） 当你通过/命令进行搜索时，所使用的模式将自动被放入”/寄存器。</p>
+<p>这些寄存器很多，那怎么来查看它们的内容呢？</p>
+<ol>
+<li>查看寄存器中内容</li>
+</ol>
+<p>:reg</p>
+<p>查看指定寄存器中内容</p>
+<p>:reg {register name}</p>
+<h2 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h2><hr>
+<ul>
+<li>调取寄存器</li>
+</ul>
+<ol>
+<li>NORMAL Mode：”{register_name}</li>
+<li>COMMAND MODE：<c-r>+”寄存器名称 （输入<c-r>后VIM会自动打出”寄存器引用符号。</c-r></c-r></li>
+<li>INSERT MODE：<c-r>+寄存器名称（无需输入寄存器引用符号”）</c-r></li>
+</ol>
+<ul>
+<li>复制到寄存器</li>
+</ul>
+<p>在复制或删除文本时，可以使用”register命令将文本放入指定的寄存器中。例如以下命令，将复制的文本放到寄存器a中，同时文本也会被放入未命名寄存器中。</p>
+<p>“ayy</p>
+<p>如果再使用相应的大写字母来指定寄存器，那么会将当前行内容追加到寄存器a中，这时该寄存器中就有了两行文本。</p>
+<p>“Ayy</p>
+<ul>
+<li>从寄存器粘贴</li>
+</ul>
+<p>命令:put会将寄存中的内容粘贴到指定的文本行后面。使用以下命令，可以将寄存器中的内容粘贴到第五行的后面:</p>
+<p>:5put a</p>
+<p>如果要将文本放在这一行的前面，可以用以下命令：</p>
+<p>:5put! a</p>
+<p>你也可以使用p命令，将x寄存中的文本粘贴到光标之后：</p>
+<p>“xp</p>
+<p>而P命令，则将x寄存中的文本粘贴到光标之前：</p>
+<p>“xP</p>
+<p>如果直接使用p或P命令，而没有指明特定寄存器，那么将粘贴未命名寄存器中的内容。</p>
+<p>使用以下命令，可以粘贴上次插入的文本，方便你录入重复的内容：</p>
+<p>“.P</p>
+<p>如果要粘贴系统剪切板中的内容，在Insert mode下可以利用快捷键Shift+Ins，而在Normal mode下，可以使用以下命令：</p>
+<p>“*p</p>
+<ul>
+<li>剪切板与自动缩进indent</li>
+</ul>
+<p>如果开启了set autoindent，在粘贴具有格式缩进的文本时（如python程序），粘贴的结果将会是缩进混乱的，因为set autoindent的影响。<br>解决这个问题有两个方法：</p>
+<ol>
+<li>使用set paste模式<br>开启paste模式后，autoindent等缩进功能将会被屏蔽，粘贴格式就会不受影响。<br>每次手工开启关闭paste模式将会比较麻烦，可以在_vimrc中为其设置一个快捷键，每次需要时按一下即可切换：set pastetoggle=<f12></f12></li>
+<li>使用普通模式的”+p命令</li>
+<li>插入模式输入<c-r><c-p>“+</c-p></c-r></li>
+</ol>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><hr>
+<ul>
+<li><a href="http://www.jianshu.com/p/82b5eb3ae305" target="_blank" rel="external">http://www.jianshu.com/p/82b5eb3ae305</a></li>
+<li><a href="https://my.oschina.net/shelllife/blog/144357" target="_blank" rel="external">https://my.oschina.net/shelllife/blog/144357</a></li>
+<li><a href="http://liuzhijun.iteye.com/blog/1830931" target="_blank" rel="external">http://liuzhijun.iteye.com/blog/1830931</a></li>
+</ul>
+  
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
@@ -147,7 +216,7 @@ sudo apt-get update
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/linux/">linux</a>
+  <span></span> <a href="/tags/vim/">vim</a>
   </div>
 
 </div>
@@ -156,7 +225,7 @@ sudo apt-get update
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://crackfree.github.io/2016/04/30/Linux-update-error-Hash-Sum-mismatch-resolved/" data-title="Linux 更新出现 Hash Sum mismatch 错误解决 | crackfree" data-tsina="null" class="share clearfix">
+	  <div data-url="https://crackfree.github.io/2017/01/05/vim-register-usage/" data-title="vim 寄存器使用 | crackfree" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -169,19 +238,11 @@ sudo apt-get update
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2016/05/15/haproxy-or-iptables-forward-ports-on-VPS/" title="VPS上使用haproxy和iptables进行代理中转与端口转发">
-  <strong>上一篇：</strong><br/>
-  <span>
-  VPS上使用haproxy和iptables进行代理中转与端口转发</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2016/04/02/fedora-ifconfig-command/"  title="解决fedora下ifconfig命令不见了">
+<a href="/2016/11/16/using-gpt-lvm-and-luks-to-part-big-disk-and-encrypt-it-in-Linux/"  title="Linux下大硬盘分区与加密－使用GPT、LVM over LUKS">
  <strong>下一篇：</strong><br/> 
- <span>解决fedora下ifconfig命令不见了
+ <span>Linux下大硬盘分区与加密－使用GPT、LVM over LUKS
 </span>
 </a>
 </div>
@@ -202,7 +263,7 @@ sudo apt-get update
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#寄存器分类"><span class="toc-number">2.</span> <span class="toc-text">寄存器分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用方法"><span class="toc-number">3.</span> <span class="toc-text">使用方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考链接"><span class="toc-number">4.</span> <span class="toc-text">参考链接</span></a></li></ol>
  
   </div>
 

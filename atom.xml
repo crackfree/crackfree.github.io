@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://crackfree.github.io/"/>
-  <updated>2016-12-14T15:15:35.000Z</updated>
+  <updated>2017-01-09T15:38:28.000Z</updated>
   <id>https://crackfree.github.io/</id>
   
   <author>
@@ -14,6 +14,115 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>vim 寄存器使用</title>
+    <link href="https://crackfree.github.io/2017/01/05/vim-register-usage/"/>
+    <id>https://crackfree.github.io/2017/01/05/vim-register-usage/</id>
+    <published>2017-01-05T03:35:53.000Z</published>
+    <updated>2017-01-09T15:38:28.000Z</updated>
+    
+    <content type="html">&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;hr&gt;
+&lt;p&gt;使用vim需要粘贴复制的多了，系统剪贴板不能存多个值，vim中的寄存器能解决这个问题。&lt;/p&gt;
+&lt;h2 id=&quot;寄存器分类&quot;&gt;&lt;a href=&quot;#寄存器分类&quot; class=&quot;headerlink&quot; title=&quot;寄存器分类&quot;&gt;&lt;/a&gt;寄存器分类&lt;/h2&gt;&lt;hr&gt;
+&lt;p&gt;VIM中有9中类型的寄存器，寄存器的主要功能就是缓存操作过程中删除、复制、搜索等的文本内容，通过 :help registers命令查看寄存器的详细帮助说明，这里对类型翻译如下：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;未命名寄存器 “”  —— vim使用的默认寄存器，文本来源命令：d/c/s/x/y&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;10个数字命名寄存器 “0 - “9 —— vim缓存yank和delete行操作命令产生的文本&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;1个非行删除内容缓存寄存器 “- —— vim缓存delete操作在非行上时产生的文本&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;26个字母命名寄存器 “a - “z / “A - “Z —— 完全由用户指定内容的寄存器&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;4个只读寄存器 “. “% “# “:&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;表达式寄存器 “= —— 使用VIM强大的表达式功能（从来没用过，一点不懂）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;GUI选择寄存器 “* “+ “~ —— vim缓存在GUI中选择的文本&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;黑洞寄存器 “_ —— 类似Linux中的/dev/null文件，只进不出，可用来滤掉影响默认寄存器的内容&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;最后搜索模式寄存器 “/ —— 缓存在vim中使用过的最后的搜索内容&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;未命名寄存器（The Unnamed Register） 当使用y命令复制文本，或使用d、c、s、x命令删除文本时，文本将自动被放入””未命名寄存器。即使你在复制或删除文本时，已经指定了寄存器（例如使用”xdd命令），这些文本也将会被同时放入”x和””寄存器。&lt;/p&gt;
+&lt;p&gt;数字寄存器（The Numbered Registers） “0始终存放最近删除的文本。”1也包含上次删除的文本。区别在于：”0不断被删除的文本所覆盖；而如果删除文本时，指定了寄存器或者文本小于一行，那么”1将不会被更新。 数字寄存器1-9可以看作是删除历史， 你可以从中找到早先删除的文本。比如你使用了三次dd命令，那么这三行文本被分别存放在寄存器1,2,3中，可以通过命令”1P,”2P,”3P将这些文本再粘贴回来。&lt;/p&gt;
+&lt;p&gt;短删除寄存器（The Small Delete Register） 当删除少于一行的文本时，除非指定了某个寄存器，否则这些内容将会被放入”-短删除寄存器中。&lt;/p&gt;
+&lt;p&gt;命名寄存器（The Named Registers） 当文本被放入以小写字母命名的寄存器（例如”a）时，该寄存器原有的内容将被覆盖；而使用以大写字母命名的寄存器（例如”A）时，将会把文本追加到原有内容之后。&lt;/p&gt;
+&lt;p&gt;只读寄存器（The Read-Only Registers） 你只能从4个只读寄存器中粘贴内容，而不能放入文本。”%包含当前文件名；”#包含交替文件名；”.包含最近插入的文本；”:包含上次执行的命令行。&lt;/p&gt;
+&lt;p&gt;表达式寄存器（The Expression Register） 当我们输入”=，就会在Vim底部显示一个以“＝”开始的提示行，可以在这里输入表达式并按回车键确认。随后使用命令p将表达式的结果粘贴到文本中。例如要在文本中插入38&lt;em&gt;56的值，首先进入命令模式，输入”=，在屏幕底部的提示行中输入“38&lt;/em&gt;56”并按回车，然后输入命令p，这样就可以将计算结果插入文本中了。在表达式寄存器中，不仅可以使用通常的算术运算符，还可以使用Vim特定的函数和运算符。例如通过表达式寄存器来得到环境变量的值（例如”=$HOME）。如果没有输入任何表达式而直接按回车键，那么Vim将执行最近使用过的表达式。&lt;/p&gt;
+&lt;p&gt;选择和拖拽寄存器（The Selection and Drop Registers） 有3个寄存器用于保存选中的文本：”&lt;em&gt;用于访问系统剪切板。在Windows下，”&lt;/em&gt;和”+相同；在Linux下，”+包含选中的文本，”*包含复制的文本。使用”+y命令，可以将当前选中的文文本复制到系统剪切板中。而”+p命令，则可以粘贴系统剪切板中的内容。通过剪切板寄存器，能够在不同的Vim编辑器或者是其他应用程序之间，进行文本交换。”~包含上次从其它应用程序拖拽到Gvim中的文本。&lt;/p&gt;
+&lt;p&gt;黑洞寄存器（The Black Hole Register） 任何放入”_中的文本都将不复存在。如果想要永久删除某些文本而不是将他放入1-9中的某个寄存中，就可以使用黑洞寄存器。例如：命令dd将删除一行文本并将其放入寄存器1中；而命令”_dd则将该行文本放入黑洞寄存器中，这些文本也就会永久消失了，而寄存器1中的文本会保持不变。&lt;/p&gt;
+&lt;p&gt;搜索模式寄存器（Search Pattern Register） 当你通过/命令进行搜索时，所使用的模式将自动被放入”/寄存器。&lt;/p&gt;
+&lt;p&gt;这些寄存器很多，那怎么来查看它们的内容呢？&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;查看寄存器中内容&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;:reg&lt;/p&gt;
+&lt;p&gt;查看指定寄存器中内容&lt;/p&gt;
+&lt;p&gt;:reg {register name}&lt;/p&gt;
+&lt;h2 id=&quot;使用方法&quot;&gt;&lt;a href=&quot;#使用方法&quot; class=&quot;headerlink&quot; title=&quot;使用方法&quot;&gt;&lt;/a&gt;使用方法&lt;/h2&gt;&lt;hr&gt;
+&lt;ul&gt;
+&lt;li&gt;调取寄存器&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol&gt;
+&lt;li&gt;NORMAL Mode：”{register_name}&lt;/li&gt;
+&lt;li&gt;COMMAND MODE：&lt;c-r&gt;+”寄存器名称 （输入&lt;c-r&gt;后VIM会自动打出”寄存器引用符号。&lt;/c-r&gt;&lt;/c-r&gt;&lt;/li&gt;
+&lt;li&gt;INSERT MODE：&lt;c-r&gt;+寄存器名称（无需输入寄存器引用符号”）&lt;/c-r&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;复制到寄存器&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;在复制或删除文本时，可以使用”register命令将文本放入指定的寄存器中。例如以下命令，将复制的文本放到寄存器a中，同时文本也会被放入未命名寄存器中。&lt;/p&gt;
+&lt;p&gt;“ayy&lt;/p&gt;
+&lt;p&gt;如果再使用相应的大写字母来指定寄存器，那么会将当前行内容追加到寄存器a中，这时该寄存器中就有了两行文本。&lt;/p&gt;
+&lt;p&gt;“Ayy&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;从寄存器粘贴&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;命令:put会将寄存中的内容粘贴到指定的文本行后面。使用以下命令，可以将寄存器中的内容粘贴到第五行的后面:&lt;/p&gt;
+&lt;p&gt;:5put a&lt;/p&gt;
+&lt;p&gt;如果要将文本放在这一行的前面，可以用以下命令：&lt;/p&gt;
+&lt;p&gt;:5put! a&lt;/p&gt;
+&lt;p&gt;你也可以使用p命令，将x寄存中的文本粘贴到光标之后：&lt;/p&gt;
+&lt;p&gt;“xp&lt;/p&gt;
+&lt;p&gt;而P命令，则将x寄存中的文本粘贴到光标之前：&lt;/p&gt;
+&lt;p&gt;“xP&lt;/p&gt;
+&lt;p&gt;如果直接使用p或P命令，而没有指明特定寄存器，那么将粘贴未命名寄存器中的内容。&lt;/p&gt;
+&lt;p&gt;使用以下命令，可以粘贴上次插入的文本，方便你录入重复的内容：&lt;/p&gt;
+&lt;p&gt;“.P&lt;/p&gt;
+&lt;p&gt;如果要粘贴系统剪切板中的内容，在Insert mode下可以利用快捷键Shift+Ins，而在Normal mode下，可以使用以下命令：&lt;/p&gt;
+&lt;p&gt;“*p&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;剪切板与自动缩进indent&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;如果开启了set autoindent，在粘贴具有格式缩进的文本时（如python程序），粘贴的结果将会是缩进混乱的，因为set autoindent的影响。&lt;br&gt;解决这个问题有两个方法：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;使用set paste模式&lt;br&gt;开启paste模式后，autoindent等缩进功能将会被屏蔽，粘贴格式就会不受影响。&lt;br&gt;每次手工开启关闭paste模式将会比较麻烦，可以在_vimrc中为其设置一个快捷键，每次需要时按一下即可切换：set pastetoggle=&lt;f12&gt;&lt;/f12&gt;&lt;/li&gt;
+&lt;li&gt;使用普通模式的”+p命令&lt;/li&gt;
+&lt;li&gt;插入模式输入&lt;c-r&gt;&lt;c-p&gt;“+&lt;/c-p&gt;&lt;/c-r&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;参考链接&quot;&gt;&lt;a href=&quot;#参考链接&quot; class=&quot;headerlink&quot; title=&quot;参考链接&quot;&gt;&lt;/a&gt;参考链接&lt;/h2&gt;&lt;hr&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://www.jianshu.com/p/82b5eb3ae305&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;http://www.jianshu.com/p/82b5eb3ae305&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://my.oschina.net/shelllife/blog/144357&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://my.oschina.net/shelllife/blog/144357&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://liuzhijun.iteye.com/blog/1830931&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;http://liuzhijun.iteye.com/blog/1830931&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;hr&gt;
+&lt;p&gt;使用vim需要粘贴复制的多了，系统剪贴板不能存多个值，vim中的寄存器能解决这个问题。&lt;/p&gt;
+&lt;h2 id=&quot;寄存器分类&quot;&gt;&lt;a
+    
+    </summary>
+    
+    
+      <category term="vim" scheme="https://crackfree.github.io/tags/vim/"/>
+    
+  </entry>
   
   <entry>
     <title>Linux下大硬盘分区与加密－使用GPT、LVM over LUKS</title>
