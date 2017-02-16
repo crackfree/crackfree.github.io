@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://crackfree.github.io/"/>
-  <updated>2017-01-09T15:38:28.000Z</updated>
+  <updated>2017-02-16T16:34:27.000Z</updated>
   <id>https://crackfree.github.io/</id>
   
   <author>
@@ -14,6 +14,93 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>ansible入门与实战——配置文件、主机组与模块</title>
+    <link href="https://crackfree.github.io/2017/01/27/newer-and-practise-of-ansible-inventory-module-and-configure-file/"/>
+    <id>https://crackfree.github.io/2017/01/27/newer-and-practise-of-ansible-inventory-module-and-configure-file/</id>
+    <published>2017-01-27T15:48:53.000Z</published>
+    <updated>2017-02-16T16:34:27.000Z</updated>
+    
+    <content type="html">&lt;h2 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot; title=&quot;简介&quot;&gt;&lt;/a&gt;简介&lt;/h2&gt;&lt;hr&gt;
+&lt;p&gt;“Ansible is Simple IT Automation”——简单的自动化IT工具。这个工具的目标有这么几项：让我们自动化部署APP；自动化管理配置项；自动化的持续交付；自动化的（AWS）云服务管理。&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;#安装&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;sudo pip install ansible&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;h2 id=&quot;构成与原理&quot;&gt;&lt;a href=&quot;#构成与原理&quot; class=&quot;headerlink&quot; title=&quot;构成与原理&quot;&gt;&lt;/a&gt;构成与原理&lt;/h2&gt;&lt;hr&gt;
+&lt;p&gt;&lt;img src=&quot;https://terry.im/wiki/terry/attachments/29786135/32800771.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://terry.im/wiki/terry/attachments/29786135/37552129.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;本质上批量的在远程服务器上执行命令 。&lt;br&gt;那么fabric和ansible有什么差别呢？简单来说fabric像是一个工具箱，提供了很多好用的工具，用来在Remote执行命令，而Ansible则是提供了一套简单的流程，你要按照它的流程来做，就能轻松完成任务。这就像是库和框架的关系一样。&lt;/p&gt;
+&lt;p&gt;Asible基本组成 ：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;核心：ansible&lt;/li&gt;
+&lt;li&gt;核心模块（Core Modules）：这些都是ansible自带的模块&lt;/li&gt;
+&lt;li&gt;扩展模块（Custom Modules）：如果核心模块不足以完成某种功能，可以添加扩展模块&lt;/li&gt;
+&lt;li&gt;主机组（Host Inventory）：定义ansible管理的主机&lt;/li&gt;
+&lt;li&gt;插件（Plugins）：完成模块功能的补充&lt;/li&gt;
+&lt;li&gt;剧本（Playbooks）：ansible的任务配置文件，将多个任务定义在剧本中，由ansible自动执行&lt;/li&gt;
+&lt;li&gt;连接插件（Connectior Plugins）：ansible基于连接插件连接到各个主机上，虽然ansible是使用ssh连接到各个&lt;br&gt;主机的，但是它还支持其他的连接方法，所以需要有连接插件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;配置文件&quot;&gt;&lt;a href=&quot;#配置文件&quot; class=&quot;headerlink&quot; title=&quot;配置文件&quot;&gt;&lt;/a&gt;配置文件&lt;/h2&gt;&lt;hr&gt;
+&lt;p&gt;执行命令，ansible会按照如下配置文件位置的顺序，来搜寻配置文件。&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;* ANSIBLE_CONFIG (环境变量)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;* ansible.cfg (当前目录下)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;* .ansible.cfg (用户家目录下)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;* /etc/ansible/ansible.cfg&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;h2 id=&quot;主机组&quot;&gt;&lt;a href=&quot;#主机组&quot; class=&quot;headerlink&quot; title=&quot;主机组&quot;&gt;&lt;/a&gt;主机组&lt;/h2&gt;&lt;hr&gt;
+&lt;p&gt;定义ansible管理的主机，/etc/ansible/hosts 文件的格式与windows的ini配置文件类似:&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;mail.example.com&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;[webservers]&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;foo.example.com&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;bar.example.com&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;[dbservers]&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;one.example.com&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;two.example.com&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;three.example.com&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;ul&gt;
+&lt;li&gt;参数&lt;br&gt;Inventory 参数的说明&lt;br&gt;如同前面提到的,通过设置下面的参数,可以控制 ansible 与远程主机的交互方式,其中一些我们已经讲到过:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;16&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;17&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;18&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;19&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;20&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;21&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;22&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;23&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;24&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;25&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;26&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;27&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;28&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;29&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;30&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;ansible_ssh_host&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      将要连接的远程主机名.与你想要设定的主机的别名不同的话,可通过此变量设置.&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;ansible_ssh_port&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      ssh端口号.如果不是默认的端口号,通过此变量设置.&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;ansible_ssh_user&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      默认的 ssh 用户名&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;ansible_ssh_pass&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      ssh 密码(这种方式并不安全,我们强烈建议使用 --ask-pass 或 SSH 密钥)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;ansible_sudo_pass&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      sudo 密码(这种方式并不安全,我们强烈建议使用 --ask-sudo-pass)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;ansible_sudo_exe (new in version 1.8)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      sudo 命令路径(适用于1.8及以上版本)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;ansible_connection&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      与主机的连接类型.比如:local, ssh 或者 paramiko. Ansible 1.2 以前默认使用 paramiko.1.2 以后默认使用 &amp;apos;smart&amp;apos;,&amp;apos;smart&amp;apos; 方式会根据是否支持 ControlPersist, 来判断&amp;apos;ssh&amp;apos; 方式是否可行.&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;ansible_ssh_private_key_file&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      ssh 使用的私钥文件.适用于有多个密钥,而你不想使用 SSH 代理的情况.&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;ansible_shell_type&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      目标系统的shell类型.默认情况下,命令的执行使用 &amp;apos;sh&amp;apos; 语法,可设置为 &amp;apos;csh&amp;apos; 或 &amp;apos;fish&amp;apos;.&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;ansible_python_interpreter&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      目标主机的 python 路径.适用于的情况: 系统中有多个 Python, 或者命令路径不是&amp;quot;/usr/bin/python&amp;quot;,比如  \*BSD, 或者 /usr/bin/python&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;      不是 2.X 版本的 Python.我们不使用 &amp;quot;/usr/bin/env&amp;quot; 机制,因为这要求远程用户的路径设置正确,且要求 &amp;quot;python&amp;quot; 可执行程序名不可为 python以外的名字(实际有可能名为python26).与 ansible_python_interpreter 的工作方式相同,可设定如 ruby 或 perl 的路径...&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h3 id=&quot;主机文件的例子&quot;&gt;&lt;a href=&quot;#主机文件的例子&quot; class=&quot;headerlink&quot; title=&quot;主机文件的例子:&quot;&gt;&lt;/a&gt;主机文件的例子:&lt;/h3&gt;&lt;hr&gt;
+&lt;blockquote&gt;
+&lt;p&gt;some_host         ansible_ssh_port=2222     ansible_ssh_user=manager&lt;br&gt;aws_host          ansible_ssh_private_key_file=/home/example/.ssh/aws.pem&lt;br&gt;freebsd_host      ansible_python_interpreter=/usr/local/bin/python&lt;br&gt;ruby_module_host  ansible_ruby_interpreter=/usr/bin/ruby.1.9.3&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;模块&quot;&gt;&lt;a href=&quot;#模块&quot; class=&quot;headerlink&quot; title=&quot;模块&quot;&gt;&lt;/a&gt;模块&lt;/h2&gt;&lt;hr&gt;
+&lt;p&gt;模型类型如下：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Cloud Modules&lt;/li&gt;
+&lt;li&gt;Clustering Modules&lt;/li&gt;
+&lt;li&gt;Commands Modules&lt;/li&gt;
+&lt;li&gt;Crypto Modules&lt;/li&gt;
+&lt;li&gt;Database Modules&lt;/li&gt;
+&lt;li&gt;Files Modules&lt;/li&gt;
+&lt;li&gt;Identity Modules&lt;/li&gt;
+&lt;li&gt;Inventory Modules&lt;/li&gt;
+&lt;li&gt;Messaging Modules&lt;/li&gt;
+&lt;li&gt;Monitoring Modules&lt;/li&gt;
+&lt;li&gt;Network Modules&lt;/li&gt;
+&lt;li&gt;Notification Modules&lt;/li&gt;
+&lt;li&gt;Packaging Modules&lt;/li&gt;
+&lt;li&gt;Remote Management Modules&lt;/li&gt;
+&lt;li&gt;Source Control Modules&lt;/li&gt;
+&lt;li&gt;Storage Modules&lt;/li&gt;
+&lt;li&gt;System Modules&lt;/li&gt;
+&lt;li&gt;Utilities Modules&lt;/li&gt;
+&lt;li&gt;Web Infrastructure Modules&lt;/li&gt;
+&lt;li&gt;Windows Modules&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;Commands-类模块&quot;&gt;&lt;a href=&quot;#Commands-类模块&quot; class=&quot;headerlink&quot; title=&quot;Commands 类模块&quot;&gt;&lt;/a&gt;Commands 类模块&lt;/h3&gt;&lt;hr&gt;
+&lt;p&gt;包含如下子模块：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;command - Executes a command on a remote node&lt;/li&gt;
+&lt;li&gt;expect - Executes a command and responds to prompts&lt;/li&gt;
+&lt;li&gt;raw - Executes a low-down and dirty SSH command&lt;/li&gt;
+&lt;li&gt;script - Runs a local script on a remote node after transferring it&lt;/li&gt;
+&lt;li&gt;shell - Execute commands in nodes.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&quot;测试raw模块&quot;&gt;&lt;a href=&quot;#测试raw模块&quot; class=&quot;headerlink&quot; title=&quot;测试raw模块&quot;&gt;&lt;/a&gt;测试raw模块&lt;/h4&gt;&lt;hr&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;ansible vps -m raw  -a &amp;apos;echo 1&amp;apos;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;vps1 | SUCCESS | rc=0 &amp;gt;&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;vps2 | SUCCESS | rc=0 &amp;gt;&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;vps3 | SUCCESS | rc=0 &amp;gt;&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h2 id=&quot;ansible-命令使用&quot;&gt;&lt;a href=&quot;#ansible-命令使用&quot; class=&quot;headerlink&quot; title=&quot;ansible 命令使用&quot;&gt;&lt;/a&gt;ansible 命令使用&lt;/h2&gt;&lt;hr&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;ansible -i 主机组 -m 模块  -a &amp;apos;临时命令&amp;apos;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot; title=&quot;简介&quot;&gt;&lt;/a&gt;简介&lt;/h2&gt;&lt;hr&gt;
+&lt;p&gt;“Ansible is Simple IT Automation”——简单的自动化IT工具。这个工具的目标有这么几项：让我们自动化
+    
+    </summary>
+    
+    
+      <category term="ansible" scheme="https://crackfree.github.io/tags/ansible/"/>
+    
+  </entry>
   
   <entry>
     <title>vim 寄存器使用</title>
