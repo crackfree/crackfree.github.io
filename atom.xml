@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://crackfree.github.io/"/>
-  <updated>2017-02-16T16:34:27.000Z</updated>
+  <updated>2017-03-12T12:12:44.000Z</updated>
   <id>https://crackfree.github.io/</id>
   
   <author>
@@ -14,6 +14,53 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>git:深入理解git结构与概念</title>
+    <link href="https://crackfree.github.io/2017/03/10/Depth-comprehension-of-git-structure-and-conception-md/"/>
+    <id>https://crackfree.github.io/2017/03/10/Depth-comprehension-of-git-structure-and-conception-md/</id>
+    <published>2017-03-10T12:42:28.000Z</published>
+    <updated>2017-03-12T12:12:44.000Z</updated>
+    
+    <content type="html">&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;hr&gt;
+&lt;p&gt;因计划每月必须写一篇博客。然而2月份没写。&lt;/p&gt;
+&lt;h2 id=&quot;概念&quot;&gt;&lt;a href=&quot;#概念&quot; class=&quot;headerlink&quot; title=&quot;概念&quot;&gt;&lt;/a&gt;概念&lt;/h2&gt;&lt;hr&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;HEAD 物件: 类似C语言的指针，指向commit，每个head有个名字（branch 名或者 tag名等）。每个仓库默认有个head叫master。一个仓库可以含有任意数量的head。在同一时间只有一个被选中的head叫做当前head。当前head用HEAD(大写)表示。如果指向的不是最新的commit，此head为分离的head。在git文档中，head（小写）可以代表任何的head，HEAD（大写）代表当前head。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;A head is simply a reference to a commit object. Each head has a name (branch name or tag name, etc). By default, there is a head in every repository called master. A repository can contain any number of heads. At any given time, one head is selected as the “current head.” This head is aliased to HEAD, always in capitals”.&lt;br&gt;Note this difference: a “head” (lowercase) refers to any one of the named heads in the repository; “HEAD” (uppercase) refers exclusively to the currently active head. This distinction is used frequently in Git documentation&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;blob 物件：就是工作目录中某个档案的”内容”，且只有内容而已，当你执行git add 指令的同时，这些新增档案的内容就会立刻被写入成为blob 物件，档名则是物件内容的杂凑运算结果，没有任何其他其他信息，像是档案时间、原本的档名或档案的其他资讯，都会储存在其他类型的物件里(也就是tree 物件)。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;tree 物件：这类物件会储存特定目录下的所有信息，包含该目录下的档名、对应的 blob 物件名称、档案连结(symbolic link) 或其他 tree 物件等等。由于 tree 物件可以包含其他 tree 物件，所以浏览 tree 物件的方式其实就跟档案系统中的 “资料夹” 没两样。简单来说，tree 物件这就是在特定版本下某个资料夹的快照(Snapshot)。&lt;/li&gt;
+&lt;li&gt;commit 物件：用来记录有那些tree 物件包含在版本中，一个commit 物件代表着Git 的一次提交，记录着特定提交版本有哪些tree 物件、以及版本提交的时间、纪录讯息等等，通常还会记录上一层的commit 物件名称(只有第一次commit 的版本没有上层commit 物件名称。&lt;/li&gt;
+&lt;li&gt;tag 物件：是一个容器，通常用来关联特定一个 commit 物件 (也可以关联到特定 blob、tree 物件)，并额外储存一些额外的参考信息(metadata)，例如: tag 名称。使用 tag 物件最常见的情况是替特定一个版本的 commit 物件标示一个易懂的名称，可能是代表某个特定发行的版本，或是拥有某个特殊意义的版本。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Git 会将每一个版本中的档案建立一个对应的blob 物件，一样的，该blob 物件的档名就是用上述的方式计算出来的，从这些blob 档案，你看不出跟版本有任何关系，你必须透过tree 物件(资料夹的快照) 与commit 物件(每一个版本的快照) 才能关联出这些blob 与版本的关系。&lt;/p&gt;
+&lt;h2 id=&quot;结构&quot;&gt;&lt;a href=&quot;#结构&quot; class=&quot;headerlink&quot; title=&quot;结构&quot;&gt;&lt;/a&gt;结构&lt;/h2&gt;&lt;hr&gt;
+&lt;p&gt;物件之间的关系：&lt;br&gt;&lt;img src=&quot;./fig-09-git-revisions.png&quot; alt=&quot;物件之间的关系&quot;&gt;&lt;/p&gt;
+&lt;h2 id=&quot;相关操作在结构中图解&quot;&gt;&lt;a href=&quot;#相关操作在结构中图解&quot; class=&quot;headerlink&quot; title=&quot;相关操作在结构中图解&quot;&gt;&lt;/a&gt;相关操作在结构中图解&lt;/h2&gt;&lt;hr&gt;
+&lt;p&gt;&lt;img src=&quot;./git-data-transport-commands.png&quot; alt=&quot;相关操作在结构中图解&quot;&gt;&lt;/p&gt;
+&lt;h2 id=&quot;文件状态变更与命令的关系&quot;&gt;&lt;a href=&quot;#文件状态变更与命令的关系&quot; class=&quot;headerlink&quot; title=&quot;文件状态变更与命令的关系&quot;&gt;&lt;/a&gt;文件状态变更与命令的关系&lt;/h2&gt;&lt;hr&gt;
+&lt;p&gt;&lt;img src=&quot;./file-status-lifecycle.png&quot; alt=&quot;文件状态变更与命令的关系&quot;&gt;&lt;/p&gt;
+&lt;p&gt;透过指令改变文件的生命周期（状态），事实上，这些改变的过程，都是在更新 ”索引档”的过程。&lt;/p&gt;
+&lt;h2 id=&quot;引用&quot;&gt;&lt;a href=&quot;#引用&quot; class=&quot;headerlink&quot; title=&quot;引用&quot;&gt;&lt;/a&gt;引用&lt;/h2&gt;&lt;hr&gt;
+&lt;p&gt;&lt;a href=&quot;https://stackoverflow.com/questions/2304087/what-is-head-in-git&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://stackoverflow.com/questions/2304087/what-is-head-in-git&lt;/a&gt;&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;hr&gt;
+&lt;p&gt;因计划每月必须写一篇博客。然而2月份没写。&lt;/p&gt;
+&lt;h2 id=&quot;概念&quot;&gt;&lt;a href=&quot;#概念&quot; class=&quot;header
+    
+    </summary>
+    
+    
+      <category term="git" scheme="https://crackfree.github.io/tags/git/"/>
+    
+  </entry>
   
   <entry>
     <title>ansible入门与实战——配置文件、主机组与模块</title>

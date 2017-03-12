@@ -4,29 +4,39 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>解决fedora下ifconfig命令不见了 | crackfree</title>
+    <title>git:深入理解git结构与概念 | crackfree</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="crackfree">
     
 
     
-    <meta name="description" content="在fedora上发现没有ifconfig、netstat等命令不见了。原因是系统是最小模式安装的，于是有了下面的解决方法：
+    <meta name="description" content="前言
+因计划每月必须写一篇博客。然而2月份没写。
+概念
 
-使用以下命令，查找ifconfig属于那个包：sudo dnf provides ifconfig然后，安装：sudo dnf install net-tools">
+HEAD 物件: 类似C语言的指针，指向commit，每个head有个名字（branch 名或者 tag名等）。每个仓库默认有个head叫master。一个仓库可以含有任意数量的head。在同一时间只有一个被选中的head叫做当前head。当前head用HEAD(大写)表示。如果指向的不是最新的commit，此head为分离的head。在g">
 <meta property="og:type" content="article">
-<meta property="og:title" content="解决fedora下ifconfig命令不见了">
-<meta property="og:url" content="https://crackfree.github.io/2016/04/02/fedora-ifconfig-command/index.html">
+<meta property="og:title" content="git:深入理解git结构与概念">
+<meta property="og:url" content="https://crackfree.github.io/2017/03/10/Depth-comprehension-of-git-structure-and-conception-md/index.html">
 <meta property="og:site_name" content="crackfree">
-<meta property="og:description" content="在fedora上发现没有ifconfig、netstat等命令不见了。原因是系统是最小模式安装的，于是有了下面的解决方法：
+<meta property="og:description" content="前言
+因计划每月必须写一篇博客。然而2月份没写。
+概念
 
-使用以下命令，查找ifconfig属于那个包：sudo dnf provides ifconfig然后，安装：sudo dnf install net-tools">
-<meta property="og:updated_time" content="2016-04-16T05:11:02.000Z">
+HEAD 物件: 类似C语言的指针，指向commit，每个head有个名字（branch 名或者 tag名等）。每个仓库默认有个head叫master。一个仓库可以含有任意数量的head。在同一时间只有一个被选中的head叫做当前head。当前head用HEAD(大写)表示。如果指向的不是最新的commit，此head为分离的head。在g">
+<meta property="og:image" content="https://crackfree.github.io/./fig-09-git-revisions.png">
+<meta property="og:image" content="https://crackfree.github.io/./git-data-transport-commands.png">
+<meta property="og:image" content="https://crackfree.github.io/./file-status-lifecycle.png">
+<meta property="og:updated_time" content="2017-03-12T12:12:44.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="解决fedora下ifconfig命令不见了">
-<meta name="twitter:description" content="在fedora上发现没有ifconfig、netstat等命令不见了。原因是系统是最小模式安装的，于是有了下面的解决方法：
+<meta name="twitter:title" content="git:深入理解git结构与概念">
+<meta name="twitter:description" content="前言
+因计划每月必须写一篇博客。然而2月份没写。
+概念
 
-使用以下命令，查找ifconfig属于那个包：sudo dnf provides ifconfig然后，安装：sudo dnf install net-tools">
+HEAD 物件: 类似C语言的指针，指向commit，每个head有个名字（branch 名或者 tag名等）。每个仓库默认有个head叫master。一个仓库可以含有任意数量的head。在同一时间只有一个被选中的head叫做当前head。当前head用HEAD(大写)表示。如果指向的不是最新的commit，此head为分离的head。在g">
+<meta name="twitter:image" content="https://crackfree.github.io/./fig-09-git-revisions.png">
 
     
     <link rel="alternative" href="/atom.xml" title="crackfree" type="application/atom+xml">
@@ -86,14 +96,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/04/02/fedora-ifconfig-command/" title="解决fedora下ifconfig命令不见了" itemprop="url">解决fedora下ifconfig命令不见了</a>
+      <a href="/2017/03/10/Depth-comprehension-of-git-structure-and-conception-md/" title="git:深入理解git结构与概念" itemprop="url">git:深入理解git结构与概念</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="crackfree" target="_blank" itemprop="author">crackfree</a>
 		
   <p class="article-time">
-    <time datetime="2016-04-02T05:08:16.000Z" itemprop="datePublished"> Published 2016-04-02</time>
+    <time datetime="2017-03-10T12:42:28.000Z" itemprop="datePublished"> Published 2017-03-10</time>
     
   </p>
 </header>
@@ -102,13 +112,35 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#概念"><span class="toc-number">2.</span> <span class="toc-text">概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结构"><span class="toc-number">3.</span> <span class="toc-text">结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关操作在结构中图解"><span class="toc-number">4.</span> <span class="toc-text">相关操作在结构中图解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文件状态变更与命令的关系"><span class="toc-number">5.</span> <span class="toc-text">文件状态变更与命令的关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#引用"><span class="toc-number">6.</span> <span class="toc-text">引用</span></a></li></ol>
 		
 		</div>
 		
-		<p>在fedora上发现没有ifconfig、netstat等命令不见了。原因是系统是最小模式安装的，于是有了下面的解决方法：</p>
-<hr>
-<p>使用以下命令，查找ifconfig属于那个包：<br><code>sudo dnf provides ifconfig</code><br>然后，安装：<br><code>sudo dnf install net-tools</code></p>
+		<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><hr>
+<p>因计划每月必须写一篇博客。然而2月份没写。</p>
+<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><hr>
+<ul>
+<li><p>HEAD 物件: 类似C语言的指针，指向commit，每个head有个名字（branch 名或者 tag名等）。每个仓库默认有个head叫master。一个仓库可以含有任意数量的head。在同一时间只有一个被选中的head叫做当前head。当前head用HEAD(大写)表示。如果指向的不是最新的commit，此head为分离的head。在git文档中，head（小写）可以代表任何的head，HEAD（大写）代表当前head。</p>
+<blockquote>
+<p>A head is simply a reference to a commit object. Each head has a name (branch name or tag name, etc). By default, there is a head in every repository called master. A repository can contain any number of heads. At any given time, one head is selected as the “current head.” This head is aliased to HEAD, always in capitals”.<br>Note this difference: a “head” (lowercase) refers to any one of the named heads in the repository; “HEAD” (uppercase) refers exclusively to the currently active head. This distinction is used frequently in Git documentation</p>
+</blockquote>
+</li>
+<li><p>blob 物件：就是工作目录中某个档案的”内容”，且只有内容而已，当你执行git add 指令的同时，这些新增档案的内容就会立刻被写入成为blob 物件，档名则是物件内容的杂凑运算结果，没有任何其他其他信息，像是档案时间、原本的档名或档案的其他资讯，都会储存在其他类型的物件里(也就是tree 物件)。</p>
+</li>
+<li>tree 物件：这类物件会储存特定目录下的所有信息，包含该目录下的档名、对应的 blob 物件名称、档案连结(symbolic link) 或其他 tree 物件等等。由于 tree 物件可以包含其他 tree 物件，所以浏览 tree 物件的方式其实就跟档案系统中的 “资料夹” 没两样。简单来说，tree 物件这就是在特定版本下某个资料夹的快照(Snapshot)。</li>
+<li>commit 物件：用来记录有那些tree 物件包含在版本中，一个commit 物件代表着Git 的一次提交，记录着特定提交版本有哪些tree 物件、以及版本提交的时间、纪录讯息等等，通常还会记录上一层的commit 物件名称(只有第一次commit 的版本没有上层commit 物件名称。</li>
+<li>tag 物件：是一个容器，通常用来关联特定一个 commit 物件 (也可以关联到特定 blob、tree 物件)，并额外储存一些额外的参考信息(metadata)，例如: tag 名称。使用 tag 物件最常见的情况是替特定一个版本的 commit 物件标示一个易懂的名称，可能是代表某个特定发行的版本，或是拥有某个特殊意义的版本。</li>
+</ul>
+<p>Git 会将每一个版本中的档案建立一个对应的blob 物件，一样的，该blob 物件的档名就是用上述的方式计算出来的，从这些blob 档案，你看不出跟版本有任何关系，你必须透过tree 物件(资料夹的快照) 与commit 物件(每一个版本的快照) 才能关联出这些blob 与版本的关系。</p>
+<h2 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h2><hr>
+<p>物件之间的关系：<br><img src="./fig-09-git-revisions.png" alt="物件之间的关系"></p>
+<h2 id="相关操作在结构中图解"><a href="#相关操作在结构中图解" class="headerlink" title="相关操作在结构中图解"></a>相关操作在结构中图解</h2><hr>
+<p><img src="./git-data-transport-commands.png" alt="相关操作在结构中图解"></p>
+<h2 id="文件状态变更与命令的关系"><a href="#文件状态变更与命令的关系" class="headerlink" title="文件状态变更与命令的关系"></a>文件状态变更与命令的关系</h2><hr>
+<p><img src="./file-status-lifecycle.png" alt="文件状态变更与命令的关系"></p>
+<p>透过指令改变文件的生命周期（状态），事实上，这些改变的过程，都是在更新 ”索引档”的过程。</p>
+<h2 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h2><hr>
+<p><a href="https://stackoverflow.com/questions/2304087/what-is-head-in-git" target="_blank" rel="external">https://stackoverflow.com/questions/2304087/what-is-head-in-git</a></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -117,7 +149,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/linux/">linux</a><a href="/tags/shell/">shell</a><a href="/tags/fedora/">fedora</a>
+  <span></span> <a href="/tags/git/">git</a>
   </div>
 
 </div>
@@ -126,7 +158,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://crackfree.github.io/2016/04/02/fedora-ifconfig-command/" data-title="解决fedora下ifconfig命令不见了 | crackfree" data-tsina="null" class="share clearfix">
+	  <div data-url="https://crackfree.github.io/2017/03/10/Depth-comprehension-of-git-structure-and-conception-md/" data-title="git:深入理解git结构与概念 | crackfree" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -139,19 +171,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2016/04/30/Linux-update-error-Hash-Sum-mismatch-resolved/" title="Linux 更新出现 Hash Sum mismatch 错误解决">
-  <strong>上一篇：</strong><br/>
-  <span>
-  Linux 更新出现 Hash Sum mismatch 错误解决</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2016/04/01/using-key-login-ssh-and-forbiden-password-login/"  title="ssh使用key登录与禁止使用密码登录">
+<a href="/2017/01/27/newer-and-practise-of-ansible-inventory-module-and-configure-file/"  title="ansible入门与实战——配置文件、主机组与模块">
  <strong>下一篇：</strong><br/> 
- <span>ssh使用key登录与禁止使用密码登录
+ <span>ansible入门与实战——配置文件、主机组与模块
 </span>
 </a>
 </div>
@@ -172,7 +196,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#概念"><span class="toc-number">2.</span> <span class="toc-text">概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结构"><span class="toc-number">3.</span> <span class="toc-text">结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#相关操作在结构中图解"><span class="toc-number">4.</span> <span class="toc-text">相关操作在结构中图解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文件状态变更与命令的关系"><span class="toc-number">5.</span> <span class="toc-text">文件状态变更与命令的关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#引用"><span class="toc-number">6.</span> <span class="toc-text">引用</span></a></li></ol>
  
   </div>
 
