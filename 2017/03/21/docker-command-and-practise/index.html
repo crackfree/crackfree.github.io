@@ -1,0 +1,570 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-cn">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>docker:docker命令总结与实战 | crackfree</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="crackfree">
+    
+
+    
+    <meta name="description" content="简介
+docker是内核级虚拟化容器。
+docker 常用命令
+1234567891011121314151617181920212223242526272829docker version 查看docker的版本号，包括客户端、服务端、依赖的Go等docker info 查看系统(docker)层面信息，包括管理的images, containers数等docker search &amp;lt;ima">
+<meta property="og:type" content="article">
+<meta property="og:title" content="docker:docker命令总结与实战">
+<meta property="og:url" content="https://crackfree.github.io/2017/03/21/docker-command-and-practise/index.html">
+<meta property="og:site_name" content="crackfree">
+<meta property="og:description" content="简介
+docker是内核级虚拟化容器。
+docker 常用命令
+1234567891011121314151617181920212223242526272829docker version 查看docker的版本号，包括客户端、服务端、依赖的Go等docker info 查看系统(docker)层面信息，包括管理的images, containers数等docker search &amp;lt;ima">
+<meta property="og:updated_time" content="2017-03-22T15:25:49.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="docker:docker命令总结与实战">
+<meta name="twitter:description" content="简介
+docker是内核级虚拟化容器。
+docker 常用命令
+1234567891011121314151617181920212223242526272829docker version 查看docker的版本号，包括客户端、服务端、依赖的Go等docker info 查看系统(docker)层面信息，包括管理的images, containers数等docker search &amp;lt;ima">
+
+    
+    <link rel="alternative" href="/atom.xml" title="crackfree" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="crackfree" title="crackfree"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="crackfree">crackfree</a></h1>
+				<h2 class="blog-motto">认识世界，了解自己。</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:crackfree.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017/03/21/docker-command-and-practise/" title="docker:docker命令总结与实战" itemprop="url">docker:docker命令总结与实战</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="crackfree" target="_blank" itemprop="author">crackfree</a>
+		
+  <p class="article-time">
+    <time datetime="2017-03-21T13:04:18.000Z" itemprop="datePublished"> 发表于 2017-03-21</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#简介"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#docker-常用命令"><span class="toc-number">2.</span> <span class="toc-text">docker 常用命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#例子"><span class="toc-number">3.</span> <span class="toc-text">例子</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#从image运行一个容器"><span class="toc-number">3.1.</span> <span class="toc-text">从image运行一个容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#进入一个正在运行的容器"><span class="toc-number">3.2.</span> <span class="toc-text">进入一个正在运行的容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#从image新建一个container执行指定命令"><span class="toc-number">3.3.</span> <span class="toc-text">从image新建一个container执行指定命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#退出container但是保持运行"><span class="toc-number">3.4.</span> <span class="toc-text">退出container但是保持运行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker端口映射"><span class="toc-number">3.5.</span> <span class="toc-text">docker端口映射</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#docker-run-–expose-与-docker-run-p-区别"><span class="toc-number">3.5.1.</span> <span class="toc-text">docker run –expose 与 docker run -p 区别</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker文件共享"><span class="toc-number">3.6.</span> <span class="toc-text">docker文件共享</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#docker-commit-固化container为images"><span class="toc-number">4.</span> <span class="toc-text">docker commit 固化container为images</span></a></li></ol>
+		
+		</div>
+		
+		<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><hr>
+<p>docker是内核级虚拟化容器。<br><br><br><br><br><br><br><br><br><br></p>
+<h2 id="docker-常用命令"><a href="#docker-常用命令" class="headerlink" title="docker 常用命令"></a>docker 常用命令</h2><hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">docker version 查看docker的版本号，包括客户端、服务端、依赖的Go等</span><br><span class="line">docker info 查看系统(docker)层面信息，包括管理的images, containers数等</span><br><span class="line">docker search &lt;image&gt; 在docker index中搜索image</span><br><span class="line">docker pull &lt;image&gt; 从docker registry server 中下拉image</span><br><span class="line">docker push &lt;image|repository&gt; 推送一个image或repository到registry</span><br><span class="line">docker push &lt;image|repository&gt;:TAG 同上，指定tag</span><br><span class="line">docker inspect &lt;image|container&gt; 查看image或container的底层信息</span><br><span class="line">docker images 过滤掉中间镜像（现有镜像的父镜像）</span><br><span class="line">docker images -a 列出所有的images</span><br><span class="line">docker ps 默认显示正在运行中的container</span><br><span class="line">docker ps -l 显示最后一次创建的container，包括未运行的</span><br><span class="line">docker ps -a 显示所有的container，包括未运行的</span><br><span class="line">docker logs &lt;container&gt; 查看container的日志，也就是执行命令的一些输出</span><br><span class="line">docker rm &lt;container...&gt; 删除一个或多个container</span><br><span class="line">docker rm `docker ps -a -q` 删除所有的container</span><br><span class="line">docker ps -a -q | xargs docker rm 同上, 删除所有的container</span><br><span class="line">docker rmi &lt;image...&gt; 删除一个或多个image</span><br><span class="line">docker start/stop/restart &lt;container&gt; 开启/停止/重启container</span><br><span class="line">docker start -i &lt;container&gt; 启动一个container并进入交互模式</span><br><span class="line">docker attach &lt;container&gt; attach一个运行中的container(进入一个正在运行的container)</span><br><span class="line">使用 attach 命令有时候并不方便。当多个窗口同时 attach 到同一个容器的时候，所有窗口都会同步显示。当某个窗口因命令阻塞时,其他窗口也无法执行操作了</span><br><span class="line">docker run &lt;image&gt; &lt;command&gt; 使用image创建container并执行相应命令，然后停止</span><br><span class="line">docker run -i -t &lt;image&gt; /bin/bash 使用image创建container并进入交互模式, login shell是/bin/bash</span><br><span class="line">docker run -i -t -p &lt;host_port:contain_port&gt; 将container的端口映射到宿主机的端口</span><br><span class="line">docker commit &lt;container&gt; [repo:tag] 将一个container固化为一个新的image，后面的repo:tag可选</span><br><span class="line">docker build &lt;path&gt; 寻找path路径下名为的Dockerfile的配置文件，使用此配置生成新的image</span><br><span class="line">docker build -t repo[:tag] 同上，可以指定repo和可选的tag</span><br><span class="line">docker build - &lt; &lt;dockerfile&gt; 使用指定的dockerfile配置文件，docker以stdin方式获取内容，使用此配置生成新的image</span><br><span class="line">docker port &lt;container&gt; &lt;container port&gt; 查看本地哪个端口映射到container的指定端口，或者用docker ps 也可以看到。</span><br></pre></td></tr></table></figure>
+<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><hr>
+<h3 id="从image运行一个容器"><a href="#从image运行一个容器" class="headerlink" title="从image运行一个容器"></a>从image运行一个容器</h3><hr>
+<p><code>docker run &lt;image名&gt;</code>  <br></p>
+<p>具体：<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"> docker run cptactionhank/atlassian-confluence</span><br><span class="line">If you encounter issues starting up Confluence, please see the Installation guide at http://confluence.atlassian.com/display/DOC/Confluence+Installation+Guide</span><br><span class="line"></span><br><span class="line">Server startup logs are located in /opt/atlassian/confluence/logs/catalina.out</span><br><span class="line">22-Mar-2017 01:42:46.438 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler [&quot;http-nio-8090&quot;]</span><br><span class="line">22-Mar-2017 01:42:46.465 INFO [main] org.apache.tomcat.util.net.NioSelectorPool.getSharedSelector Using a shared selector for servlet write/read</span><br><span class="line">22-Mar-2017 01:42:46.467 INFO [main] org.apache.catalina.startup.Catalina.load Initialization processed in 561 ms</span><br><span class="line">22-Mar-2017 01:42:46.474 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service Tomcat-Standalone</span><br><span class="line">22-Mar-2017 01:42:46.474 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet Engine: Apache Tomcat/8.0.41</span><br><span class="line">2017-03-22 01:42:48,622 INFO [localhost-startStop-1] [com.atlassian.confluence.lifecycle] contextInitialized Starting Confluence 6.0.6 [build 7104 based on commit hash 194f920205d6dc337c4fd055ad1d0a7b56409ec8]</span><br><span class="line">22-Mar-2017 01:42:56.603 INFO [localhost-startStop-2] org.apache.catalina.startup.HostConfig.deployDescriptor Deploying configuration descriptor /opt/atlassian/confluence/conf/Standalone/localhost/synchrony-proxy.xml</span><br><span class="line">22-Mar-2017 01:42:56.608 WARNING [localhost-startStop-2] org.apache.catalina.startup.SetContextPropertiesRule.begin [SetContextPropertiesRule]&#123;Context&#125; Setting property &apos;debug&apos; to &apos;0&apos; did not find a matching property.</span><br></pre></td></tr></table></figure></p>
+<h3 id="进入一个正在运行的容器"><a href="#进入一个正在运行的容器" class="headerlink" title="进入一个正在运行的容器"></a>进入一个正在运行的容器</h3><hr>
+<p>先查看运行的容器ID。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker ps -l</span><br><span class="line">CONTAINER ID        IMAGE                                       COMMAND                CREATED             STATUS              PORTS               NAMES</span><br><span class="line">a76a9cbce0a0        cptactionhank/atlassian-confluence:latest   &quot;/docker-entrypoint.   5 minutes ago       Up 5 minutes        8090/tcp            silly_hopper</span><br></pre></td></tr></table></figure></p>
+<p>然后用attach进入:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker attach  a76a9cbce0a0</span><br><span class="line">daemon@a76a9cbce0a0:/var/atlassian/confluence$</span><br></pre></td></tr></table></figure></p>
+<p>命令有时候并不方便。当多个窗口同时 attach 到同一个容器的时候，所有窗口都会同步显示。当某个窗口因命令阻塞时,其他窗口也无法执行操作了</p>
+<h3 id="从image新建一个container执行指定命令"><a href="#从image新建一个container执行指定命令" class="headerlink" title="从image新建一个container执行指定命令"></a>从image新建一个container执行指定命令</h3><hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker run  -ti cptactionhank/atlassian-confluence  /bin/bash</span><br><span class="line">daemon@a76a9cbce0a0:/var/atlassian/confluence$</span><br></pre></td></tr></table></figure>
+<p>-i 交互 <br><br>-t 终端</p>
+<h3 id="退出container但是保持运行"><a href="#退出container但是保持运行" class="headerlink" title="退出container但是保持运行"></a>退出container但是保持运行</h3><hr>
+<p>默认情况下，如果使用ctrl-c退出container,那么container也会stop</p>
+<p>按ctrl-p ctrl-q可以退出到宿主机，而保持container仍然在运行</p>
+<h3 id="docker端口映射"><a href="#docker端口映射" class="headerlink" title="docker端口映射"></a>docker端口映射</h3><hr>
+<p>docker run -p用法: <code>docker     run    -ti   -p [宿主机监听地址]:宿主机端口:container端口</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker     run    -ti   -p 0.0.0.0:88:89  cptactionhank/atlassian-confluence  bash</span><br></pre></td></tr></table></figure>
+<p>docker ps 查看端口映射情况<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">CONTAINER ID        IMAGE                                       COMMAND                CREATED             STATUS              PORTS                                                 NAMES</span><br><span class="line">0ca4efd74460        cptactionhank/atlassian-confluence:latest   &quot;/docker-entrypoint.   11 minutes ago      Up 11 minutes       8090/tcp, 0.0.0.0:88-&gt;89/tcp</span><br></pre></td></tr></table></figure></p>
+<h4 id="docker-run-–expose-与-docker-run-p-区别"><a href="#docker-run-–expose-与-docker-run-p-区别" class="headerlink" title="docker run –expose 与 docker run -p 区别"></a>docker run –expose 与 docker run -p 区别</h4><hr>
+<p><code>docker run --expose &lt;port&gt;</code>与<code>docker run -p &lt;port&gt;</code>区别:<br>-p 映射宿主机到container端口。expose不映射端口只在docker虚拟网卡上，打开对指定端口的访问。</p>
+<h3 id="docker文件共享"><a href="#docker文件共享" class="headerlink" title="docker文件共享"></a>docker文件共享</h3><hr>
+<p>docker 宿主机与container共享文件<code>docker  run  -v  &lt;宿主路径&gt;:[container路径]</code>  <image></image></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker     run      -ti    -v    /tmp:/tmp1   cptactionhank/atlassian-confluence  bash</span><br><span class="line">daemon@480a375cf60c:/var/atlassian/confluence$</span><br></pre></td></tr></table></figure>
+<p>查看已经挂载的路径：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker     run      -ti    -v    /tmp:/tmp1   cptactionhank/atlassian-confluence  bash</span><br><span class="line">daemon@480a375cf60c:/var/atlassian/confluence$ mount|grep -i tmp</span><br><span class="line">tmpfs on /dev type tmpfs (rw,nosuid,mode=755)</span><br><span class="line">shm on /dev/shm type tmpfs (rw,nosuid,nodev,noexec,relatime,size=65536k)</span><br><span class="line">/dev/dm-1 on /tmp1 type ext4 (rw,relatime,errors=remount-ro,data=ordered)</span><br></pre></td></tr></table></figure></p>
+<h2 id="docker-commit-固化container为images"><a href="#docker-commit-固化container为images" class="headerlink" title="docker commit 固化container为images"></a>docker commit 固化container为images</h2><hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker commit    -a=&apos;test&apos;   7f157e173dad    cptactionhank/atlassian-confluence:test</span><br><span class="line">32855aa7f8ca15a38b19c21639282d0001ec5bb2f609dd82f5fd0d9199b88dbb</span><br></pre></td></tr></table></figure>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/docker/">docker</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://crackfree.github.io/2017/03/21/docker-command-and-practise/" data-title="docker:docker命令总结与实战 | crackfree" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2017/03/10/Depth-comprehension-of-git-structure-and-conception-md/"  title="git:深入理解git结构与概念">
+ <strong>下一篇：</strong><br/> 
+ <span>git:深入理解git结构与概念
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+<section id="comments" class="comment">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#简介"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#docker-常用命令"><span class="toc-number">2.</span> <span class="toc-text">docker 常用命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#例子"><span class="toc-number">3.</span> <span class="toc-text">例子</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#从image运行一个容器"><span class="toc-number">3.1.</span> <span class="toc-text">从image运行一个容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#进入一个正在运行的容器"><span class="toc-number">3.2.</span> <span class="toc-text">进入一个正在运行的容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#从image新建一个container执行指定命令"><span class="toc-number">3.3.</span> <span class="toc-text">从image新建一个container执行指定命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#退出container但是保持运行"><span class="toc-number">3.4.</span> <span class="toc-text">退出container但是保持运行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker端口映射"><span class="toc-number">3.5.</span> <span class="toc-text">docker端口映射</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#docker-run-–expose-与-docker-run-p-区别"><span class="toc-number">3.5.1.</span> <span class="toc-text">docker run –expose 与 docker run -p 区别</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker文件共享"><span class="toc-number">3.6.</span> <span class="toc-text">docker文件共享</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#docker-commit-固化container为images"><span class="toc-number">4.</span> <span class="toc-text">docker commit 固化container为images</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/linux/" title="linux">linux<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/vim/" title="vim">vim<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ISO/" title="ISO">ISO<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/shell/" title="shell">shell<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/fedora/" title="fedora">fedora<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/docker/" title="docker">docker<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/glibc/" title="glibc">glibc<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/haproxy/" title="haproxy">haproxy<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/iptables/" title="iptables">iptables<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/VPS/" title="VPS">VPS<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/git/" title="git">git<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/github/" title="github">github<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/blog/" title="blog">blog<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/GPT/" title="GPT">GPT<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LVM/" title="LVM">LVM<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/LUKS/" title="LUKS">LUKS<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/part/" title="part">part<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/dmcrypt/" title="dmcrypt">dmcrypt<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ssh/" title="ssh">ssh<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  
+
+  
+<div class="github-card">
+<p class="asidetitle">Github 名片</p>
+<div class="github-card" data-github="crackfree" data-width="220" data-height="119" data-theme="medium">
+<script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
+</div>
+  </div>
+
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+    </ul>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> 认识世界,了解自己。 <br/>
+			Stay hungry, stay foolish..</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/5642571355" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		<a href="https://github.com/crackfree" target="_blank" class="icon-github" title="github"></a>
+		
+		
+		
+		
+		
+		
+		<a href="https://www.douban.com/people/147714177" target="_blank" class="icon-douban" title="豆瓣"></a>
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="crackfree">crackfree</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+<script type="text/javascript">
+
+var disqus_shortname = 'crackfree';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
