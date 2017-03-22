@@ -23,7 +23,7 @@ docker 常用命令
 docker是内核级虚拟化容器。
 docker 常用命令
 1234567891011121314151617181920212223242526272829docker version 查看docker的版本号，包括客户端、服务端、依赖的Go等docker info 查看系统(docker)层面信息，包括管理的images, containers数等docker search &amp;lt;ima">
-<meta property="og:updated_time" content="2017-03-22T15:25:49.000Z">
+<meta property="og:updated_time" content="2017-03-22T15:26:20.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="docker:docker命令总结与实战">
 <meta name="twitter:description" content="简介
@@ -57,7 +57,7 @@ docker 常用命令
 				<h1 class="site-name"><a href="/" title="crackfree">crackfree</a></h1>
 				<h2 class="blog-motto">认识世界，了解自己。</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -73,7 +73,7 @@ docker 常用命令
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
 						<input type="hidden" name="q" value="site:crackfree.github.io">
 					</form>
 					
@@ -96,21 +96,21 @@ docker 常用命令
 		<a href="/about" title="crackfree" target="_blank" itemprop="author">crackfree</a>
 		
   <p class="article-time">
-    <time datetime="2017-03-21T13:04:18.000Z" itemprop="datePublished"> 发表于 2017-03-21</time>
+    <time datetime="2017-03-21T13:04:18.000Z" itemprop="datePublished"> Published 2017-03-21</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目录</strong>
+			<strong class="toc-title">Contents</strong>
 		
 			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#简介"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#docker-常用命令"><span class="toc-number">2.</span> <span class="toc-text">docker 常用命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#例子"><span class="toc-number">3.</span> <span class="toc-text">例子</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#从image运行一个容器"><span class="toc-number">3.1.</span> <span class="toc-text">从image运行一个容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#进入一个正在运行的容器"><span class="toc-number">3.2.</span> <span class="toc-text">进入一个正在运行的容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#从image新建一个container执行指定命令"><span class="toc-number">3.3.</span> <span class="toc-text">从image新建一个container执行指定命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#退出container但是保持运行"><span class="toc-number">3.4.</span> <span class="toc-text">退出container但是保持运行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker端口映射"><span class="toc-number">3.5.</span> <span class="toc-text">docker端口映射</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#docker-run-–expose-与-docker-run-p-区别"><span class="toc-number">3.5.1.</span> <span class="toc-text">docker run –expose 与 docker run -p 区别</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker文件共享"><span class="toc-number">3.6.</span> <span class="toc-text">docker文件共享</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#docker-commit-固化container为images"><span class="toc-number">4.</span> <span class="toc-text">docker commit 固化container为images</span></a></li></ol>
 		
 		</div>
 		
 		<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><hr>
-<p>docker是内核级虚拟化容器。<br><br><br><br><br><br><br><br><br><br></p>
+<p>docker是内核级虚拟化容器。<br><br><br><br><br><br><br><br></p>
 <h2 id="docker-常用命令"><a href="#docker-常用命令" class="headerlink" title="docker 常用命令"></a>docker 常用命令</h2><hr>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">docker version 查看docker的版本号，包括客户端、服务端、依赖的Go等</span><br><span class="line">docker info 查看系统(docker)层面信息，包括管理的images, containers数等</span><br><span class="line">docker search &lt;image&gt; 在docker index中搜索image</span><br><span class="line">docker pull &lt;image&gt; 从docker registry server 中下拉image</span><br><span class="line">docker push &lt;image|repository&gt; 推送一个image或repository到registry</span><br><span class="line">docker push &lt;image|repository&gt;:TAG 同上，指定tag</span><br><span class="line">docker inspect &lt;image|container&gt; 查看image或container的底层信息</span><br><span class="line">docker images 过滤掉中间镜像（现有镜像的父镜像）</span><br><span class="line">docker images -a 列出所有的images</span><br><span class="line">docker ps 默认显示正在运行中的container</span><br><span class="line">docker ps -l 显示最后一次创建的container，包括未运行的</span><br><span class="line">docker ps -a 显示所有的container，包括未运行的</span><br><span class="line">docker logs &lt;container&gt; 查看container的日志，也就是执行命令的一些输出</span><br><span class="line">docker rm &lt;container...&gt; 删除一个或多个container</span><br><span class="line">docker rm `docker ps -a -q` 删除所有的container</span><br><span class="line">docker ps -a -q | xargs docker rm 同上, 删除所有的container</span><br><span class="line">docker rmi &lt;image...&gt; 删除一个或多个image</span><br><span class="line">docker start/stop/restart &lt;container&gt; 开启/停止/重启container</span><br><span class="line">docker start -i &lt;container&gt; 启动一个container并进入交互模式</span><br><span class="line">docker attach &lt;container&gt; attach一个运行中的container(进入一个正在运行的container)</span><br><span class="line">使用 attach 命令有时候并不方便。当多个窗口同时 attach 到同一个容器的时候，所有窗口都会同步显示。当某个窗口因命令阻塞时,其他窗口也无法执行操作了</span><br><span class="line">docker run &lt;image&gt; &lt;command&gt; 使用image创建container并执行相应命令，然后停止</span><br><span class="line">docker run -i -t &lt;image&gt; /bin/bash 使用image创建container并进入交互模式, login shell是/bin/bash</span><br><span class="line">docker run -i -t -p &lt;host_port:contain_port&gt; 将container的端口映射到宿主机的端口</span><br><span class="line">docker commit &lt;container&gt; [repo:tag] 将一个container固化为一个新的image，后面的repo:tag可选</span><br><span class="line">docker build &lt;path&gt; 寻找path路径下名为的Dockerfile的配置文件，使用此配置生成新的image</span><br><span class="line">docker build -t repo[:tag] 同上，可以指定repo和可选的tag</span><br><span class="line">docker build - &lt; &lt;dockerfile&gt; 使用指定的dockerfile配置文件，docker以stdin方式获取内容，使用此配置生成新的image</span><br><span class="line">docker port &lt;container&gt; &lt;container port&gt; 查看本地哪个端口映射到container的指定端口，或者用docker ps 也可以看到。</span><br></pre></td></tr></table></figure>
 <h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><hr>
@@ -189,22 +189,22 @@ docker 常用命令
 </section>
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">文章目录</strong>
+  <strong class="toc-title">Contents</strong>
  
  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#简介"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#docker-常用命令"><span class="toc-number">2.</span> <span class="toc-text">docker 常用命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#例子"><span class="toc-number">3.</span> <span class="toc-text">例子</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#从image运行一个容器"><span class="toc-number">3.1.</span> <span class="toc-text">从image运行一个容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#进入一个正在运行的容器"><span class="toc-number">3.2.</span> <span class="toc-text">进入一个正在运行的容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#从image新建一个container执行指定命令"><span class="toc-number">3.3.</span> <span class="toc-text">从image新建一个container执行指定命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#退出container但是保持运行"><span class="toc-number">3.4.</span> <span class="toc-text">退出container但是保持运行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker端口映射"><span class="toc-number">3.5.</span> <span class="toc-text">docker端口映射</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#docker-run-–expose-与-docker-run-p-区别"><span class="toc-number">3.5.1.</span> <span class="toc-text">docker run –expose 与 docker run -p 区别</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker文件共享"><span class="toc-number">3.6.</span> <span class="toc-text">docker文件共享</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#docker-commit-固化container为images"><span class="toc-number">4.</span> <span class="toc-text">docker commit 固化container为images</span></a></li></ol>
  
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
 <aside class="clearfix">
 
   
 <div class="tagslist">
-	<p class="asidetitle">标签</p>
+	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
 		
 			
@@ -256,18 +256,6 @@ docker 常用命令
 			
 		
 			
-				<li><a href="/tags/github/" title="github">github<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/blog/" title="blog">blog<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/GPT/" title="GPT">GPT<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/LVM/" title="LVM">LVM<sup>1</sup></a></li>
 			
 		
@@ -284,6 +272,18 @@ docker 常用命令
 			
 		
 			
+				<li><a href="/tags/hexo/" title="hexo">hexo<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/github/" title="github">github<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/blog/" title="blog">blog<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/ssh/" title="ssh">ssh<sup>1</sup></a></li>
 			
 		
@@ -295,7 +295,7 @@ docker 常用命令
 
   
 <div class="github-card">
-<p class="asidetitle">Github 名片</p>
+<p class="asidetitle">Github Card</p>
 <div class="github-card" data-github="crackfree" data-width="220" data-height="119" data-theme="medium">
 <script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
 </div>
@@ -304,11 +304,11 @@ docker 常用命令
 
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
 </div>
 
   <div class="linkslist">
-  <p class="asidetitle">友情链接</p>
+  <p class="asidetitle">Links</p>
     <ul>
         
     </ul>
@@ -550,7 +550,7 @@ $(document).ready(function(){
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 
