@@ -1,6 +1,6 @@
 
  <!DOCTYPE HTML>
-<html lang="zh-cn">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   
@@ -57,7 +57,7 @@ docker 常用命令
 				<h1 class="site-name"><a href="/" title="crackfree">crackfree</a></h1>
 				<h2 class="blog-motto">认识世界，了解自己。</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -73,7 +73,7 @@ docker 常用命令
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
 						<input type="hidden" name="q" value="site:crackfree.github.io">
 					</form>
 					
@@ -96,14 +96,14 @@ docker 常用命令
 		<a href="/about" title="crackfree" target="_blank" itemprop="author">crackfree</a>
 		
   <p class="article-time">
-    <time datetime="2017-03-21T13:04:18.000Z" itemprop="datePublished"> 发表于 2017-03-21</time>
+    <time datetime="2017-03-21T13:04:18.000Z" itemprop="datePublished"> Published 2017-03-21</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目录</strong>
+			<strong class="toc-title">Contents</strong>
 		
 			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#简介"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#docker-常用命令"><span class="toc-number">2.</span> <span class="toc-text">docker 常用命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#例子"><span class="toc-number">3.</span> <span class="toc-text">例子</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#从image运行一个容器"><span class="toc-number">3.1.</span> <span class="toc-text">从image运行一个容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#进入一个正在运行的容器"><span class="toc-number">3.2.</span> <span class="toc-text">进入一个正在运行的容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#从image新建一个container执行指定命令"><span class="toc-number">3.3.</span> <span class="toc-text">从image新建一个container执行指定命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#退出container但是保持运行"><span class="toc-number">3.4.</span> <span class="toc-text">退出container但是保持运行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker端口映射"><span class="toc-number">3.5.</span> <span class="toc-text">docker端口映射</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#docker-run-–expose-与-docker-run-p-区别"><span class="toc-number">3.5.1.</span> <span class="toc-text">docker run –expose 与 docker run -p 区别</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker文件共享"><span class="toc-number">3.6.</span> <span class="toc-text">docker文件共享</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#docker-commit-固化container为images"><span class="toc-number">4.</span> <span class="toc-text">docker commit 固化container为images</span></a></li></ol>
 		
@@ -189,22 +189,22 @@ docker 常用命令
 </section>
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">文章目录</strong>
+  <strong class="toc-title">Contents</strong>
  
  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#简介"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#docker-常用命令"><span class="toc-number">2.</span> <span class="toc-text">docker 常用命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#例子"><span class="toc-number">3.</span> <span class="toc-text">例子</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#从image运行一个容器"><span class="toc-number">3.1.</span> <span class="toc-text">从image运行一个容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#进入一个正在运行的容器"><span class="toc-number">3.2.</span> <span class="toc-text">进入一个正在运行的容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#从image新建一个container执行指定命令"><span class="toc-number">3.3.</span> <span class="toc-text">从image新建一个container执行指定命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#退出container但是保持运行"><span class="toc-number">3.4.</span> <span class="toc-text">退出container但是保持运行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker端口映射"><span class="toc-number">3.5.</span> <span class="toc-text">docker端口映射</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#docker-run-–expose-与-docker-run-p-区别"><span class="toc-number">3.5.1.</span> <span class="toc-text">docker run –expose 与 docker run -p 区别</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#docker文件共享"><span class="toc-number">3.6.</span> <span class="toc-text">docker文件共享</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#docker-commit-固化container为images"><span class="toc-number">4.</span> <span class="toc-text">docker commit 固化container为images</span></a></li></ol>
  
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
 <aside class="clearfix">
 
   
 <div class="tagslist">
-	<p class="asidetitle">标签</p>
+	<p class="asidetitle">Tags</p>
 		<ul class="clearfix">
 		
 			
@@ -216,6 +216,10 @@ docker 常用命令
 			
 		
 			
+				<li><a href="/tags/ISO/" title="ISO">ISO<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/shell/" title="shell">shell<sup>1</sup></a></li>
 			
 		
@@ -224,7 +228,7 @@ docker 常用命令
 			
 		
 			
-				<li><a href="/tags/ISO/" title="ISO">ISO<sup>1</sup></a></li>
+				<li><a href="/tags/docker/" title="docker">docker<sup>1</sup></a></li>
 			
 		
 			
@@ -232,7 +236,7 @@ docker 常用命令
 			
 		
 			
-				<li><a href="/tags/docker/" title="docker">docker<sup>1</sup></a></li>
+				<li><a href="/tags/ansible/" title="ansible">ansible<sup>1</sup></a></li>
 			
 		
 			
@@ -248,11 +252,11 @@ docker 常用命令
 			
 		
 			
-				<li><a href="/tags/GPT/" title="GPT">GPT<sup>1</sup></a></li>
+				<li><a href="/tags/git/" title="git">git<sup>1</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/git/" title="git">git<sup>1</sup></a></li>
+				<li><a href="/tags/LVM/" title="LVM">LVM<sup>1</sup></a></li>
 			
 		
 			
@@ -268,23 +272,19 @@ docker 常用命令
 			
 		
 			
-				<li><a href="/tags/ssh/" title="ssh">ssh<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/RSA/" title="RSA">RSA<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/ansible/" title="ansible">ansible<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/hexo/" title="hexo">hexo<sup>1</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/github/" title="github">github<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/blog/" title="blog">blog<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/ssh/" title="ssh">ssh<sup>1</sup></a></li>
 			
 		
 		</ul>
@@ -295,7 +295,7 @@ docker 常用命令
 
   
 <div class="github-card">
-<p class="asidetitle">Github 名片</p>
+<p class="asidetitle">Github Card</p>
 <div class="github-card" data-github="crackfree" data-width="220" data-height="119" data-theme="medium">
 <script type="text/javascript" src="//cdn.jsdelivr.net/github-cards/latest/widget.js" ></script>
 </div>
@@ -304,11 +304,11 @@ docker 常用命令
 
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
 </div>
 
   <div class="linkslist">
-  <p class="asidetitle">友情链接</p>
+  <p class="asidetitle">Links</p>
     <ul>
         
           <li>
@@ -556,7 +556,7 @@ $(document).ready(function(){
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 
