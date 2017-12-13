@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://crackfree.github.io/"/>
-  <updated>2017-03-22T15:32:25.000Z</updated>
+  <updated>2017-07-12T14:14:03.192Z</updated>
   <id>https://crackfree.github.io/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="https://crackfree.github.io/2017/03/21/docker-command-and-practise/"/>
     <id>https://crackfree.github.io/2017/03/21/docker-command-and-practise/</id>
     <published>2017-03-21T13:04:18.000Z</published>
-    <updated>2017-03-22T15:32:25.000Z</updated>
+    <updated>2017-07-12T14:14:03.192Z</updated>
     
     <content type="html">&lt;h2 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot; title=&quot;简介&quot;&gt;&lt;/a&gt;简介&lt;/h2&gt;&lt;hr&gt;
 &lt;p&gt;docker是内核级虚拟化容器。&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;/p&gt;
@@ -72,7 +72,7 @@
     <link href="https://crackfree.github.io/2017/03/10/Depth-comprehension-of-git-structure-and-conception-md/"/>
     <id>https://crackfree.github.io/2017/03/10/Depth-comprehension-of-git-structure-and-conception-md/</id>
     <published>2017-03-10T12:42:28.000Z</published>
-    <updated>2017-03-12T12:12:44.000Z</updated>
+    <updated>2017-07-12T14:14:03.192Z</updated>
     
     <content type="html">&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;hr&gt;
 &lt;p&gt;因计划每月必须写一篇博客。然而2月份没写。&lt;/p&gt;
@@ -119,7 +119,7 @@
     <link href="https://crackfree.github.io/2017/01/27/newer-and-practise-of-ansible-inventory-module-and-configure-file/"/>
     <id>https://crackfree.github.io/2017/01/27/newer-and-practise-of-ansible-inventory-module-and-configure-file/</id>
     <published>2017-01-27T15:48:53.000Z</published>
-    <updated>2017-02-16T16:34:27.000Z</updated>
+    <updated>2017-07-12T14:14:03.192Z</updated>
     
     <content type="html">&lt;h2 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot; title=&quot;简介&quot;&gt;&lt;/a&gt;简介&lt;/h2&gt;&lt;hr&gt;
 &lt;p&gt;“Ansible is Simple IT Automation”——简单的自动化IT工具。这个工具的目标有这么几项：让我们自动化部署APP；自动化管理配置项；自动化的持续交付；自动化的（AWS）云服务管理。&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;#安装&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;sudo pip install ansible&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
@@ -206,7 +206,7 @@
     <link href="https://crackfree.github.io/2017/01/05/vim-register-usage/"/>
     <id>https://crackfree.github.io/2017/01/05/vim-register-usage/</id>
     <published>2017-01-05T03:35:53.000Z</published>
-    <updated>2017-01-09T15:38:28.000Z</updated>
+    <updated>2017-07-12T14:14:03.192Z</updated>
     
     <content type="html">&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;hr&gt;
 &lt;p&gt;使用vim需要粘贴复制的多了，系统剪贴板不能存多个值，vim中的寄存器能解决这个问题。&lt;/p&gt;
@@ -315,7 +315,7 @@
     <link href="https://crackfree.github.io/2016/11/16/using-gpt-lvm-and-luks-to-part-big-disk-and-encrypt-it-in-Linux/"/>
     <id>https://crackfree.github.io/2016/11/16/using-gpt-lvm-and-luks-to-part-big-disk-and-encrypt-it-in-Linux/</id>
     <published>2016-11-16T13:50:55.000Z</published>
-    <updated>2016-12-14T15:15:35.000Z</updated>
+    <updated>2017-07-12T14:14:03.192Z</updated>
     
     <content type="html">&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;hr&gt;
 &lt;p&gt;双十一买了块3T硬盘，今天有空折腾下，也记录下。&lt;br&gt;&lt;br&gt;本文用到的技术有GPT、LUKS、LVM、ext4。&lt;br&gt;&lt;br&gt;预定的结果为在使用GPT分区表的硬盘上，建立多个主分区。每个主分区使用LUKS整个分区加密。在加密的主分区内使用LVM建立多个所需的逻辑卷，简单的说为LVM over LUKS。 逻辑卷使用ext4格式格式化。&lt;br&gt;用一句话概括本文为ext4 over LVM over LUKS over GPT。&lt;/p&gt;
@@ -452,7 +452,7 @@
     <link href="https://crackfree.github.io/2016/10/01/glibc-upgrade/"/>
     <id>https://crackfree.github.io/2016/10/01/glibc-upgrade/</id>
     <published>2016-10-01T08:37:43.000Z</published>
-    <updated>2016-10-01T11:45:00.000Z</updated>
+    <updated>2017-07-12T14:14:03.192Z</updated>
     
     <content type="html">&lt;h1 id=&quot;Centos-升级glibc&quot;&gt;&lt;a href=&quot;#Centos-升级glibc&quot; class=&quot;headerlink&quot; title=&quot;Centos 升级glibc&quot;&gt;&lt;/a&gt;Centos 升级glibc&lt;/h1&gt;&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;hr&gt;
 &lt;p&gt;刚升级了glibc,整理网上文章如下&lt;/p&gt;
@@ -512,7 +512,7 @@
     <link href="https://crackfree.github.io/2016/09/04/cat-x-iso-to-dev-sdX-mechanism/"/>
     <id>https://crackfree.github.io/2016/09/04/cat-x-iso-to-dev-sdX-mechanism/</id>
     <published>2016-09-03T18:03:30.000Z</published>
-    <updated>2016-09-12T15:58:49.000Z</updated>
+    <updated>2017-07-12T14:14:03.188Z</updated>
     
     <content type="html">&lt;h1 id=&quot;cat-x-iso-gt-dev-sdX-启动原理&quot;&gt;&lt;a href=&quot;#cat-x-iso-gt-dev-sdX-启动原理&quot; class=&quot;headerlink&quot; title=&quot;cat x.iso &amp;gt;  /dev/sdX 启动原理&quot;&gt;&lt;/a&gt;cat x.iso &amp;gt;  /dev/sdX 启动原理&lt;/h1&gt;&lt;hr&gt;
 &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;hr&gt;
@@ -544,7 +544,7 @@
     <link href="https://crackfree.github.io/2016/05/15/vim-save-root-file-with-non-root-user/"/>
     <id>https://crackfree.github.io/2016/05/15/vim-save-root-file-with-non-root-user/</id>
     <published>2016-05-15T07:37:06.000Z</published>
-    <updated>2016-05-15T08:55:55.000Z</updated>
+    <updated>2017-07-12T14:14:03.192Z</updated>
     
     <content type="html">&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;hr&gt;
 &lt;p&gt;用vim时，经常会出现编辑完文件没权限保存。难到要重新敲一遍？&lt;/p&gt;
@@ -595,7 +595,7 @@
     <link href="https://crackfree.github.io/2016/05/15/haproxy-or-iptables-forward-ports-on-VPS/"/>
     <id>https://crackfree.github.io/2016/05/15/haproxy-or-iptables-forward-ports-on-VPS/</id>
     <published>2016-05-15T04:58:06.000Z</published>
-    <updated>2016-10-01T14:32:42.000Z</updated>
+    <updated>2017-07-12T14:14:03.192Z</updated>
     
     <content type="html">&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;hr&gt;
 &lt;p&gt;因为A VPS上装了锐速，另B VPS上配置了代理。A的链路好，而A上配置代理有坑。因此想办法把两者的有点结合起来，做一个端口转发将A的端口转发至B，来提升代理的速度。&lt;br&gt;此时网络连接链路变为:&lt;/p&gt;
@@ -689,7 +689,7 @@ iptables -t nat -A POSTROUTING -d B -p tcp --dport 8888 -j SNAT --to A
     <link href="https://crackfree.github.io/2016/04/30/Linux-update-error-Hash-Sum-mismatch-resolved/"/>
     <id>https://crackfree.github.io/2016/04/30/Linux-update-error-Hash-Sum-mismatch-resolved/</id>
     <published>2016-04-30T06:49:44.000Z</published>
-    <updated>2016-04-30T07:58:20.000Z</updated>
+    <updated>2017-07-12T14:14:03.188Z</updated>
     
     <content type="html">&lt;p&gt;linux 更新时，出现如下错误:&lt;/p&gt;
 &lt;blockquote&gt;
@@ -726,7 +726,7 @@ sudo apt-get update
     <link href="https://crackfree.github.io/2016/04/02/fedora-ifconfig-command/"/>
     <id>https://crackfree.github.io/2016/04/02/fedora-ifconfig-command/</id>
     <published>2016-04-02T05:08:16.000Z</published>
-    <updated>2016-04-16T05:11:02.000Z</updated>
+    <updated>2017-07-12T14:14:03.192Z</updated>
     
     <content type="html">&lt;p&gt;在fedora上发现没有ifconfig、netstat等命令不见了。原因是系统是最小模式安装的，于是有了下面的解决方法：&lt;/p&gt;
 &lt;hr&gt;
@@ -755,7 +755,7 @@ sudo apt-get update
     <link href="https://crackfree.github.io/2016/04/01/using-key-login-ssh-and-forbiden-password-login/"/>
     <id>https://crackfree.github.io/2016/04/01/using-key-login-ssh-and-forbiden-password-login/</id>
     <published>2016-04-01T05:04:46.000Z</published>
-    <updated>2016-04-16T05:12:37.000Z</updated>
+    <updated>2017-07-12T14:14:03.192Z</updated>
     
     <content type="html">&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;hr&gt;
 &lt;p&gt;因为ssh用密码登录不太安全，容易被爆破，使用某些工具登录每次都要输入密码，不方便，所以现在一般都禁止用密码登录，而使用key登录。&lt;/p&gt;
@@ -802,7 +802,7 @@ AuthorizedKeysFile .ssh/authorized_keys
     <link href="https://crackfree.github.io/2016/03/04/using-hexo-to-write-blog-on-github/"/>
     <id>https://crackfree.github.io/2016/03/04/using-hexo-to-write-blog-on-github/</id>
     <published>2016-03-04T12:32:13.000Z</published>
-    <updated>2016-04-16T05:10:52.000Z</updated>
+    <updated>2017-07-12T14:14:03.192Z</updated>
     
     <content type="html">&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;hr&gt;
 &lt;p&gt;最近想写一个博客，而github上拥有免费空间，在github上自己搭建博客可以自己高度定制，所以有了此文。(github pages 300M size,) &lt;/p&gt;
