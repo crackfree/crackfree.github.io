@@ -4,35 +4,23 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>cat xx.iso &gt; /dev/sdX 启动原理 | crackfree</title>
+    <title>rasperrypi | crackfree</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="crackfree">
     
 
     
-    <meta name="description" content="cat x.iso &amp;gt;  /dev/sdX 启动原理
-前言
-之前在U盘装系统的时，“刻录”U盘常用命令cat xx.iso &amp;gt; /dev/sdX（其实用dd也可以），xx.iso为要“刻录”的系统，sdX为U盘在系统中的设备文件名。执行命令后，U盘变为一个自带引导，包含iso内内容的操作系统安装盘。个人觉得能自带引导比较神奇，于是有了本文。
-原理分析
-ISO是一种文件系统格式，其他的如">
+    <meta name="description" content="duckdns.org/12345678910111213141516171819202122232425262728293031raspberrypiif you are running http://www.raspbmc.com/ then you must follow the raspbmc instructionsfirst lets login to your raspberrypi">
 <meta property="og:type" content="article">
-<meta property="og:title" content="cat xx.iso > /dev/sdX 启动原理">
-<meta property="og:url" content="https://crackfree.github.io/2016/09/04/cat-x-iso-to-dev-sdX-mechanism/index.html">
+<meta property="og:title" content="rasperrypi">
+<meta property="og:url" content="https://crackfree.github.io/2018/03/23/rasperrypi/index.html">
 <meta property="og:site_name" content="crackfree">
-<meta property="og:description" content="cat x.iso &amp;gt;  /dev/sdX 启动原理
-前言
-之前在U盘装系统的时，“刻录”U盘常用命令cat xx.iso &amp;gt; /dev/sdX（其实用dd也可以），xx.iso为要“刻录”的系统，sdX为U盘在系统中的设备文件名。执行命令后，U盘变为一个自带引导，包含iso内内容的操作系统安装盘。个人觉得能自带引导比较神奇，于是有了本文。
-原理分析
-ISO是一种文件系统格式，其他的如">
-<meta property="og:updated_time" content="2018-03-03T15:15:43.055Z">
+<meta property="og:description" content="duckdns.org/12345678910111213141516171819202122232425262728293031raspberrypiif you are running http://www.raspbmc.com/ then you must follow the raspbmc instructionsfirst lets login to your raspberrypi">
+<meta property="og:updated_time" content="2018-03-23T15:10:53.095Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="cat xx.iso > /dev/sdX 启动原理">
-<meta name="twitter:description" content="cat x.iso &amp;gt;  /dev/sdX 启动原理
-前言
-之前在U盘装系统的时，“刻录”U盘常用命令cat xx.iso &amp;gt; /dev/sdX（其实用dd也可以），xx.iso为要“刻录”的系统，sdX为U盘在系统中的设备文件名。执行命令后，U盘变为一个自带引导，包含iso内内容的操作系统安装盘。个人觉得能自带引导比较神奇，于是有了本文。
-原理分析
-ISO是一种文件系统格式，其他的如">
+<meta name="twitter:title" content="rasperrypi">
+<meta name="twitter:description" content="duckdns.org/12345678910111213141516171819202122232425262728293031raspberrypiif you are running http://www.raspbmc.com/ then you must follow the raspbmc instructionsfirst lets login to your raspberrypi">
 
     
     <link rel="alternative" href="/atom.xml" title="crackfree" type="application/atom+xml">
@@ -92,14 +80,14 @@ ISO是一种文件系统格式，其他的如">
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/09/04/cat-x-iso-to-dev-sdX-mechanism/" title="cat xx.iso &gt; /dev/sdX 启动原理" itemprop="url">cat xx.iso &gt; /dev/sdX 启动原理</a>
+      <a href="/2018/03/23/rasperrypi/" title="rasperrypi" itemprop="url">rasperrypi</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="crackfree" target="_blank" itemprop="author">crackfree</a>
 		
   <p class="article-time">
-    <time datetime="2016-09-03T18:03:30.000Z" itemprop="datePublished"> Published 2016-09-04</time>
+    <time datetime="2018-03-23T15:04:41.000Z" itemprop="datePublished"> Published 2018-03-23</time>
     
   </p>
 </header>
@@ -108,30 +96,16 @@ ISO是一种文件系统格式，其他的如">
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#cat-x-iso-gt-dev-sdX-启动原理"><span class="toc-number">1.</span> <span class="toc-text">cat x.iso >  /dev/sdX 启动原理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原理分析"><span class="toc-number">1.2.</span> <span class="toc-text">原理分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文献"><span class="toc-number">1.3.</span> <span class="toc-text">参考文献</span></a></li></ol></li></ol>
+			
 		
 		</div>
 		
-		<h1 id="cat-x-iso-gt-dev-sdX-启动原理"><a href="#cat-x-iso-gt-dev-sdX-启动原理" class="headerlink" title="cat x.iso &gt;  /dev/sdX 启动原理"></a>cat x.iso &gt;  /dev/sdX 启动原理</h1><hr>
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><hr>
-<p>之前在U盘装系统的时，“刻录”U盘常用命令cat xx.iso &gt; /dev/sdX（其实用dd也可以），xx.iso为要“刻录”的系统，sdX为U盘在系统中的设备文件名。执行命令后，U盘变为一个自带引导，包含iso内内容的操作系统安装盘。个人觉得能自带引导比较神奇，于是有了本文。</p>
-<h2 id="原理分析"><a href="#原理分析" class="headerlink" title="原理分析"></a>原理分析</h2><hr>
-<p>ISO是一种文件系统格式，其他的如ext4、ntfs、fat。ISO格式可以作为一种镜像文件，文件系统自身可带引导功能。cat/dd命令只是将文件系统镜像拷贝到Ｕ盘设备上。<br><br>ISO文件自身的引导，可由特殊工具创建的，比如说isohybrid，可将引导程序写入镜像文件前几个扇区，iso9660标准一般不会使用开始的几个用来引导的扇区，使iso镜像可以有引导功能。这也解释通了光盘为什么可以引导(光盘自身是ISO格式)。任何设备在Linux中都被抽象为文件，cat xx.iso &gt; /dev/sdX将ISO中的内容输出重定向到设备上，从而完成了拷贝。在这个过程中，cat对iso文件没有任何处理，仅仅是数据拷贝。<br><br>同理，也可以创建一个ext4格式的文件镜像然后cat　ext4file &gt; sdX 完成对sdX硬盘的格式化和数据写入。</p>
-<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><hr>
-<ul>
-<li><a href="https://unix.stackexchange.com/questions/31537/how-why-does-cat-write-a-bootable-iso-to-a-device" target="_blank" rel="external">https://unix.stackexchange.com/questions/31537/how-why-does-cat-write-a-bootable-iso-to-a-device</a></li>
-<li><a href="https://unix.stackexchange.com/questions/48267/what-happens-when-i-do-cat-debian-iso-dev-sdx" target="_blank" rel="external">https://unix.stackexchange.com/questions/48267/what-happens-when-i-do-cat-debian-iso-dev-sdx</a></li>
-</ul>
+		<p>duckdns.org/<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">raspberrypi</span><br><span class="line">if you are running http://www.raspbmc.com/ then you must follow the raspbmc instructions</span><br><span class="line">first lets login to your raspberrypi over ssh</span><br><span class="line">ssh pi@raspberrypi</span><br><span class="line">then lets make a directory to put your files in, move into it and make our main script</span><br><span class="line">mkdir duckdns</span><br><span class="line">cd duckdns</span><br><span class="line">vi duck.sh</span><br><span class="line">now copy this text and put it into the file (in vi you hit the i key to insert, ESC then u to undo) you must change your token and domain to be the one you want to update</span><br><span class="line">you can pass a comma separated (no spaces) list of domains</span><br><span class="line">you can if you need to hard code an IP (best not to - leave it blank and we detect your remote ip)</span><br><span class="line">hit ESC then use use arrow keys to move the cursor x deletes, i puts you back into insert mode</span><br><span class="line">echo url=&quot;https://www.duckdns.org/update?domains=exampledomain&amp;token=a7c4d0ad-114e-40ef-ba1d-d217904a50f2&amp;ip=&quot; | curl -k -o ~/duckdns/duck.log -K -</span><br><span class="line">now save the file (in vi hit ESC then :wq! then ENTER)</span><br><span class="line">this script will make a https request and log the output in the file duck.log</span><br><span class="line">now make the duck.sh file executeable</span><br><span class="line">chmod 700 duck.sh</span><br><span class="line">next we wil be using the cron process to make the script get run every 5 minutes</span><br><span class="line">crontab -e</span><br><span class="line">copy this text and paste it at the bottom of the crontab</span><br><span class="line">*/5 * * * * ~/duckdns/duck.sh &gt;/dev/null 2&gt;&amp;1</span><br><span class="line">now save the file (CTRL+o then CTRL+x)</span><br><span class="line">lets test the script</span><br><span class="line">./duck.sh</span><br><span class="line">this should simply return to a prompt</span><br><span class="line">we can also see if the last attempt was successful (OK or bad KO)</span><br><span class="line">cat duck.log</span><br><span class="line">if it is KO check your Token and Domain are correct in the duck.sh script</span><br><span class="line">The final task for Raspbmc is to make the cron autostart on reboot for Raspbian you don&apos;t need to do this</span><br><span class="line">first we simply manualy start the crontab</span><br><span class="line">sudo service cron start</span><br></pre></td></tr></table></figure></p>
   
 	</div>
 		<footer class="article-footer clearfix">
 <div class="article-catetags">
 
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/linux/">linux</a><a href="/tags/ISO/">ISO</a>
-  </div>
 
 </div>
 
@@ -139,7 +113,7 @@ ISO是一种文件系统格式，其他的如">
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://crackfree.github.io/2016/09/04/cat-x-iso-to-dev-sdX-mechanism/" data-title="cat xx.iso &gt; /dev/sdX 启动原理 | crackfree" data-tsina="null" class="share clearfix">
+	  <div data-url="https://crackfree.github.io/2018/03/23/rasperrypi/" data-title="rasperrypi | crackfree" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -152,19 +126,11 @@ ISO是一种文件系统格式，其他的如">
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2016/10/01/glibc-upgrade/" title="Centos 升级glibc">
-  <strong>上一篇：</strong><br/>
-  <span>
-  Centos 升级glibc</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2016/05/15/vim-save-root-file-with-non-root-user/"  title="vim切换权限用root保存文件">
+<a href="/2017/03/21/docker-command-and-practise/"  title="docker:docker命令总结与实战">
  <strong>下一篇：</strong><br/> 
- <span>vim切换权限用root保存文件
+ <span>docker:docker命令总结与实战
 </span>
 </a>
 </div>
@@ -185,7 +151,7 @@ ISO是一种文件系统格式，其他的如">
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#cat-x-iso-gt-dev-sdX-启动原理"><span class="toc-number">1.</span> <span class="toc-text">cat x.iso >  /dev/sdX 启动原理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原理分析"><span class="toc-number">1.2.</span> <span class="toc-text">原理分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文献"><span class="toc-number">1.3.</span> <span class="toc-text">参考文献</span></a></li></ol></li></ol>
+ 
  
   </div>
 
