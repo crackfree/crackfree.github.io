@@ -2026,7 +2026,8 @@ footer {
 .icon-stack-overflow:before,
 .icon-email:before,
 .icon-google_plus:before,
-.icon-linkedin:before {
+.icon-linkedin:before,
+.icon-telegram:before {
   font-family: "FontAwesome";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -2066,6 +2067,11 @@ footer {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   content: "\f142";
+}
+.icon-telegram:before {
+  font-family: fa-solid-900;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 .copyright {
   -webkit-font-smoothing: antialiased;
